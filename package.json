@@ -1,0 +1,17 @@
+{
+  "name": "hachi-core",
+  "version": "1.0.0",
+  "description": "hachi框架服务",
+  "main": "index.js",
+  "repository": "git@github.com:l2xBrain/hachi-core.git",
+  "author": "l2xBrain <l2xbrai@126.com>",
+  "license": "MIT",
+  "dependencies": {
+    "arg": "^4.1.3",
+    "chalk": "^4.0.0",
+    "dva": "^2.4.1",
+    "react-router-config": "^5.1.1",
+    "taskr": "^1.1.0",
+    "webpack": "^4.43.0"
+  }
+}
