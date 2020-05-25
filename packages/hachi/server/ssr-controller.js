@@ -3,7 +3,7 @@ import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl, UrlWithParsedQuery } from 'url'
-import loadConfig, { isTargetLikeServerless } from './config'
+import loadConfig from './config'
 import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, PAGES_MANIFEST } from '../lib/constants';
 import Router from '../router';
 

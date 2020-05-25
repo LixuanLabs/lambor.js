@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import arg from 'arg';
-import comBuild from './cli/build';
-import comDev from './cli/dev';
+// import comBuild from './cli/build';
+// import comDev from './cli/dev';
 
 const args = arg(
     {
@@ -23,8 +23,8 @@ console.log('args=>', args);
 
 
 const commands = {
-    build: comBuild,
-    dev: comDev
+    // build: comBuild,
+    // dev: comDev
 }
 
 const defaultCommand = 'dev';
