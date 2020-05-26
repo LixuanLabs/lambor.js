@@ -51,27 +51,6 @@ export function createEntrypoints(
   const client = {}
   const server = {}
 
-  const hasRuntimeConfig =
-    Object.keys(config.publicRuntimeConfig).length > 0 ||
-    Object.keys(config.serverRuntimeConfig).length > 0
-
-  const defaultServerlessOptions = {
-    absoluteAppPath: pages['/_app'],
-    absoluteDocumentPath: pages['/_document'],
-    absoluteErrorPath: pages['/_error'],
-    distDir: DOT_NEXT_ALIAS,
-    assetPrefix: config.assetPrefix,
-    generateEtags: config.generateEtags,
-    canonicalBase: config.canonicalBase,
-    basePath: config.experimental.basePath,
-    runtimeConfig: hasRuntimeConfig
-      ? JSON.stringify({
-          publicRuntimeConfig: config.publicRuntimeConfig,
-          serverRuntimeConfig: config.serverRuntimeConfig,
-        })
-      : '',
-  }
-
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
     const bundleFile = absolutePagePath
@@ -81,30 +60,12 @@ export function createEntrypoints(
 
     if (isApiRoute || target === 'server') {
       server[bundlePath] = [absolutePagePath]
+      client[bundlePath] = [absolutePagePath]
     } 
 
-    if (page === '/_document') {
-      return
-    }
-
-    if (!isApiRoute) {
-      const pageLoaderOpts = {
-        page,
-        absolutePagePath,
-      }
-      const pageLoader = `next-client-pages-loader?${stringify(
-        pageLoaderOpts
-      )}!`
-
-      // Make sure next/router is a dependency of _app or else granularChunks
-      // might cause the router to not be able to load causing hydration
-      // to fail
-
-      client[bundlePath] =
-        page === '/_app'
-          ? [pageLoader, require.resolve('../client/router')]
-          : pageLoader
-    }
+    // if (page === '/_document') {
+    //   return
+    // }
   })
 
   return {

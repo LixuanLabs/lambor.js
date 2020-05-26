@@ -32,6 +32,10 @@ const hachiBuild = (argv) => {
       0
     )
   }
+  console.log('argv', argv);
+  
+  console.log('build args===>', args);
+  
 
   const dir = resolve(args._[0] || '.')
 
@@ -49,4 +53,4 @@ const hachiBuild = (argv) => {
     })
 }
 
-export { hachiBuild }
+export default hachiBuild

@@ -1,3 +1,5 @@
+const path = require('path');
+const {babelClientOpts, babelServerOpts} = require('./babel-config');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
@@ -21,7 +23,7 @@ export default async function getBaseWebpackConfig(
             publicPath: '/dist/'
         },
         resolve: {
-            alias: getAlias(),
+            // alias: getAlias(),
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },
         externals: {
@@ -34,7 +36,7 @@ export default async function getBaseWebpackConfig(
                         'thread-loader',
                         {
                             loader: 'babel-loader',
-                            options: babelCnf
+                            options: target === 'server' ? babelServerOpts : babelClientOpts
                         },
                     ]
                 }, {

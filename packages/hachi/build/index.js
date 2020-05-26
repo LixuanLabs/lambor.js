@@ -6,10 +6,18 @@ import {
 import { createEntrypoints } from './entries';
 import getBaseWebpackConfig from './webpack-config';
 
-export default function build(dir, conf) {
-    const config = loadConfig(dir, conf);
+export default async function build(dir) {
+    const config = loadConfig(dir);
     const pagesMapDir = findPagesMapDir(dir);
     const mappedPages = await collectPages(pagesMapDir);
     const entrypoints = createEntrypoints(false, mappedPages, 'server', config);
+    console.log('entrypoints', entrypoints);
+
+    const webpackConfigs = await Promise.all([
+        getBaseWebpackConfig(dir, {config, target: 'server', entrypoints}),
+        getBaseWebpackConfig(dir, {config, target: 'client', entrypoints})
+    ])
+    console.log('webpackConfigs', webpackConfigs);
+    
     
 }

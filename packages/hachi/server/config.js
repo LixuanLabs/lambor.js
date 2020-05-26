@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { CONFIG_FILE } from '../lib/constants'
+import findUp from 'find-up';
 
 export default function loadConfig(dir, customConfig) {
     if (customConfig) {

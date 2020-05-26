@@ -1,12 +1,12 @@
 import http from 'http'
-import next from '../next'
+import controller from './ssr-controller'
 
 export default async function start(
   serverOptions,
   port,
   hostname
 ) {
-  const app = next({
+  const app = controller({
     ...serverOptions,
     customServer: false,
   })
