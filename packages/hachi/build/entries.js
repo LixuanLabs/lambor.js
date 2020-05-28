@@ -2,11 +2,12 @@ import chalk from 'chalk'
 import { join } from 'path'
 import { stringify } from 'querystring'
 import { API_ROUTE, DOT_NEXT_ALIAS, PAGES_DIR_ALIAS } from '../lib/constants'
+import { normalizePagePath } from '../lib/normalize-page-path';
 
 
 export function createPagesMapping(
-  pagePaths: string[],
-  extensions: string[]
+  pagePaths,
+  extensions
 ) {
   const previousPages = {}
   const pages = pagePaths.reduce(
@@ -53,10 +54,12 @@ export function createEntrypoints(
 
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
-    const bundleFile = absolutePagePath
+    const bundleFile = `${normalizePagePath(page)}.js`
     const isApiRoute = page.match(API_ROUTE)
 
     const bundlePath = join('static', 'pages', bundleFile)
+    console.log('bundlePath', bundlePath);
+    
 
     if (isApiRoute || target === 'server') {
       server[bundlePath] = [absolutePagePath]

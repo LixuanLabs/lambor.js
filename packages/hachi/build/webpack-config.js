@@ -2,6 +2,7 @@ const path = require('path');
 const {babelClientOpts, babelServerOpts} = require('./babel-config');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 export default async function getBaseWebpackConfig(
     dir,
@@ -30,10 +31,10 @@ export default async function getBaseWebpackConfig(
         },
         module: {
             rules: [{
-                    test: /\.js$/,
-                    exclude: [/node_modules\/(?!(react-dnd|dnd-core|react-dnd-html5-backend))/],
+                    test: /\.jsx?$/,
+                    exclude: [/node_modules/],
                     use: [
-                        'thread-loader',
+                        // 'thread-loader',
                         {
                             loader: 'babel-loader',
                             options: target === 'server' ? babelServerOpts : babelClientOpts
@@ -54,10 +55,11 @@ export default async function getBaseWebpackConfig(
                 }]
         },
         plugins: [
-            target === 'server' &&
-                new ReactLoadablePlugin({
-                    filename: REACT_LOADABLE_MANIFEST,
-                }),
+            new CleanWebpackPlugin()
+            // target === 'server' &&
+            //     new ReactLoadablePlugin({
+            //         filename: REACT_LOADABLE_MANIFEST,
+            //     }),
         ],
         optimization: {
             splitChunks: {

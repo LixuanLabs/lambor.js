@@ -21,13 +21,14 @@ export function findPagesMapDir(dir) {
     )
 }
 
-export async function collectPages(pagesMapDir) {
+export async function collectPages(pagesMapDir, dir) {
     const pagesMap = require(pagesMapDir);
     const obj = {};
     Object.keys(pagesMap).map(key => {
-        obj[key + '/aModel'] = pagesMap[key] + 'aModel.js';
-        obj[key + '/aIndex'] = pagesMap[key] + 'aIndex.js';
-        obj[key + '/aLang'] = pagesMap[key] + 'aLang.js';
+      const preKey = pagesMap[key].split('pages')[1];
+        obj[path.join(preKey, 'aModel')] = path.join(dir, pagesMap[key], 'aModel.js');
+        obj[path.join(preKey, 'aIndex')] = path.join(dir, pagesMap[key], 'aIndex.jsx');
+        obj[path.join(preKey, 'aLang')] = path.join(dir, pagesMap[key], 'aLang.js');
     })
     return obj;
 }

@@ -8,7 +8,7 @@ module.exports = {
         yield task
             .source('packages/hachi/**/*.+(js|jsx|ts|tsx)')
             .babel('server')
-            .target('dist/hachi')
+            .target('dist/hachi', {mode: 0o666})
         notify('Compiled files')
     },
     * build(task) {
