@@ -5,6 +5,7 @@ import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl, UrlWithParsedQuery } from 'url'
 import loadConfig from './config'
 import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, PAGES_MANIFEST } from '../lib/constants';
+import { registerModel } from '../lib/utils';
 import Router from '../router';
 
 
@@ -50,7 +51,7 @@ export default class SSRController {
         res,
         parsedUrl
       ) {
-        this.initApp(this.router);
+        this.initDva({router: this.router, url: req.url});
         const app = this.app;
         const App = app.start();
         try {
@@ -69,10 +70,11 @@ export default class SSRController {
         await this.render404(req, res, parsedUrl)
     }
 
-    initApp(router, initModel) {
+    initDva({router, url, initModel = []}) {
         // 初始化DvaApp
         const history = createMemoryHistory();
-        history.push(this.ctx.url);
+        history.push(url);
+        
         let initialState = this.initLocale(this.initialState);
 
         this.app = dva({history, initialState, onError: e => {
@@ -85,7 +87,26 @@ export default class SSRController {
                 registerModel(this.app, model);
             });
         }
+    }
 
+    getInitState(locale) {
+      return {
+        _hachi: {
+          locale: locale || 'en'
+        }
+      }
+    }
+
+    getInitModel() {
+      
+    }
+
+    getCustomInitState() {
+      return {};
+    }
+
+    getCustomInitModel() {
+      return [];
     }
 
     async handleRequest(

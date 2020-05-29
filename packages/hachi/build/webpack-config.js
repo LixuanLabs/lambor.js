@@ -20,7 +20,7 @@ export default async function getBaseWebpackConfig(
         },
         output: {
             path: outputPath,
-            filename: 'js/[name].js',
+            filename: 'js/[name]',
             publicPath: '/dist/'
         },
         resolve: {
