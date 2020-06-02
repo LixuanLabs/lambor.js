@@ -3335,7 +3335,7 @@ promise-inflight@^1.0.1:
   resolved "http://npm.tdc.shangri-la.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
 
-prop-types@^15.5.0, prop-types@^15.6.0, prop-types@^15.6.1:
+prop-types@^15.5.0, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.7.2"
   resolved "http://npm.tdc.shangri-la.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha1-UsQedbjIfnK52TYOAga5ncv/psU=
@@ -3490,6 +3490,15 @@ react-router@^4.2.0, react-router@^4.3.1:
     path-to-regexp "^1.7.0"
     prop-types "^15.6.1"
     warning "^4.0.1"
+
+react@^16.13.1:
+  version "16.13.1"
+  resolved "http://npm.tdc.shangri-la.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
+  integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 "readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
@@ -4204,7 +4213,7 @@ watchpack@^1.6.1:
     chokidar "^3.4.0"
     watchpack-chokidar2 "^2.0.0"
 
-webpack-sources@^1.4.0, webpack-sources@^1.4.1:
+webpack-sources@^1.4.0, webpack-sources@^1.4.1, webpack-sources@^1.4.3:
   version "1.4.3"
   resolved "http://npm.tdc.shangri-la.com/webpack-sources/-/webpack-sources-1.4.3.tgz#eedd8ec0b928fbf1cbfe994e22d2d890f330a933"
   integrity sha512-lgTS3Xhv1lCOKo7SA5TjKXMjpSM4sBjNV5+q2bqesbSPs5FjGmU6jjtBSkX9b4qW87vDIsCIlUPOEhbZrMdjeQ==

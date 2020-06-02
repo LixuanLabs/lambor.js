@@ -1,5 +1,6 @@
 import path from 'path';
 import chalk from 'chalk';
+import { promises } from 'fs';
 import loadConfig from '../server/config';
 import {
     findPagesMapDir,
@@ -8,7 +9,7 @@ import {
 import { createEntrypoints } from './entries';
 import getBaseWebpackConfig from './webpack-config';
 import { runCompiler } from './compiler';
-import { SERVER_DIRECTORY, PAGES_MANIFEST } from '../lib/constants';
+import { SERVER_DIRECTORY, PAGES_MANIFEST, ROUTES_MANIFEST } from '../lib/constants';
 import formatWebpackMessages from './format-webpack-messages';
 
 export default async function build(dir) {
@@ -16,13 +17,15 @@ export default async function build(dir) {
     const distDir = path.join(dir, config.distDir)
     const pagesMapDir = findPagesMapDir(dir);
     
+    
     const mappedPages = await collectPages(pagesMapDir, dir);
     const entrypoints = createEntrypoints(false, mappedPages, 'server', config);
 
     const webpackConfigs = await Promise.all([
         getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client}),
         getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server}),
-    ])
+    ]);
+    // await promises.mkdir(distDir, { recursive: true })
     let result = await runCompiler(webpackConfigs);
     result = formatWebpackMessages(result)
     if (result.errors.length > 0) {
@@ -45,6 +48,13 @@ export default async function build(dir) {
           console.log(chalk.green('Compiled successfully.\n'))
         }
     }
+
+    const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
+    await promises.writeFile(
+      routesManifestPath,
+      JSON.stringify(mappedPages),
+      'utf8'
+    )
     // const manifestPath = path.join(distDir, SERVER_DIRECTORY, PAGES_MANIFEST)
 
     

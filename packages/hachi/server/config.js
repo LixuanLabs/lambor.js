@@ -11,14 +11,20 @@ export default function loadConfig(dir, customConfig) {
     })
     // If config file was found
     if (path) {
+        console.log('path', path);
+        
         const userConfigModule = require(path)
+        console.log('userConfigModule', userConfigModule);
+        
         const userConfig = normalizeConfig(
             userConfigModule.default || userConfigModule
         )
+        console.log('userConfig', userConfig);
+        
         if (Object.keys(userConfig).length === 0) {
             console.warn(
               chalk.yellow.bold('Warning: ') +
-                'Detected next.config.js, no exported configuration found. https://err.sh/zeit/next.js/empty-configuration'
+                'Detected hachi.config.js, no exported configuration found.'
             )
         }
         return assignDefaults({ configOrigin: CONFIG_FILE, ...userConfig })

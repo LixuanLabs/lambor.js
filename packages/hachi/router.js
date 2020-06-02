@@ -41,6 +41,6 @@ export default class Router {
     }
 
     async execute(req, res, parsedUrl) {
-        this.matchComponents()
+        const components = this.matchComponents()
     }
 }

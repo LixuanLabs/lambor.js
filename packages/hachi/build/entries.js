@@ -58,7 +58,6 @@ export function createEntrypoints(
     const isApiRoute = page.match(API_ROUTE)
 
     const bundlePath = join('static', 'pages', bundleFile)
-    console.log('bundlePath', bundlePath);
     
 
     if (isApiRoute || target === 'server') {

@@ -1,16 +1,16 @@
 import http from 'http'
-import controller from './ssr-controller'
+import Controller from './ssr-controller'
 
 export default async function start(
   serverOptions,
   port,
   hostname
 ) {
-  const app = controller({
+  const app = new Controller({
     ...serverOptions,
     customServer: false,
   })
-  const srv = http.createServer(app.getRequestHandler())
+  const srv = http.createServer(app.handleRequest())
   await new Promise((resolve, reject) => {
     // This code catches EADDRINUSE error if the port is already in use
     srv.on('error', reject)

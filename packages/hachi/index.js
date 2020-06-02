@@ -2,6 +2,7 @@
 import arg from 'arg';
 import comBuild from './cli/build';
 import comDev from './cli/dev';
+import comStart from './cli/start';
 
 const args = arg(
     {
@@ -23,7 +24,8 @@ const args = arg(
 
 const commands = {
     build: comBuild,
-    dev: comDev
+    dev: comDev,
+    start: comStart
 }
 
 const defaultCommand = 'dev';

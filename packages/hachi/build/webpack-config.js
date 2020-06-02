@@ -1,8 +1,9 @@
 const path = require('path');
 const {babelClientOpts, babelServerOpts} = require('./babel-config');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
-const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
+const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
 export default async function getBaseWebpackConfig(
     dir,
@@ -14,6 +15,15 @@ export default async function getBaseWebpackConfig(
 ) {
     const distDir = path.join(dir, config.distDir)
     const outputPath = path.join(distDir, target === 'server' ? 'server' : '')
+    const plugins = [
+        new CleanWebpackPlugin()
+    ];
+    if (target === 'server') {
+
+    } else {
+        plugins.push(new BuildManifestPlugin())
+    }
+    
     return {
         entry: {
             ...entrypoints
@@ -55,7 +65,7 @@ export default async function getBaseWebpackConfig(
                 }]
         },
         plugins: [
-            new CleanWebpackPlugin()
+            ...plugins,
             // target === 'server' &&
             //     new ReactLoadablePlugin({
             //         filename: REACT_LOADABLE_MANIFEST,

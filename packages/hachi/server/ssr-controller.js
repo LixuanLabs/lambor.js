@@ -1,10 +1,10 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl, UrlWithParsedQuery } from 'url'
 import loadConfig from './config'
-import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, PAGES_MANIFEST } from '../lib/constants';
+import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST } from '../lib/constants';
 import { registerModel } from '../lib/utils';
 import Router from '../router';
 
@@ -25,16 +25,22 @@ export default class SSRController {
 
         this.serverBuildDir = join(this.distDir,SERVER_DIRECTORY);
 
-        const pagesManifestPath = join(this.serverBuildDir, PAGES_MANIFEST)
+        // const pagesManifestPath = join(this.serverBuildDir, PAGES_MANIFEST)
 
-        if (!dev) {
-            this.pagesManifest = require(pagesManifestPath)
-        }
+        // if (!dev) {
+        //     this.pagesManifest = require(pagesManifestPath)
+        // }
         this.router = new Router(this.generateRoutes());
 
     }
 
+    getCustomRoutes() {
+      return require(join(this.distDir, ROUTES_MANIFEST))
+    }
+
     generateRoutes() {
+      console.log('hachiConfig', this.hachiConfig);
+      this.customRoutes = this.getCustomRoutes()
         return [
             {
                 path: '/',
