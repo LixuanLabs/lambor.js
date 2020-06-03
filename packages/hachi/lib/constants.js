@@ -15,7 +15,7 @@ export const SERVER_DIRECTORY = 'server'
 export const SERVERLESS_DIRECTORY = 'serverless'
 export const CONFIG_FILE = 'hachi.config.js'
 export const BUILD_ID_FILE = 'BUILD_ID'
-export const BLOCKED_PAGES = ['/_document', '/_app']
+export const BLOCKED_PAGES = ['/_document', '/_app', '/_clientDocument', '/_clientApp']
 export const CLIENT_PUBLIC_FILES_PATH = 'public'
 export const CLIENT_STATIC_FILES_PATH = 'static'
 export const CLIENT_STATIC_FILES_RUNTIME = 'runtime'
@@ -35,6 +35,7 @@ export const CLIENT_STATIC_FILES_RUNTIME_POLYFILLS = `${CLIENT_STATIC_FILES_RUNT
 export const IS_BUNDLED_PAGE_REGEX = /^static[/\\][^/\\]+[/\\]pages.*\.js$/
 // matches static/<buildid>/pages/:page*.js
 export const ROUTE_NAME_REGEX = /^static[/\\]pages[/\\](.*)[/\\](aIndex|aModel|aLang)\.js$/
+export const BLOCKED_NAME_REGEX = /^static[/\\]pages[/\\](_clientDocument|_document|_clientApp|_app)\.js$/
 export const SERVERLESS_ROUTE_NAME_REGEX = /^pages[/\\](.*)\.js$/
 export const TEMPORARY_REDIRECT_STATUS = 307
 export const PERMANENT_REDIRECT_STATUS = 308

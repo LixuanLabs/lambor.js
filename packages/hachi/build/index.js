@@ -21,11 +21,11 @@ export default async function build(dir) {
     const mappedPages = await collectPages(pagesMapDir, dir);
     const entrypoints = createEntrypoints(false, mappedPages, 'server', config);
 
+    await promises.mkdir(distDir, { recursive: true })
     const webpackConfigs = await Promise.all([
         getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client}),
         getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server}),
     ]);
-    // await promises.mkdir(distDir, { recursive: true })
     let result = await runCompiler(webpackConfigs);
     result = formatWebpackMessages(result)
     if (result.errors.length > 0) {

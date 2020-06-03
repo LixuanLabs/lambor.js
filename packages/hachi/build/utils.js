@@ -25,10 +25,18 @@ export async function collectPages(pagesMapDir, dir) {
     const pagesMap = require(pagesMapDir);
     const obj = {};
     Object.keys(pagesMap).map(key => {
+      if (BLOCKED_PAGES.includes(key)) {
+        obj[key] = path.join(dir, pagesMap[key]);
+        return;
+      }
       const preKey = pagesMap[key].split('pages')[1];
         obj[path.join(preKey, 'aModel')] = path.join(dir, pagesMap[key], 'aModel.js');
         obj[path.join(preKey, 'aIndex')] = path.join(dir, pagesMap[key], 'aIndex.jsx');
         obj[path.join(preKey, 'aLang')] = path.join(dir, pagesMap[key], 'aLang.js');
     })
+    // if (!obj['_clientDocument']) obj['_clientDocument'] = 'hachi/server/pages/_document';
+    // if (!obj['_document']) obj['_document'] = 'hachi/server/pages/_document';
+    // if (!obj['_clientApp']) obj['_clientApp'] = 'hachi/server/pages/_app';
+    // if (!obj['_app']) obj['_app'] = 'hachi/server/pages/_app';
     return obj;
 }

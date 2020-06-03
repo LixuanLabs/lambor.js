@@ -1,5 +1,5 @@
 import { RawSource } from 'webpack-sources'
-import { ROUTE_NAME_REGEX, IS_BUNDLED_PAGE_REGEX, BUILD_MANIFEST } from '../../lib/constants';
+import { ROUTE_NAME_REGEX, IS_BUNDLED_PAGE_REGEX, BUILD_MANIFEST, BLOCKED_NAME_REGEX } from '../../lib/constants';
 
 export default class BuildManifestPlugin {
     apply(compiler) {
@@ -10,15 +10,26 @@ export default class BuildManifestPlugin {
                     pages: {}
                 };
                 const { chunks } = compilation;
-                for (const [, entrypoint] of compilation.entrypoints.entries()) {
+                const pageManifest = {};
+                for (const [urlKey, entrypoint] of compilation.entrypoints.entries()) {
+                    console.log('urlKey', entrypoint.name, BLOCKED_NAME_REGEX.test(entrypoint.name));
+                    
+                    // if (BLOCKED_PAGES.includes(urlKey)) {continue;}
+                    if (BLOCKED_NAME_REGEX.test(entrypoint.name)) continue;
                     const result = ROUTE_NAME_REGEX.exec(entrypoint.name);
                     const pagePath = result[1];
+                    console.log('pagePath', pagePath);
+                    
                     if (!pagePath) {
                         return
+                    }
+                    if (!pageManifest[`/${pagePath.replace(/\\/g, '/')}`]) {
+                        pageManifest[`/${pagePath.replace(/\\/g, '/')}`] = [];
                     }
                     const filesForEntry = [];
                     // getFiles() - helper function to read the files for an entrypoint from stats object
                     for (const file of entrypoint.getFiles()) {
+                        
                         if (/\.map$/.test(file) || /\.hot-update\.js$/.test(file)) {
                         continue
                         }
@@ -32,12 +43,11 @@ export default class BuildManifestPlugin {
                         if (IS_BUNDLED_PAGE_REGEX.exec(file)) {
                         continue
                         }
+                        console.log('file', file.replace(/\\/g, '/'));
 
-                        filesForEntry.push(file.replace(/\\/g, '/'));
+                        pageManifest[`/${pagePath.replace(/\\/g, '/')}`].push(file.replace(/\\/g, '/'));
                     }
-                    assetMap.pages[`/${pagePath.replace(/\\/g, '/')}`] = [
-                        ...filesForEntry,
-                    ]
+                    assetMap.pages = pageManifest;
                 }
                 if (typeof assetMap.pages['/index'] !== 'undefined') {
                     assetMap.pages['/'] = assetMap.pages['/index']

@@ -7,6 +7,7 @@ import loadConfig from './config'
 import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST } from '../lib/constants';
 import { registerModel } from '../lib/utils';
 import Router from '../router';
+import { loadComponents } from './load-components';
 
 
 export default class SSRController {
@@ -30,12 +31,16 @@ export default class SSRController {
         // if (!dev) {
         //     this.pagesManifest = require(pagesManifestPath)
         // }
-        this.router = new Router(this.generateRoutes());
+        this.router = new Router();
 
     }
 
     getCustomRoutes() {
       return require(join(this.distDir, ROUTES_MANIFEST))
+    }
+
+    async findPageComponents(pathname, query) {
+      await loadComponents(this.distDir, pathname)
     }
 
     generateRoutes() {
@@ -61,7 +66,8 @@ export default class SSRController {
         const app = this.app;
         const App = app.start();
         try {
-          const matched = await this.router.execute(req, res, parsedUrl)
+          await this.findPageComponents(parsedUrl.pathname, parsedUrl.query)
+          // const matched = await this.router.execute(req, res, parsedUrl, app)
           if (matched) {
             return
           }
