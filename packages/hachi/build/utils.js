@@ -34,9 +34,5 @@ export async function collectPages(pagesMapDir, dir) {
         obj[path.join(preKey, 'aIndex')] = path.join(dir, pagesMap[key], 'aIndex.jsx');
         obj[path.join(preKey, 'aLang')] = path.join(dir, pagesMap[key], 'aLang.js');
     })
-    // if (!obj['_clientDocument']) obj['_clientDocument'] = 'hachi/server/pages/_document';
-    // if (!obj['_document']) obj['_document'] = 'hachi/server/pages/_document';
-    // if (!obj['_clientApp']) obj['_clientApp'] = 'hachi/server/pages/_app';
-    // if (!obj['_app']) obj['_app'] = 'hachi/server/pages/_app';
     return obj;
 }

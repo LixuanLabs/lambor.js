@@ -1,20 +1,22 @@
-import { matchRoutes } from 'react-router-config';
+import * as React from 'react';
+import { Router, Route, Switch } from 'dva/router';
 
-export default class Router {
-    constructor(routes) {
-        this.routes = routes;
-    }
-
-    async execute(req, res, parsedUrl, app) {
-        this.renderToHTML(req, res, parsedUrl.pathname, parsedUrl.query)
-
-    }
-
-    async renderToHTML(req, res, pathname, query) {
-        await findPageComponents(pathname, query);
-    }
-
-    async findPageComponents(pathname, query) {
-        
-    }
+export default function({history, context}) {
+    const { routerList } = context;
+    return (
+        <Router history={history}>
+            <Switch>
+                {
+                    (routerList || []).map(({path, exact, component: C, ...rest}) => {
+                        return <Route
+                            key={path}
+                            path={path}
+                            exact={exact}
+                            render={(props) => <C {...props} {...rest} />}
+                        />
+                    })
+                }
+            </Switch>
+        </Router>
+    )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
-import {
-  loadGetInitialProps,
-} from '../../lib/utils'
+// import {
+//   loadGetInitialProps,
+// } from '../../lib/utils'
 
 
 /**
@@ -12,13 +12,14 @@ async function appGetInitialProps({
   Component,
   ctx,
 }) {
-  const pageProps = await loadGetInitialProps(Component, ctx)
-  return { pageProps }
+  // const pageProps = await loadGetInitialProps(Component, ctx)
+  // return { pageProps }
+  return {  }
 }
 
 export default class App extends React.Component {
-  static origGetInitialProps = appGetInitialProps
-  static getInitialProps = appGetInitialProps
+  // static origGetInitialProps = appGetInitialProps
+  // static getInitialProps = appGetInitialProps
 
   // Kept here for backwards compatibility.
   // When someone ended App they could call `super.componentDidCatch`.

@@ -22,32 +22,42 @@ export default async function build(dir) {
     const entrypoints = createEntrypoints(false, mappedPages, 'server', config);
 
     await promises.mkdir(distDir, { recursive: true })
-    const webpackConfigs = await Promise.all([
-        getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client}),
-        getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server}),
-    ]);
-    let result = await runCompiler(webpackConfigs);
-    result = formatWebpackMessages(result)
-    if (result.errors.length > 0) {
-        // Only keep the first error. Others are often indicative
-        // of the same problem, but confuse the reader with noise.
-        if (result.errors.length > 1) {
-          result.errors.length = 1
-        }
-        const error = result.errors.join('\n\n')
-    
-        console.error(chalk.red('Failed to compile.\n'))
-        console.error(error)
-        throw new Error('> Build failed because of webpack errors')
-    } else {
-        if (result.warnings.length > 0) {
-          console.warn(chalk.yellow('Compiled with warnings.\n'))
-          console.warn(result.warnings.join('\n\n'))
-          console.warn()
-        } else {
-          console.log(chalk.green('Compiled successfully.\n'))
-        }
+    // const webpackConfigs = [
+    //     getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client}),
+    //     getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server}),
+    // ];
+    try {
+      const clientWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client});
+      const serverWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server});
+      await runCompiler(clientWebpackConfig);
+      await runCompiler(serverWebpackConfig)  
+      console.log(chalk.green('Compiled successfully.\n'))
+    } catch (error) {
+      console.error(chalk.red('Failed to compile.\n'))
+      console.error(error)
     }
+    // let result = await runCompiler(webpackConfigs);
+    // result = formatWebpackMessages(result)
+    // if (result.errors.length > 0) {
+    //     // Only keep the first error. Others are often indicative
+    //     // of the same problem, but confuse the reader with noise.
+    //     if (result.errors.length > 1) {
+    //       result.errors.length = 1
+    //     }
+    //     const error = result.errors.join('\n\n')
+    
+    //     console.error(chalk.red('Failed to compile.\n'))
+    //     console.error(error)
+    //     throw new Error('> Build failed because of webpack errors')
+    // } else {
+    //     if (result.warnings.length > 0) {
+    //       console.warn(chalk.yellow('Compiled with warnings.\n'))
+    //       console.warn(result.warnings.join('\n\n'))
+    //       console.warn()
+    //     } else {
+    //       console.log(chalk.green('Compiled successfully.\n'))
+    //     }
+    // }
 
     const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
     await promises.writeFile(

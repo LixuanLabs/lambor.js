@@ -34,7 +34,7 @@ export const CLIENT_STATIC_FILES_RUNTIME_POLYFILLS = `${CLIENT_STATIC_FILES_RUNT
 // matches static/<buildid>/pages/<page>.js
 export const IS_BUNDLED_PAGE_REGEX = /^static[/\\][^/\\]+[/\\]pages.*\.js$/
 // matches static/<buildid>/pages/:page*.js
-export const ROUTE_NAME_REGEX = /^static[/\\]pages[/\\](.*)[/\\](aIndex|aModel|aLang)\.js$/
+export const ROUTE_NAME_REGEX = /^static[/\\]pages[/\\](.*)[/\\](aIndex|aModel|aLang)\.(jsx|js|ts|tsx)$/
 export const BLOCKED_NAME_REGEX = /^static[/\\]pages[/\\](_clientDocument|_document|_clientApp|_app)\.js$/
 export const SERVERLESS_ROUTE_NAME_REGEX = /^pages[/\\](.*)\.js$/
 export const TEMPORARY_REDIRECT_STATUS = 307

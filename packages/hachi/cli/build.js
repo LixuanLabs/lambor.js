@@ -24,17 +24,12 @@ const hachiBuild = (argv) => {
         Compiles the application for production deployment
 
       Usage
-        $ next build <dir>
+        $ hachi build <dir>
 
-      <dir> represents the directory of the Next.js application.
-      If no directory is provided, the current directory will be used.
     `,
       0
     )
   }
-  console.log('argv', argv);
-  
-  console.log('build args===>', args);
   
 
   const dir = resolve(args._[0] || '.')

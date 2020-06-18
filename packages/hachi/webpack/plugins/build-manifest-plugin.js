@@ -12,13 +12,11 @@ export default class BuildManifestPlugin {
                 const { chunks } = compilation;
                 const pageManifest = {};
                 for (const [urlKey, entrypoint] of compilation.entrypoints.entries()) {
-                    console.log('urlKey', entrypoint.name, BLOCKED_NAME_REGEX.test(entrypoint.name));
                     
                     // if (BLOCKED_PAGES.includes(urlKey)) {continue;}
                     if (BLOCKED_NAME_REGEX.test(entrypoint.name)) continue;
                     const result = ROUTE_NAME_REGEX.exec(entrypoint.name);
                     const pagePath = result[1];
-                    console.log('pagePath', pagePath);
                     
                     if (!pagePath) {
                         return
@@ -43,7 +41,6 @@ export default class BuildManifestPlugin {
                         if (IS_BUNDLED_PAGE_REGEX.exec(file)) {
                         continue
                         }
-                        console.log('file', file.replace(/\\/g, '/'));
 
                         pageManifest[`/${pagePath.replace(/\\/g, '/')}`].push(file.replace(/\\/g, '/'));
                     }
@@ -52,7 +49,6 @@ export default class BuildManifestPlugin {
                 if (typeof assetMap.pages['/index'] !== 'undefined') {
                     assetMap.pages['/'] = assetMap.pages['/index']
                   }
-                console.log('assetMap', assetMap);
                 compilation.assets[BUILD_MANIFEST] = new RawSource(
                     JSON.stringify(assetMap, null, 2)
                 )

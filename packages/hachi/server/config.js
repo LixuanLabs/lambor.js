@@ -11,15 +11,11 @@ export default function loadConfig(dir, customConfig) {
     })
     // If config file was found
     if (path) {
-        console.log('path', path);
-        
         const userConfigModule = require(path)
-        console.log('userConfigModule', userConfigModule);
         
         const userConfig = normalizeConfig(
             userConfigModule.default || userConfigModule
         )
-        console.log('userConfig', userConfig);
         
         if (Object.keys(userConfig).length === 0) {
             console.warn(
@@ -106,7 +102,7 @@ function assignDefaults(userConfig) {
 }
 
 const defaultConfig = {
-    distDir: '.hachi',
+    distDir: 'hachi',
     pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
     target: 'server',
     assetPrefix: '',

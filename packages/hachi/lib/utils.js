@@ -1,3 +1,8 @@
+import path from 'path';
+
+import { PAGES_MANIFEST, BUILD_MANIFEST } from './constants';
+
+
 export function printAndExit(message, code = 1) {
     if (code === 0) {
       // tslint:disable-next-line no-console
@@ -26,6 +31,15 @@ export function registerModel(app, model) {
    app.model(model);
  }
 }
+const ESCAPE_LOOKUP = {
+  '&': '\\u0026',
+  '>': '\\u003e',
+  '<': '\\u003c',
+  '\u2028': '\\u2028',
+  '\u2029': '\\u2029',
+}
+
+const ESCAPE_REGEX = /[&><\u2028\u2029]/g
 
 export function htmlEscapeJsonString(str) {
   return str.replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match])
@@ -79,4 +93,49 @@ export async function loadGetInitialProps (App, ctx) {
   return props
 }
 
+export function getPagePath (page, distDir, server) {
+  const serverBuildPath = path.join(distDir, server);
+  const pagesManifest = require(path.join(serverBuildPath, PAGES_MANIFEST))
+  return  pagesManifest[page];
+}
+
+export async function requirePage(app, page, distDir, server) {
+  const serverBuildPath = path.join(distDir, server);
+  const pagePath = getPagePath(page, distDir, server)
+  if (Array.isArray(pagePath)) {
+    let comPath = null,
+        modelPath = null,
+        langPath = null;
+    for (const filePath of pagePath) {
+      if (/aModel\.js$/.test(filePath)) {
+        modelPath = path.join(serverBuildPath, filePath);
+      } else if (/aLang\.js$/.test(filePath)) {
+        langPath = path.join(serverBuildPath, filePath)
+      } else if (/aIndex\.js$/.test(filePath)) {
+        comPath = path.join(serverBuildPath, filePath);
+      }
+    }
+    delete require.cache[require.resolve(modelPath)];
+    delete require.cache[require.resolve(langPath)];
+    delete require.cache[require.resolve(comPath)];
+    const model = require(modelPath);
+    console.log('model', model.state);
+    model.state._Lang = require(langPath);
+    registerModel(app, model);
+    return require(comPath);
+  }
+}
   
+
+export function sendHTML(
+  req,
+  res,
+  html
+) {
+
+  if (!res.getHeader('Content-Type')) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8')
+  }
+  res.setHeader('Content-Length', Buffer.byteLength(html))
+  res.end(req.method === 'HEAD' ? null : html)
+}

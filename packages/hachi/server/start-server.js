@@ -10,7 +10,7 @@ export default async function start(
     ...serverOptions,
     customServer: false,
   })
-  const srv = http.createServer(app.handleRequest())
+  const srv = http.createServer(app.handleRequest)
   await new Promise((resolve, reject) => {
     // This code catches EADDRINUSE error if the port is already in use
     srv.on('error', reject)

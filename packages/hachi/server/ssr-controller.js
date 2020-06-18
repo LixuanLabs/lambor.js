@@ -1,12 +1,14 @@
+import * as React from 'react';
 import { join, resolve } from 'path';
 import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
-import { format as formatUrl, parse as parseUrl, UrlWithParsedQuery } from 'url'
+import { format as formatUrl, parse as parseUrl } from 'url'
+import { renderToString } from 'react-dom/server';
 import loadConfig from './config'
 import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST } from '../lib/constants';
-import { registerModel } from '../lib/utils';
-import Router from '../router';
+import { registerModel, sendHTML } from '../lib/utils';
+import router from '../router';
 import { loadComponents } from './load-components';
 
 
@@ -31,7 +33,7 @@ export default class SSRController {
         // if (!dev) {
         //     this.pagesManifest = require(pagesManifestPath)
         // }
-        this.router = new Router();
+        this.router = router;
 
     }
 
@@ -39,12 +41,11 @@ export default class SSRController {
       return require(join(this.distDir, ROUTES_MANIFEST))
     }
 
-    async findPageComponents(pathname, query) {
-      await loadComponents(this.distDir, pathname)
+    async findPageComponents(app, pathname, query) {
+      await loadComponents(app, this.distDir, pathname)
     }
 
     generateRoutes() {
-      console.log('hachiConfig', this.hachiConfig);
       this.customRoutes = this.getCustomRoutes()
         return [
             {
@@ -66,11 +67,12 @@ export default class SSRController {
         const app = this.app;
         const App = app.start();
         try {
-          await this.findPageComponents(parsedUrl.pathname, parsedUrl.query)
+          await this.findPageComponents(app, parsedUrl.pathname, parsedUrl.query)
           // const matched = await this.router.execute(req, res, parsedUrl, app)
-          if (matched) {
-            return
-          }
+          const html = renderToString(
+            <App context={{}} />
+          );
+          sendHTML(req, res, html);
         } catch (err) {
           if (err.code === 'DECODE_FAILED') {
             res.statusCode = 400
@@ -87,9 +89,9 @@ export default class SSRController {
         const history = createMemoryHistory();
         history.push(url);
         
-        let initialState = this.initLocale(this.initialState);
+        // let initialState = this.initLocale(this.initialState);
 
-        this.app = dva({history, initialState, onError: e => {
+        this.app = dva({history, onError: e => {
             console.log(e.message);
         }});
         this.app.router(router);
@@ -121,21 +123,22 @@ export default class SSRController {
       return [];
     }
 
-    async handleRequest(
-        req,
-        res,
-        parsedUrl
-      ){
+    handleRequest = async (req, res, parsedUrl) => {
         // Parse url if parsedUrl not provided
         if (!parsedUrl || typeof parsedUrl !== 'object') {
-          const url = req.url
-          parsedUrl = parseUrl(url, true)
+          parsedUrl = parseUrl(req.url, true)
         }
 
         // 检测是否为数据请求
         if (this.hachiConfig.apiReg.test(parsedUrl.pathname)) {
             console.log('api接口', parsedUrl.pathname);
-            
+            res.end();
+            return;
+        }
+
+        if (parsedUrl.pathname === '/favicon.ico') {
+          res.end();
+          return;
         }
     
         // Parse the querystring ourselves if the user doesn't handle querystring parsing
@@ -143,14 +146,13 @@ export default class SSRController {
           parsedUrl.query = parseQs(parsedUrl.query)
         }
     
-        res.statusCode = 200
         try {
           return await this.run(req, res, parsedUrl)
         } catch (err) {
-          this.logError(err)
+          console.error(err)
           res.statusCode = 500
           res.end('Internal Server Error')
         }
-      }
+    }
     
 }

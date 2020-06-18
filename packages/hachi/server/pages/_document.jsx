@@ -1,13 +1,21 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import {
-  AMP_RENDER_TARGET,
-  CLIENT_STATIC_FILES_RUNTIME_AMP,
-  CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH,
-  CLIENT_STATIC_FILES_RUNTIME_WEBPACK,
-} from '../../lib/constants'
-import { DocumentContext as DocumentComponentContext } from '../../lib/document-context'
-import { htmlEscapeJsonString } from '../../lib/utils'
+
+const ESCAPE_LOOKUP = {
+  '&': '\\u0026',
+  '>': '\\u003e',
+  '<': '\\u003c',
+  '\u2028': '\\u2028',
+  '\u2029': '\\u2029',
+}
+
+const ESCAPE_REGEX = /[&><\u2028\u2029]/g
+
+export function htmlEscapeJsonString(str) {
+  return str.replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match])
+}
+
+export const DocumentComponentContext = React.createContext(null)
 
 
 export async function middleware({ req, res }) {}
@@ -92,8 +100,6 @@ export class Html extends Component {
     children: PropTypes.node.isRequired,
   }
 
-  context
-
   render() {
     const { htmlProps } = this.context._documentProps
     return (
@@ -113,7 +119,6 @@ export class Head extends Component {
     crossOrigin: PropTypes.string,
   }
 
-  context
 
   getCssLinks() {
     const { assetPrefix, files } = this.context._documentProps
@@ -214,13 +219,8 @@ export class Head extends Component {
   render() {
     const {
       styles,
-      ampPath,
-      inAmpMode,
       assetPrefix,
-      hybridAmp,
-      canonicalBase,
       __NEXT_DATA__,
-      dangerousAsPath,
       headTags,
       unstable_runtimeJS,
     } = this.context._documentProps
@@ -273,14 +273,12 @@ export class Head extends Component {
           <>
             <style
               data-next-hide-fouc
-              data-ampdevmode={inAmpMode ? 'true' : undefined}
               dangerouslySetInnerHTML={{
                 __html: `body{display:none}`,
               }}
             />
             <noscript
               data-next-hide-fouc
-              data-ampdevmode={inAmpMode ? 'true' : undefined}
             >
               <style
                 dangerouslySetInnerHTML={{
@@ -296,52 +294,48 @@ export class Head extends Component {
           name="next-head-count"
           content={React.Children.count(head || []).toString()}
         />
-        {!inAmpMode && (
-          <>
-            {this.getCssLinks()}
-            {!disableRuntimeJS && (
-              <link
-                rel="preload"
-                href={
-                  assetPrefix +
-                  getOptionalModernScriptVariant(
-                    encodeURI(`/_next/static/${buildId}/pages/_app.js`)
-                  ) +
-                  _devOnlyInvalidateCacheQueryString
-                }
-                as="script"
-                nonce={this.props.nonce}
-                crossOrigin={this.props.crossOrigin || process.crossOrigin}
-              />
-            )}
-            {!disableRuntimeJS && page !== '/_error' && (
-              <link
-                rel="preload"
-                href={
-                  assetPrefix +
-                  getOptionalModernScriptVariant(
-                    encodeURI(
-                      `/_next/static/${buildId}/pages${getPageFile(page)}`
-                    )
-                  ) +
-                  _devOnlyInvalidateCacheQueryString
-                }
-                as="script"
-                nonce={this.props.nonce}
-                crossOrigin={this.props.crossOrigin || process.crossOrigin}
-              />
-            )}
-            {!disableRuntimeJS && this.getPreloadDynamicChunks()}
-            {!disableRuntimeJS && this.getPreloadMainLinks()}
-            {this.context._documentProps.isDevelopment && (
-              // this element is used to mount development styles so the
-              // ordering matches production
-              // (by default, style-loader injects at the bottom of <head />)
-              <noscript id="__next_css__DO_NOT_USE__" />
-            )}
-            {styles || null}
-          </>
-        )}
+          {this.getCssLinks()}
+          {!disableRuntimeJS && (
+            <link
+              rel="preload"
+              href={
+                assetPrefix +
+                getOptionalModernScriptVariant(
+                  encodeURI(`/_next/static/${buildId}/pages/_app.js`)
+                ) +
+                _devOnlyInvalidateCacheQueryString
+              }
+              as="script"
+              nonce={this.props.nonce}
+              crossOrigin={this.props.crossOrigin || process.crossOrigin}
+            />
+          )}
+          {!disableRuntimeJS && page !== '/_error' && (
+            <link
+              rel="preload"
+              href={
+                assetPrefix +
+                getOptionalModernScriptVariant(
+                  encodeURI(
+                    `/_next/static/${buildId}/pages${getPageFile(page)}`
+                  )
+                ) +
+                _devOnlyInvalidateCacheQueryString
+              }
+              as="script"
+              nonce={this.props.nonce}
+              crossOrigin={this.props.crossOrigin || process.crossOrigin}
+            />
+          )}
+          {!disableRuntimeJS && this.getPreloadDynamicChunks()}
+          {!disableRuntimeJS && this.getPreloadMainLinks()}
+          {this.context._documentProps.isDevelopment && (
+            // this element is used to mount development styles so the
+            // ordering matches production
+            // (by default, style-loader injects at the bottom of <head />)
+            <noscript id="__next_css__DO_NOT_USE__" />
+          )}
+          {styles || null}
         {React.createElement(React.Fragment, {}, ...(headTags || []))}
       </head>
     )
@@ -354,7 +348,7 @@ export class Main extends Component {
   context
 
   render() {
-    const { inAmpMode, html } = this.context._documentProps
+    const { html } = this.context._documentProps
     return <div id="__hachi" dangerouslySetInnerHTML={{ __html: html }} />
   }
 }
@@ -484,49 +478,6 @@ export class NextScript extends Component {
 
     const { _devOnlyInvalidateCacheQueryString } = this.context
 
-    if (inAmpMode) {
-      if (process.env.NODE_ENV === 'production') {
-        return null
-      }
-
-      const devFiles = [
-        CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH,
-        CLIENT_STATIC_FILES_RUNTIME_AMP,
-        CLIENT_STATIC_FILES_RUNTIME_WEBPACK,
-      ]
-
-      return (
-        <>
-          {staticMarkup || disableRuntimeJS ? null : (
-            <script
-              id="__NEXT_DATA__"
-              type="application/json"
-              nonce={this.props.nonce}
-              crossOrigin={this.props.crossOrigin || process.crossOrigin}
-              dangerouslySetInnerHTML={{
-                __html: NextScript.getInlineScriptSource(
-                  this.context._documentProps
-                ),
-              }}
-              data-ampdevmode
-            />
-          )}
-          {devFiles
-            ? devFiles.map((file) => (
-                <script
-                  key={file}
-                  src={`${assetPrefix}/_next/${file}${_devOnlyInvalidateCacheQueryString}`}
-                  nonce={this.props.nonce}
-                  crossOrigin={this.props.crossOrigin || process.crossOrigin}
-                  data-ampdevmode
-                />
-              ))
-            : null}
-          {React.createElement(React.Fragment, {}, ...(bodyTags || []))}
-        </>
-      )
-    }
-
     const { page, buildId } = __NEXT_DATA__
 
     if (process.env.NODE_ENV !== 'production') {
@@ -649,10 +600,6 @@ export class NextScript extends Component {
       </>
     )
   }
-}
-
-function getAmpPath(ampPath, asPath) {
-  return ampPath || `${asPath}${asPath.includes('?') ? '&' : '?'}amp=1`
 }
 
 function getPageFile(page, buildId) {
