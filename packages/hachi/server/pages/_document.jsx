@@ -15,7 +15,7 @@ export function htmlEscapeJsonString(str) {
   return str.replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match])
 }
 
-export const DocumentComponentContext = React.createContext(null)
+export const DocumentComponentContext = React.createContext()
 
 
 export async function middleware({ req, res }) {}
@@ -82,13 +82,13 @@ export default class Document extends Component {
 
   render() {
     return (
-      <Html>
-        <Head />
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
+        <Html>
+          <Head />
+          <body>
+            <Main />
+            {/* <NextScript /> */}
+          </body>
+        </Html>
     )
   }
 }
@@ -154,38 +154,6 @@ export class Head extends Component {
     return cssLinkElements.length === 0 ? null : cssLinkElements
   }
 
-  getPreloadDynamicChunks() {
-    const { dynamicImports, assetPrefix } = this.context._documentProps
-    const { _devOnlyInvalidateCacheQueryString } = this.context
-
-    return (
-      dedupe(dynamicImports)
-        .map((bundle) => {
-          // `dynamicImports` will contain both `.js` and `.module.js` when the
-          // feature is enabled. This clause will filter down to the modern
-          // variants only.
-          if (!bundle.file.endsWith(getOptionalModernScriptVariant('.js'))) {
-            return null
-          }
-
-          return (
-            <link
-              rel="preload"
-              key={bundle.file}
-              href={`${assetPrefix}/_next/${encodeURI(
-                bundle.file
-              )}${_devOnlyInvalidateCacheQueryString}`}
-              as="script"
-              nonce={this.props.nonce}
-              crossOrigin={this.props.crossOrigin || process.crossOrigin}
-            />
-          )
-        })
-        // Filter out nulled scripts
-        .filter(Boolean)
-    )
-  }
-
   getPreloadMainLinks() {
     const { assetPrefix, files } = this.context._documentProps
     const { _devOnlyInvalidateCacheQueryString } = this.context
@@ -220,13 +188,12 @@ export class Head extends Component {
     const {
       styles,
       assetPrefix,
-      __NEXT_DATA__,
+      page,
       headTags,
       unstable_runtimeJS,
     } = this.context._documentProps
     const disableRuntimeJS = unstable_runtimeJS === false
     const { _devOnlyInvalidateCacheQueryString } = this.context
-    const { page, buildId } = __NEXT_DATA__
 
     let { head } = this.context._documentProps
     let children = this.props.children
@@ -301,7 +268,7 @@ export class Head extends Component {
               href={
                 assetPrefix +
                 getOptionalModernScriptVariant(
-                  encodeURI(`/_next/static/${buildId}/pages/_app.js`)
+                  encodeURI(`/_next/static/pages/_app.js`)
                 ) +
                 _devOnlyInvalidateCacheQueryString
               }
@@ -317,7 +284,7 @@ export class Head extends Component {
                 assetPrefix +
                 getOptionalModernScriptVariant(
                   encodeURI(
-                    `/_next/static/${buildId}/pages${getPageFile(page)}`
+                    `/_next/static/pages${getPageFile(page)}`
                   )
                 ) +
                 _devOnlyInvalidateCacheQueryString
@@ -327,7 +294,6 @@ export class Head extends Component {
               crossOrigin={this.props.crossOrigin || process.crossOrigin}
             />
           )}
-          {!disableRuntimeJS && this.getPreloadDynamicChunks()}
           {!disableRuntimeJS && this.getPreloadMainLinks()}
           {this.context._documentProps.isDevelopment && (
             // this element is used to mount development styles so the
@@ -345,11 +311,9 @@ export class Head extends Component {
 export class Main extends Component {
   static contextType = DocumentComponentContext
 
-  context
-
   render() {
-    const { html } = this.context._documentProps
-    return <div id="__hachi" dangerouslySetInnerHTML={{ __html: html }} />
+    const { children } = this.context._documentProps
+    return <div id="__hachi">{children}</div>;
   }
 }
 
@@ -360,8 +324,6 @@ export class NextScript extends Component {
     nonce: PropTypes.string,
     crossOrigin: PropTypes.string,
   }
-
-  context
 
   // Source: https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
   static safariNomoduleFix =
@@ -494,7 +456,7 @@ export class NextScript extends Component {
         key={page}
         src={
           assetPrefix +
-          encodeURI(`/_next/static/${buildId}/pages${getPageFile(page)}`) +
+          encodeURI(`/_next/static/pages${getPageFile(page)}`) +
           _devOnlyInvalidateCacheQueryString
         }
         nonce={this.props.nonce}
@@ -509,7 +471,7 @@ export class NextScript extends Component {
           src={
             assetPrefix +
             getOptionalModernScriptVariant(
-              encodeURI(`/_next/static/${buildId}/pages${getPageFile(page)}`)
+              encodeURI(`/_next/static/pages${getPageFile(page)}`)
             ) +
             _devOnlyInvalidateCacheQueryString
           }
@@ -526,7 +488,7 @@ export class NextScript extends Component {
         data-next-page="/_app"
         src={
           assetPrefix +
-          `/_next/static/${buildId}/pages/_app.js` +
+          `/_next/static/pages/_app.js` +
           _devOnlyInvalidateCacheQueryString
         }
         key="_app"
@@ -540,7 +502,7 @@ export class NextScript extends Component {
           data-next-page="/_app"
           src={
             assetPrefix +
-            `/_next/static/${buildId}/pages/_app.module.js` +
+            `/_next/static/pages/_app.module.js` +
             _devOnlyInvalidateCacheQueryString
           }
           key="_app-modern"

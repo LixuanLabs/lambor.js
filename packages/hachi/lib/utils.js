@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { PAGES_MANIFEST, BUILD_MANIFEST } from './constants';
+import { PAGES_MANIFEST, BLOCKED_PAGES_REG } from './constants';
 
 
 export function printAndExit(message, code = 1) {
@@ -101,6 +101,9 @@ export function getPagePath (page, distDir, server) {
 
 export async function requirePage(app, page, distDir, server) {
   const serverBuildPath = path.join(distDir, server);
+  if (BLOCKED_PAGES_REG.test(page)) {
+    return require(path.join(serverBuildPath, page))
+  }
   const pagePath = getPagePath(page, distDir, server)
   if (Array.isArray(pagePath)) {
     let comPath = null,
@@ -115,11 +118,7 @@ export async function requirePage(app, page, distDir, server) {
         comPath = path.join(serverBuildPath, filePath);
       }
     }
-    delete require.cache[require.resolve(modelPath)];
-    delete require.cache[require.resolve(langPath)];
-    delete require.cache[require.resolve(comPath)];
     const model = require(modelPath);
-    console.log('model', model.state);
     model.state._Lang = require(langPath);
     registerModel(app, model);
     return require(comPath);

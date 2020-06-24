@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { join, resolve } from 'path';
+import fs from 'fs';
 import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
@@ -25,8 +26,11 @@ export default class SSRController {
         this.hachiConfig = loadConfig(this.dir, conf);
         this.distDir = join(this.dir, this.hachiConfig.distDir);
         this.publicDir = join(this.dir, CLIENT_PUBLIC_FILES_PATH);
-
         this.serverBuildDir = join(this.distDir,SERVER_DIRECTORY);
+        this.routesJson = join(this.dir, 'routes.json');
+        if (fs.existsSync(this.routesJson)) {
+          this.routesMap = require(this.routesJson);
+        }
 
         // const pagesManifestPath = join(this.serverBuildDir, PAGES_MANIFEST)
 
@@ -39,10 +43,6 @@ export default class SSRController {
 
     getCustomRoutes() {
       return require(join(this.distDir, ROUTES_MANIFEST))
-    }
-
-    async findPageComponents(app, pathname, query) {
-      await loadComponents(app, this.distDir, pathname)
     }
 
     generateRoutes() {
@@ -65,14 +65,18 @@ export default class SSRController {
       ) {
         this.initDva({router: this.router, url: req.url});
         const app = this.app;
-        const App = app.start();
+        const DApp = app.start();
         try {
-          await this.findPageComponents(app, parsedUrl.pathname, parsedUrl.query)
+          const { Document, App, routesList } = await loadComponents(app, this.distDir, this.routesMap);
           // const matched = await this.router.execute(req, res, parsedUrl, app)
           const html = renderToString(
-            <App context={{}} />
+            <DApp context={{
+              routesList,
+              Document,
+              App
+            }} />
           );
-          sendHTML(req, res, html);
+          return sendHTML(req, res, html);
         } catch (err) {
           if (err.code === 'DECODE_FAILED') {
             res.statusCode = 400
@@ -81,7 +85,7 @@ export default class SSRController {
           throw err
         }
     
-        await this.render404(req, res, parsedUrl)
+        // await this.render404(req, res, parsedUrl)
     }
 
     initDva({router, url, initModel = []}) {

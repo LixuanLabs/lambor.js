@@ -95,7 +95,7 @@ function assignDefaults(userConfig) {
   
     if (typeof result.assetPrefix !== 'string') {
       throw new Error(
-        `Specified assetPrefix is not a string, found type "${typeof result.assetPrefix}" https://err.sh/zeit/next.js/invalid-assetprefix`
+        `Specified assetPrefix is not a string, found type "${typeof result.assetPrefix}" `
       )
     }
     return result

@@ -16,6 +16,7 @@ export const SERVERLESS_DIRECTORY = 'serverless'
 export const CONFIG_FILE = 'hachi.config.js'
 export const BUILD_ID_FILE = 'BUILD_ID'
 export const BLOCKED_PAGES = ['/_document', '/_app', '/_clientDocument', '/_clientApp']
+export const BLOCKED_PAGES_REG = /(\/_document|\/_app|\/_clientDocument|\/_clientApp)/;
 export const CLIENT_PUBLIC_FILES_PATH = 'public'
 export const CLIENT_STATIC_FILES_PATH = 'static'
 export const CLIENT_STATIC_FILES_RUNTIME = 'runtime'

@@ -34,9 +34,11 @@ export default async function getBaseWebpackConfig(
         entry: {
             ...entrypoints
         },
+        target: target === 'server' ? 'node' : 'web',
         output: {
             path: outputPath,
             filename: '[name]',
+            libraryTarget: 'commonjs2',
             publicPath: '/dist/'
         },
         resolve: {
