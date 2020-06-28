@@ -118,8 +118,9 @@ export async function requirePage(app, page, distDir, server) {
         comPath = path.join(serverBuildPath, filePath);
       }
     }
+    const langModule = require(langPath)
     const model = require(modelPath);
-    model.state._Lang = require(langPath);
+    model.state._Lang = langModule.default || langModule;
     registerModel(app, model);
     return require(comPath);
   }

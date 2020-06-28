@@ -19,9 +19,7 @@ export default function({history, context}) {
                                     {
                                         page: location.pathname,
                                         children: (
-                                            <App>
-                                                <C {...props} {...rest} />
-                                            </App>
+                                            <C {...props} {...rest} />
                                         )
                                     }
                                 )
