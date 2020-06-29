@@ -27,6 +27,8 @@ export async function loadComponents (app, distDir, routesMap) {
           });
         }
       }
+      console.log('routesList', routesList);
+      
       return {
         Document: DocumentMod.default,
         App: AppMod.default,

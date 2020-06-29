@@ -51,7 +51,6 @@ export function createEntrypoints(
 ) {
   const client = {}
   const server = {}
-
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
     const bundleFile = `${normalizePagePath(page)}.js`
@@ -74,7 +73,6 @@ export function createEntrypoints(
     //   return
     // }
   })
-
   return {
     client,
     server,
