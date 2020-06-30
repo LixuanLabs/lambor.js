@@ -18,6 +18,7 @@ export default async function getBaseWebpackConfig(
     const distDir = path.join(dir, config.distDir)
     const outputPath = path.join(distDir, target === 'server' ? 'server' : '')
     const plugins = [];
+    const output = {}
     if (target === 'server') {
         plugins.push(new PagesManifestPlugin())
         plugins.push(new CopyPlugin({
@@ -25,6 +26,7 @@ export default async function getBaseWebpackConfig(
                 {from: path.join(__dirname, '../server/pages'), to: outputPath}
             ]
         }))
+        output.libraryTarget = 'commonjs2'
     } else {
         plugins.push(new CleanWebpackPlugin())
         plugins.push(new BuildManifestPlugin())
@@ -37,9 +39,9 @@ export default async function getBaseWebpackConfig(
         target: target === 'server' ? 'node' : 'web',
         output: {
             path: outputPath,
-            filename: '[name]',
-            libraryTarget: 'commonjs2',
-            publicPath: '/dist/'
+            filename: '[name].js',
+            publicPath: '/dist/',
+            ...output
         },
         resolve: {
             // alias: getAlias(),
@@ -80,26 +82,21 @@ export default async function getBaseWebpackConfig(
             //         filename: REACT_LOADABLE_MANIFEST,
             //     }),
         ],
-        // optimization: {
-        //     splitChunks: {
-        //         maxAsyncRequests: 1,
-        //         cacheGroups: {
-        //             vendor: {
-        //                 test: /node_modules(?!(\/(@ant-design|antd)))/,
-        //                 chunks: "all",
-        //                 name: "vendor",
-        //                 priority: 10,
-        //                 enforce: true,
-        //             },
-        //             ant: {
-        //                 test: /node_modules\/(@ant-design|antd)/,
-        //                 chunks: "all",
-        //                 name: "ant",
-        //                 priority: 12,
-        //                 enforce: true
-        //             }
-        //         }
-        //     },
-        // },
+        optimization: {
+            splitChunks: {
+                maxAsyncRequests: 1,
+                cacheGroups: {
+                    vendor: {
+                        chunks: "all",
+                        name: "vendor",
+                        priority: 10,
+                        enforce: true,
+                    },
+                }
+            },
+            runtimeChunk: {
+                name: 'manifest'
+            }
+        },
     }
 }

@@ -12,6 +12,8 @@ export default class BuildManifestPlugin {
                 const { chunks } = compilation;
                 const pageManifest = {};
                 for (const [urlKey, entrypoint] of compilation.entrypoints.entries()) {
+                    console.log('entrypoint', entrypoint.name);
+                    
                     
                     // if (BLOCKED_PAGES.includes(urlKey)) {continue;}
                     if (BLOCKED_NAME_REGEX.test(entrypoint.name)) continue;

@@ -231,36 +231,6 @@ export class Head extends Component {
           content={React.Children.count(head || []).toString()}
         />
           {this.getCssLinks()}
-          {!disableRuntimeJS && (
-            <link
-              rel="preload"
-              href={
-                getOptionalModernScriptVariant(
-                  encodeURI(`/static/pages/_app.js`)
-                ) +
-                _devOnlyInvalidateCacheQueryString
-              }
-              as="script"
-              nonce={this.props.nonce}
-              crossOrigin={this.props.crossOrigin || process.crossOrigin}
-            />
-          )}
-          {!disableRuntimeJS && page !== '/_error' && (
-            <link
-              rel="preload"
-              href={
-                getOptionalModernScriptVariant(
-                  encodeURI(
-                    `/static/pages${getPageFile(page)}`
-                  )
-                ) +
-                _devOnlyInvalidateCacheQueryString
-              }
-              as="script"
-              nonce={this.props.nonce}
-              crossOrigin={this.props.crossOrigin || process.crossOrigin}
-            />
-          )}
           {this.context._documentProps.isDevelopment && (
             // this element is used to mount development styles so the
             // ordering matches production
