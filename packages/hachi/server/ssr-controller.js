@@ -7,7 +7,7 @@ import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl } from 'url'
 import { renderToString } from 'react-dom/server';
 import loadConfig from './config'
-import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST } from '../lib/constants';
+import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST, BUILD_MANIFEST } from '../lib/constants';
 import { registerModel, sendHTML } from '../lib/utils';
 import router from '../router';
 import { loadComponents } from './load-components';
@@ -28,6 +28,9 @@ export default class SSRController {
         this.publicDir = join(this.dir, CLIENT_PUBLIC_FILES_PATH);
         this.serverBuildDir = join(this.distDir,SERVER_DIRECTORY);
         this.routesJson = join(this.dir, 'routes.json');
+        const buildManifestPath = join(this.distDir, BUILD_MANIFEST);
+        const buildManifestModule = require(buildManifestPath)
+        this.buildManifest = buildManifestModule.default || buildManifestModule;
         if (fs.existsSync(this.routesJson)) {
           this.routesMap = require(this.routesJson);
         }
@@ -41,22 +44,6 @@ export default class SSRController {
 
     }
 
-    getCustomRoutes() {
-      return require(join(this.distDir, ROUTES_MANIFEST))
-    }
-
-    generateRoutes() {
-      this.customRoutes = this.getCustomRoutes()
-        return [
-            {
-                path: '/',
-                exact: true,
-                getComponent: (locale) => {
-                    return <div>getComponent</div>
-                }
-            }
-        ]
-    }
 
     async run(
         req,
@@ -73,7 +60,8 @@ export default class SSRController {
             <DApp context={{
               routesList,
               Document,
-              App
+              App,
+              buildManifest: this.buildManifest
             }} />
           );
           return sendHTML(req, res, html);
@@ -140,6 +128,21 @@ export default class SSRController {
             return;
         }
 
+        // 是否为静态文件
+        if (parsedUrl.pathname.startsWith('/static')) {
+          res.write(
+            fs.readFileSync(
+              join(
+                this.distDir,
+                '/static/',
+                parsedUrl.pathname.slice('/static/'.length)
+              ),
+              'utf8'
+            )
+          )
+          return res.end()
+        }
+
         if (parsedUrl.pathname === '/favicon.ico') {
           res.end();
           return;
@@ -149,6 +152,7 @@ export default class SSRController {
         if (typeof parsedUrl.query === 'string') {
           parsedUrl.query = parseQs(parsedUrl.query)
         }
+
     
         try {
           return await this.run(req, res, parsedUrl)
