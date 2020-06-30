@@ -121,7 +121,7 @@ export async function requirePage(app, page, distDir, server) {
     const langModule = require(langPath)
     const model = require(modelPath);
     model.state._Lang = langModule.default || langModule;
-    registerModel(app, model);
+    registerModel(app, model.default || model);
     return require(comPath);
   }
 }
