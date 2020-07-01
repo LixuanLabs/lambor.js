@@ -16,20 +16,37 @@ export default async function getBaseWebpackConfig(
     }
 ) {
     const distDir = path.join(dir, config.distDir)
-    const outputPath = path.join(distDir, target === 'server' ? 'server' : '')
     const plugins = [];
     const output = {}
+    const optimization = {};
     if (target === 'server') {
+        output.libraryTarget = 'commonjs2'
+        output.path = path.join(distDir, 'server');
         plugins.push(new PagesManifestPlugin())
         plugins.push(new CopyPlugin({
             patterns: [
-                {from: path.join(__dirname, '../server/pages'), to: outputPath}
+                {from: path.join(__dirname, '../server/pages'), to: output.path}
             ]
         }))
-        output.libraryTarget = 'commonjs2'
+        
     } else {
+        output.path = distDir;
         plugins.push(new CleanWebpackPlugin())
         plugins.push(new BuildManifestPlugin())
+        optimization.splitChunks = {
+            maxAsyncRequests: 1,
+            cacheGroups: {
+                vendor: {
+                    chunks: "all",
+                    name: "vendor",
+                    priority: 10,
+                    enforce: true,
+                },
+            }
+        };
+        optimization.runtimeChunk = {
+            name: 'manifest'
+        };
     }
     
     return {
@@ -38,9 +55,7 @@ export default async function getBaseWebpackConfig(
         },
         target: target === 'server' ? 'node' : 'web',
         output: {
-            path: outputPath,
             filename: '[name].js',
-            publicPath: '/dist/',
             ...output
         },
         resolve: {
@@ -62,6 +77,12 @@ export default async function getBaseWebpackConfig(
                         },
                     ]
                 }, {
+                    test: /\.less$/,
+                    use: [
+                        // 'thread-loader',
+                        'style-loader', 'css-loader', 'less-loader',
+                    ]
+                }, {
                     test: /\.(png|jpg|gif|ico)$/,
                     loader: 'file-loader',
                     options: {
@@ -77,26 +98,7 @@ export default async function getBaseWebpackConfig(
         },
         plugins: [
             ...plugins,
-            // target === 'server' &&
-            //     new ReactLoadablePlugin({
-            //         filename: REACT_LOADABLE_MANIFEST,
-            //     }),
         ],
-        optimization: {
-            splitChunks: {
-                maxAsyncRequests: 1,
-                cacheGroups: {
-                    vendor: {
-                        chunks: "all",
-                        name: "vendor",
-                        priority: 10,
-                        enforce: true,
-                    },
-                }
-            },
-            runtimeChunk: {
-                name: 'manifest'
-            }
-        },
+        optimization,
     }
 }

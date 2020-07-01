@@ -16,23 +16,10 @@ export async function loadComponents (app, distDir, routesMap) {
     
       const DocumentMod = require(documentPath)
       const AppMod = require(appPath)
-      const routesList = [];
-      for (const route in routesMap) {
-        if (routesMap.hasOwnProperty(route)) {
-          const pageCom = await requirePage(app, route, distDir, SERVER_DIRECTORY);
-          routesList.push({
-            path: route,
-            exact: true,
-            component: pageCom.default
-          });
-        }
-      }
-      console.log('routesList', routesList);
       
       return {
         Document: DocumentMod.default,
         App: AppMod.default,
-        routesList
       }
       
 

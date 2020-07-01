@@ -101,7 +101,7 @@ function assignDefaults(userConfig) {
     return result
 }
 
-const defaultConfig = {
+export const defaultConfig = {
     distDir: 'hachi',
     pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
     target: 'server',

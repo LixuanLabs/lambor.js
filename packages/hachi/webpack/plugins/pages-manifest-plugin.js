@@ -30,12 +30,12 @@ export default class PagesManifestPlugin {
           pages[`/${pagePath.replace(/\\/g, '/')}`].push(chunk.name.replace(
             /\\/g,
             '/'
-          ))
+          ) + '.js')
         } else {
           pages[`/${pagePath.replace(/\\/g, '/')}`] = [chunk.name.replace(
             /\\/g,
             '/'
-          )];
+          ) + '.js'];
 
         }
       }

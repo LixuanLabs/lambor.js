@@ -2,12 +2,13 @@ import * as React from 'react';
 import { join, resolve } from 'path';
 import fs from 'fs';
 import dva from 'dva';
+import * as Loadable from 'react-loadable';
 import { createMemoryHistory } from 'history';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl } from 'url'
 import { renderToString } from 'react-dom/server';
 import loadConfig from './config'
-import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST, BUILD_MANIFEST } from '../lib/constants';
+import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST, BUILD_MANIFEST, BLOCKED_PAGES, BLOCKED_PAGES_REG } from '../lib/constants';
 import { registerModel, sendHTML } from '../lib/utils';
 import router from '../router';
 import { loadComponents } from './load-components';
@@ -27,21 +28,90 @@ export default class SSRController {
         this.distDir = join(this.dir, this.hachiConfig.distDir);
         this.publicDir = join(this.dir, CLIENT_PUBLIC_FILES_PATH);
         this.serverBuildDir = join(this.distDir,SERVER_DIRECTORY);
-        this.routesJson = join(this.dir, 'routes.json');
+        
         const buildManifestPath = join(this.distDir, BUILD_MANIFEST);
         const buildManifestModule = require(buildManifestPath)
         this.buildManifest = buildManifestModule.default || buildManifestModule;
-        if (fs.existsSync(this.routesJson)) {
-          this.routesMap = require(this.routesJson);
-        }
-
-        // const pagesManifestPath = join(this.serverBuildDir, PAGES_MANIFEST)
-
-        // if (!dev) {
-        //     this.pagesManifest = require(pagesManifestPath)
-        // }
         this.router = router;
+        this.routerList = this.generateRoutes();
+        
 
+    }
+     // 构建Loadable 路由系统
+    generateRoutes() {
+      this.routesJsonPath = join(this.dir, 'routes.json');
+      const routes = [];
+      if (fs.existsSync(this.routesJsonPath)) {
+        const routesMap = require(this.routesJsonPath);
+        for (const key in routesMap) {
+          if (BLOCKED_PAGES_REG.test(key)) continue;
+          const aIndexPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aIndex');
+          const aLangPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aLang');
+          const aModelPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aModel');
+          let aIndexPath,
+              aLangPath,
+              aModelPath = null;
+          for (const ext of this.hachiConfig.pageExtensions) {
+            if (aIndexPath && aLangPath && aModelPath) {
+              break;
+            }
+            if (!aIndexPath) {
+              const tempPath = aIndexPathPrefix + '.' + ext;
+              if (fs.existsSync(tempPath)) aIndexPath = tempPath;
+            }
+            if (!aLangPath) {
+              const tempPath = aLangPathPrefix + '.' + ext;
+              if (fs.existsSync(tempPath)) aLangPath = tempPath
+            }
+            if (!aModelPath) {
+              const tempPath = aModelPathPrefix + '.' + ext;
+              if (fs.existsSync(tempPath)) aModelPath = tempPath;
+            }
+          }
+          console.log('aIndexPath===', aIndexPath);
+          
+
+          if (aIndexPath && aLangPath && aModelPath) {
+            routes.push({
+              path: key,
+              exact: true,
+              component: Loadable.Map({
+                  loader: {
+                    Index: () => import(aIndexPath),
+                    Lang: () => import(aLangPath),
+                    Model: () => import(aModelPath)
+                  },
+                  delay: 2000,
+                  timeout: 10000,
+                  loading: <div>loading</div>,
+                  modules: [
+                    aIndexPath,
+                    aLangPath,
+                    aModelPath
+                  ],
+                  webpack: [
+                    aIndexPath,
+                    aLangPath,
+                    aModelPath
+                  ],
+                  render(loaded, props) {
+                    const AIndex = loaded['Index'].default || loaded['Index'];
+                    const Model = loaded['Model'].default || loaded['Model'];
+                    const Lang = loaded['Lang'].default || loaded['Lang'];
+                    console.log('AIndex');
+                    
+                    registerModel(Model);
+                    return (
+                        <AIndex {...props} __lang={Lang} />
+                    )
+                  }
+              })
+            })  
+          }
+          
+        }
+      }
+      return routes;
     }
 
 
@@ -54,14 +124,17 @@ export default class SSRController {
         const app = this.app;
         const DApp = app.start();
         try {
-          const { Document, App, routesList } = await loadComponents(app, this.distDir, this.routesMap);
+          const pageBuildFiles = this.buildManifest.pages[parsedUrl.pathname];
+          console.log('pageBuildFiles', pageBuildFiles);
+          
+          const { Document, App } = await loadComponents(app, this.distDir, pageBuildFiles);
           // const matched = await this.router.execute(req, res, parsedUrl, app)
           const html = renderToString(
             <DApp context={{
-              routesList,
+              routesList: this.routerList,
               Document,
               App,
-              buildManifest: this.buildManifest
+              pageBuildFiles
             }} />
           );
           return sendHTML(req, res, html);

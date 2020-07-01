@@ -1,5 +1,7 @@
-import http from 'http'
-import Controller from './ssr-controller'
+import http from 'http';
+import * as Loadable from 'react-loadable';
+// import Controller from './ssr-controller';
+import Controller from './ssr-controller';
 
 export default async function start(
   serverOptions,
@@ -10,6 +12,8 @@ export default async function start(
     ...serverOptions,
     customServer: false,
   })
+  await Loadable.preloadAll()
+  
   const srv = http.createServer(app.handleRequest)
   await new Promise((resolve, reject) => {
     // This code catches EADDRINUSE error if the port is already in use

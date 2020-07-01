@@ -50,7 +50,7 @@ export function createEntrypoints(
   config
 ) {
   const client = {}
-  const server = {}
+  const server = []
   Object.keys(pages).forEach((page) => {
     const absolutePagePath = pages[page]
     const bundleFile = `${normalizePagePath(page)}`
@@ -59,15 +59,12 @@ export function createEntrypoints(
     const bundlePath = join('static', 'pages', bundleFile)
     
     if (['/_document', '/_app'].includes(absolutePagePath)) {
-        server[bundlePath] = [absolutePagePath];
+        server.push[absolutePagePath];
         return;
     }
 
-
-    if (isApiRoute || target === 'server') {
-      server[bundlePath] = [absolutePagePath]
-      client[bundlePath] = [absolutePagePath]
-    } 
+    server[bundlePath] = [absolutePagePath]
+    client[bundlePath] = [absolutePagePath]
 
     // if (page === '/_document') {
     //   return
@@ -75,6 +72,6 @@ export function createEntrypoints(
   })
   return {
     client,
-    server,
+    server
   }
 }

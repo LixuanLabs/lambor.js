@@ -31,6 +31,13 @@ export function registerModel(app, model) {
    app.model(model);
  }
 }
+
+export function registerRouterModel (modelList) {
+  modelList.forEach(model => {
+      registerModel(app, model);
+  });
+};
+
 const ESCAPE_LOOKUP = {
   '&': '\\u0026',
   '>': '\\u003e',
@@ -100,6 +107,7 @@ export function getPagePath (page, distDir, server) {
 }
 
 export async function requirePage(app, page, distDir, server) {
+  console.log('page', page);
   const serverBuildPath = path.join(distDir, server);
   if (BLOCKED_PAGES_REG.test(page)) {
     return require(path.join(serverBuildPath, page))
@@ -116,10 +124,17 @@ export async function requirePage(app, page, distDir, server) {
         langPath = path.join(serverBuildPath, filePath)
       } else if (/aIndex\.js$/.test(filePath)) {
         comPath = path.join(serverBuildPath, filePath);
+      } else {
+
       }
     }
+    console.log('modelPath', modelPath);
+    
     const langModule = require(langPath)
-    const model = require(modelPath);
+    const modelModule = require(modelPath)
+    console.log('modelModule', modelModule);
+    
+    const model = modelModule.default || modelModule;
     model.state._Lang = langModule.default || langModule;
     registerModel(app, model.default || model);
     return require(comPath);
