@@ -1,4 +1,5 @@
 import path from 'path';
+import glob from 'glob';
 import { existsSync, promises, readFileSync } from 'fs';
 import { BLOCKED_PAGES } from '../lib/constants';
 
@@ -23,16 +24,13 @@ export function findPagesMapDir(dir) {
 
 export async function collectPages(pagesMapDir, dir) {
     const pagesMap = require(pagesMapDir);
-    const obj = {};
+    const urlPagesMap = {};
     Object.keys(pagesMap).map(key => {
       if (BLOCKED_PAGES.includes(key)) {
-        obj[key] = path.join(dir, pagesMap[key]);
+        urlPagesMap[key] = path.join(dir, pagesMap[key]);
         return;
       }
-      const preKey = pagesMap[key].split('pages')[1];
-        obj[path.join(preKey, 'aModel')] = path.join(dir, pagesMap[key], 'aModel.js');
-        obj[path.join(preKey, 'aIndex')] = path.join(dir, pagesMap[key], 'aIndex.jsx');
-        obj[path.join(preKey, 'aLang')] = path.join(dir, pagesMap[key], 'aLang.js');
+      urlPagesMap[key] = glob.sync(`${path.join(dir, pagesMap[key])}/{aIndex,aLang,aModel}.*`);
     })
-    return obj;
+    return urlPagesMap;
 }

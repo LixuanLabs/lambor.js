@@ -23,7 +23,7 @@ export const babelClientOpts = {
     plugins: [
       // workaround for @taskr/esnext bug replacing `-import` with `-require(`
       // eslint-disable-next-line no-useless-concat
-      '@babel/plugin-syntax-dynamic-impor' + 't',
+      '@babel/plugin-syntax-dynamic-import',
       ['@babel/plugin-proposal-class-properties', { loose: true }],
     ],
     overrides: [

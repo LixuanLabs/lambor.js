@@ -5,6 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
 import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
+import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
 export default async function getBaseWebpackConfig(
@@ -22,17 +23,17 @@ export default async function getBaseWebpackConfig(
     if (target === 'server') {
         output.libraryTarget = 'commonjs2'
         output.path = path.join(distDir, 'server');
-        plugins.push(new PagesManifestPlugin())
+        plugins.push(new CleanWebpackPlugin())
+        // plugins.push(new PagesManifestPlugin())
         plugins.push(new CopyPlugin({
             patterns: [
                 {from: path.join(__dirname, '../server/pages'), to: output.path}
             ]
         }))
-        
     } else {
         output.path = distDir;
         plugins.push(new CleanWebpackPlugin())
-        plugins.push(new BuildManifestPlugin())
+        // plugins.push(new BuildManifestPlugin())
         optimization.splitChunks = {
             maxAsyncRequests: 1,
             cacheGroups: {
@@ -59,7 +60,9 @@ export default async function getBaseWebpackConfig(
             ...output
         },
         resolve: {
-            // alias: getAlias(),
+            alias: {
+                ha: process.cwd()
+            },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },
         mode: 'development',
@@ -80,7 +83,13 @@ export default async function getBaseWebpackConfig(
                     test: /\.less$/,
                     use: [
                         // 'thread-loader',
-                        'style-loader', 'css-loader', 'less-loader',
+                        'style-loader', 'css-loader', 
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                javascriptEnabled: true
+                            }
+                        }
                     ]
                 }, {
                     test: /\.(png|jpg|gif|ico)$/,

@@ -11,6 +11,7 @@ import loadConfig from './config'
 import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST, BUILD_MANIFEST, BLOCKED_PAGES, BLOCKED_PAGES_REG } from '../lib/constants';
 import { registerModel, sendHTML } from '../lib/utils';
 import router from '../router';
+import { generateRoutes } from '../lib/routes';
 import { loadComponents } from './load-components';
 
 
@@ -32,86 +33,8 @@ export default class SSRController {
         const buildManifestPath = join(this.distDir, BUILD_MANIFEST);
         const buildManifestModule = require(buildManifestPath)
         this.buildManifest = buildManifestModule.default || buildManifestModule;
-        this.router = router;
-        this.routerList = this.generateRoutes();
-        
-
-    }
-     // 构建Loadable 路由系统
-    generateRoutes() {
-      this.routesJsonPath = join(this.dir, 'routes.json');
-      const routes = [];
-      if (fs.existsSync(this.routesJsonPath)) {
-        const routesMap = require(this.routesJsonPath);
-        for (const key in routesMap) {
-          if (BLOCKED_PAGES_REG.test(key)) continue;
-          const aIndexPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aIndex');
-          const aLangPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aLang');
-          const aModelPathPrefix = join(this.serverBuildDir, 'static', routesMap[key], 'aModel');
-          let aIndexPath,
-              aLangPath,
-              aModelPath = null;
-          for (const ext of this.hachiConfig.pageExtensions) {
-            if (aIndexPath && aLangPath && aModelPath) {
-              break;
-            }
-            if (!aIndexPath) {
-              const tempPath = aIndexPathPrefix + '.' + ext;
-              if (fs.existsSync(tempPath)) aIndexPath = tempPath;
-            }
-            if (!aLangPath) {
-              const tempPath = aLangPathPrefix + '.' + ext;
-              if (fs.existsSync(tempPath)) aLangPath = tempPath
-            }
-            if (!aModelPath) {
-              const tempPath = aModelPathPrefix + '.' + ext;
-              if (fs.existsSync(tempPath)) aModelPath = tempPath;
-            }
-          }
-          console.log('aIndexPath===', aIndexPath);
-          
-
-          if (aIndexPath && aLangPath && aModelPath) {
-            routes.push({
-              path: key,
-              exact: true,
-              component: Loadable.Map({
-                  loader: {
-                    Index: () => import(aIndexPath),
-                    Lang: () => import(aLangPath),
-                    Model: () => import(aModelPath)
-                  },
-                  delay: 2000,
-                  timeout: 10000,
-                  loading: <div>loading</div>,
-                  modules: [
-                    aIndexPath,
-                    aLangPath,
-                    aModelPath
-                  ],
-                  webpack: [
-                    aIndexPath,
-                    aLangPath,
-                    aModelPath
-                  ],
-                  render(loaded, props) {
-                    const AIndex = loaded['Index'].default || loaded['Index'];
-                    const Model = loaded['Model'].default || loaded['Model'];
-                    const Lang = loaded['Lang'].default || loaded['Lang'];
-                    console.log('AIndex');
-                    
-                    registerModel(Model);
-                    return (
-                        <AIndex {...props} __lang={Lang} />
-                    )
-                  }
-              })
-            })  
-          }
-          
-        }
-      }
-      return routes;
+        this.initDva({router: router});
+        this.routerList = generateRoutes(this.dir);
     }
 
 
@@ -120,12 +43,11 @@ export default class SSRController {
         res,
         parsedUrl
       ) {
-        this.initDva({router: this.router, url: req.url});
+        
         const app = this.app;
         const DApp = app.start();
         try {
           const pageBuildFiles = this.buildManifest.pages[parsedUrl.pathname];
-          console.log('pageBuildFiles', pageBuildFiles);
           
           const { Document, App } = await loadComponents(app, this.distDir, pageBuildFiles);
           // const matched = await this.router.execute(req, res, parsedUrl, app)
@@ -133,8 +55,8 @@ export default class SSRController {
             <DApp context={{
               routesList: this.routerList,
               Document,
-              App,
-              pageBuildFiles
+              pageBuildFiles,
+              app
             }} />
           );
           return sendHTML(req, res, html);
@@ -149,10 +71,10 @@ export default class SSRController {
         // await this.render404(req, res, parsedUrl)
     }
 
-    initDva({router, url, initModel = []}) {
+    initDva({router}) {
         // 初始化DvaApp
         const history = createMemoryHistory();
-        history.push(url);
+        // history.push(url);
         
         // let initialState = this.initLocale(this.initialState);
 
@@ -161,11 +83,11 @@ export default class SSRController {
         }});
         this.app.router(router);
 
-        if (initModel.length) {
-            initModel.forEach(model => {
-                registerModel(this.app, model);
-            });
-        }
+        // if (initModel.length) {
+        //     initModel.forEach(model => {
+        //         registerModel(this.app, model);
+        //     });
+        // }
     }
 
     getInitState(locale) {

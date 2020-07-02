@@ -3,8 +3,7 @@ import { Router, Route, Switch } from 'dva/router';
 import { BLOCKED_PAGES_REG } from './lib/constants';
 
 export default function({history, context}) {
-    const { routesList, Document, App, pageBuildFiles } = context;
-    console.log('routesList===>', routesList);
+    const { routesList, Document, pageBuildFiles } = context;
     return (
         <Router history={history}>
             <Switch>

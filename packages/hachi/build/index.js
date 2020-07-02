@@ -19,8 +19,8 @@ export default async function build(dir) {
     
     
     const mappedPages = await collectPages(pagesMapDir, dir);
-    const entrypoints = createEntrypoints(false, mappedPages, 'server', config);
-
+    const entrypoints = createEntrypoints();
+    
     await promises.mkdir(distDir, { recursive: true })
     try {
       const clientWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client});

@@ -4,6 +4,9 @@ export function normalizePagePath(page) {
   if (!page.startsWith('/')) {
     page = `/${page}`
   }
+  if (page === '/') {
+    page = '/index'
+  }
   // Throw when using ../ etc in the pathname
   const resolvedPage = posix.normalize(page)
   if (page !== resolvedPage) {

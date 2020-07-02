@@ -1,17 +1,19 @@
 import chalk from 'chalk';
 import { CONFIG_FILE } from '../lib/constants'
 import findUp from 'find-up';
+import userConfigModule from 'ha/hachi.config.js';
 
 export default function loadConfig(dir, customConfig) {
     if (customConfig) {
         return assignDefaults({ configOrigin: 'server', ...customConfig })
     }
-    const path = findUp.sync(CONFIG_FILE, {
+    const configFile = findUp.sync(CONFIG_FILE, {
         cwd: dir,
     })
     // If config file was found
-    if (path) {
-        const userConfigModule = require(path)
+    if (configFile) {
+      // const userConfigModule = require(configFile);
+      console.log('userConfigModule', userConfigModule);
         
         const userConfig = normalizeConfig(
             userConfigModule.default || userConfigModule
@@ -102,8 +104,8 @@ function assignDefaults(userConfig) {
 }
 
 export const defaultConfig = {
-    distDir: 'hachi',
-    pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
+    distDir: '.ha',
+    pageExtensions: ['.tsx', '.ts', '.jsx', '.js'],
     target: 'server',
     assetPrefix: '',
     apiReg: /^\/api(?:\/|$)/

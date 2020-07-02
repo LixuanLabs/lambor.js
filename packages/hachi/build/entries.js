@@ -43,35 +43,14 @@ export function createPagesMapping(
   return pages
 }
 
-export function createEntrypoints(
-  dev,
-  pages,
-  target,
-  config
-) {
-  const client = {}
-  const server = []
-  Object.keys(pages).forEach((page) => {
-    const absolutePagePath = pages[page]
-    const bundleFile = `${normalizePagePath(page)}`
-    const isApiRoute = page.match(API_ROUTE)
-
-    const bundlePath = join('static', 'pages', bundleFile)
-    
-    if (['/_document', '/_app'].includes(absolutePagePath)) {
-        server.push[absolutePagePath];
-        return;
-    }
-
-    server[bundlePath] = [absolutePagePath]
-    client[bundlePath] = [absolutePagePath]
-
-    // if (page === '/_document') {
-    //   return
-    // }
-  })
+export function createEntrypoints() {
+  
   return {
-    client,
-    server
+    client: {
+      client: join(__dirname, '../client/index.js')
+    },
+    server: {
+      server: join(__dirname, '../server/ssr-controller.js')
+    }
   }
 }

@@ -1,13 +1,14 @@
 import http from 'http';
 import * as Loadable from 'react-loadable';
-// import Controller from './ssr-controller';
-import Controller from './ssr-controller';
+import path from 'path';
 
 export default async function start(
   serverOptions,
   port,
   hostname
 ) {
+  const controllerModule = require(path.join(process.cwd(), './.ha/server/server.js'));
+  const Controller = controllerModule.default || controllerModule;
   const app = new Controller({
     ...serverOptions,
     customServer: false,
