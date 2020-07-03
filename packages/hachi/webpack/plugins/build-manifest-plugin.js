@@ -16,7 +16,6 @@ export default class BuildManifestPlugin {
                     
                     if (BLOCKED_NAME_REGEX.test(entrypoint.name)) continue;
                     const result = ROUTE_NAME_REGEX.exec(entrypoint.name);
-                    console.log('result', result);
                     const pagePath = result[1];
                     
                     if (!pagePath) {

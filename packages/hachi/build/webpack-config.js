@@ -1,11 +1,12 @@
 const path = require('path');
+const webpack = require('webpack');
 const {babelClientOpts, babelServerOpts} = require('./babel-config');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
-import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
-import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
+// import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
+// import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
+// import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
 export default async function getBaseWebpackConfig(
@@ -30,15 +31,19 @@ export default async function getBaseWebpackConfig(
                 {from: path.join(__dirname, '../server/pages'), to: output.path}
             ]
         }))
+        plugins.push(new webpack.DefinePlugin({
+            __IS_SERVER__: JSON.stringify(true)
+        }))
     } else {
         output.path = distDir;
         plugins.push(new CleanWebpackPlugin())
-        // plugins.push(new BuildManifestPlugin())
+        plugins.push(new webpack.DefinePlugin({
+            __IS_SERVER__: JSON.stringify(false)
+        }))
         optimization.splitChunks = {
             maxAsyncRequests: 1,
             cacheGroups: {
                 vendor: {
-                    chunks: "all",
                     name: "vendor",
                     priority: 10,
                     enforce: true,
@@ -61,9 +66,13 @@ export default async function getBaseWebpackConfig(
         },
         resolve: {
             alias: {
-                ha: process.cwd()
+                __root: process.cwd(),
+                'ha/document': path.resolve(__dirname, '../server/pages/_document')
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        },
+        node: {
+            __dirname: true
         },
         mode: 'development',
         externals: {

@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import { CONFIG_FILE } from '../lib/constants'
 import findUp from 'find-up';
-import userConfigModule from 'ha/hachi.config.js';
 
 export default function loadConfig(dir, customConfig) {
     if (customConfig) {
@@ -12,8 +11,7 @@ export default function loadConfig(dir, customConfig) {
     })
     // If config file was found
     if (configFile) {
-      // const userConfigModule = require(configFile);
-      console.log('userConfigModule', userConfigModule);
+      const userConfigModule = require(configFile);
         
         const userConfig = normalizeConfig(
             userConfigModule.default || userConfigModule

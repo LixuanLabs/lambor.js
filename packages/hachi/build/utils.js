@@ -32,5 +32,17 @@ export async function collectPages(pagesMapDir, dir) {
       }
       urlPagesMap[key] = glob.sync(`${path.join(dir, pagesMap[key])}/{aIndex,aLang,aModel}.*`);
     })
+    
+    return urlPagesMap;
+}
+
+export async function collectBlockPages(pagesMapDir, dir) {
+    const pagesMap = require(pagesMapDir);
+    const urlPagesMap = {};
+    Object.keys(pagesMap).map(key => {
+      if (BLOCKED_PAGES.includes(key)) {
+        urlPagesMap[key] = path.join(dir, pagesMap[key]);
+      }
+    })
     return urlPagesMap;
 }

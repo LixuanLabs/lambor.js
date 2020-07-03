@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { join } from 'path'
 import { stringify } from 'querystring'
-import { API_ROUTE, DOT_NEXT_ALIAS, PAGES_DIR_ALIAS } from '../lib/constants'
+import { API_ROUTE, DOT_NEXT_ALIAS, PAGES_DIR_ALIAS, BLOCKED_PAGES_REG } from '../lib/constants'
 import { normalizePagePath } from '../lib/normalize-page-path';
 
 
@@ -43,14 +43,23 @@ export function createPagesMapping(
   return pages
 }
 
-export function createEntrypoints() {
+export function createEntrypoints(mappedPages) {
+  const dynamicEntry = {};
+  for (const url in mappedPages) {
+    if (BLOCKED_PAGES_REG.test(url)) {
+      dynamicEntry[url] = mappedPages[url];
+    }
+  }
   
   return {
     client: {
-      client: join(__dirname, '../client/index.js')
+      client: join(__dirname, '../client/index.js'),
+      routes: join(__dirname, '../lib/routes.js'),
+      ...dynamicEntry
     },
     server: {
-      server: join(__dirname, '../server/ssr-controller.js')
+      server: join(__dirname, '../server/ssr.js'),
+      ...dynamicEntry
     }
   }
 }

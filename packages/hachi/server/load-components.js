@@ -1,25 +1,18 @@
 import { join } from 'path';
-import { SERVER_DIRECTORY, CLIENT_STATIC_FILES_PATH } from '../lib/constants';
-import { requirePage } from '../lib/utils';
+import { SERVER_DIRECTORY, DIST_DIRECTORY } from '../lib/constants';
 
-export async function loadComponents (app, distDir, routesMap) {
+export async function loadComponents (app, distDir) {
     const documentPath = join(
-        distDir,
+        '__root',
+        DIST_DIRECTORY,
         SERVER_DIRECTORY,
-        '_document'
-      )
-      const appPath = join(
-        distDir,
-        SERVER_DIRECTORY,
-        '_app'
+        '_document.js'
       )
     
       const DocumentMod = require(documentPath)
-      const AppMod = require(appPath)
       
       return {
-        Document: DocumentMod.default,
-        App: AppMod.default,
+        Document: DocumentMod.default
       }
       
 

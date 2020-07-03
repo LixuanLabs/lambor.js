@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Router, Route, Switch } from 'dva/router';
-import { BLOCKED_PAGES_REG } from './lib/constants';
 
 export default function({history, context}) {
     const { routesList, Document, pageBuildFiles } = context;
@@ -8,7 +7,7 @@ export default function({history, context}) {
         <Router history={history}>
             <Switch>
                 {
-                    (routesList || []).filter(({path}) => !BLOCKED_PAGES_REG.test(path)).map(({path, exact, component: C, ...rest}) => {
+                    (routesList || []).map(({path, exact, component: C, ...rest}) => {
                         return <Route
                             key={path}
                             path={path}

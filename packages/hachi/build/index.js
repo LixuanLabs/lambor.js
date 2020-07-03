@@ -17,14 +17,15 @@ export default async function build(dir) {
     const distDir = path.join(dir, config.distDir)
     const pagesMapDir = findPagesMapDir(dir);
     
-    
     const mappedPages = await collectPages(pagesMapDir, dir);
-    const entrypoints = createEntrypoints();
+    const entrypoints = createEntrypoints(mappedPages);
+    
     
     await promises.mkdir(distDir, { recursive: true })
     try {
       const clientWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client});
       const serverWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server});
+      
       await runCompiler(clientWebpackConfig);
       await runCompiler(serverWebpackConfig)  
       console.log(chalk.green('Compiled successfully.\n'))

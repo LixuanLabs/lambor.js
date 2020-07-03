@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import arg from 'arg';
+
 import comBuild from './cli/build';
 import comDev from './cli/dev';
 import comStart from './cli/start';

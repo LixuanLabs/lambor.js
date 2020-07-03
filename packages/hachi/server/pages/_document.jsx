@@ -305,7 +305,7 @@ export class NextScript extends Component {
             __html: NextScript.safariNomoduleFix,
           }}
         />
-        {this.getScripts()}
+        {/* {this.getScripts()} */}
       </>
     )
   }
