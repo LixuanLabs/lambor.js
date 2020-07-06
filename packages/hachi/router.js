@@ -14,19 +14,7 @@ export default function({history, context}) {
                             key={path}
                             path={path}
                             exact={exact}
-                            render={(props) => {
-                                const { location } = props;
-                                return Document.renderDocument(Document,
-                                    {
-                                        page: location.pathname,
-                                        files: pageBuildFiles,
-                                        children: (
-                                            <C {...props} {...rest} />
-                                        )
-                                    }
-                                )
-                                
-                            }}
+                            render={(props) => <C {...props} {...rest} />}
                         />
                     })
                 }

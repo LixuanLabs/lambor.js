@@ -2,7 +2,6 @@
 // 在服务端和浏览器端都要读取routes.json文件，所以执行此文件要在服务端执行完成
 import * as React from 'react';
 import * as Loadable from 'react-loadable';
-import { join } from 'path';
 import routes from '__root/routes';
 import { BLOCKED_PAGES_REG } from './constants';
 import { registerModel } from '../lib/utils';
@@ -22,7 +21,7 @@ const res = [];
       res.push({
           path: key,
           exact: true,
-          component: routes[key]({registerModel, app})
+          component: Loadable.Map(routes[key]({registerModel, app}))
       })  
       
     }

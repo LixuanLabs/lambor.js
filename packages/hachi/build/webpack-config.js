@@ -44,19 +44,22 @@ export default async function getBaseWebpackConfig(
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(false)
         }))
-        optimization.splitChunks = {
-            maxAsyncRequests: 1,
-            cacheGroups: {
-                vendor: {
-                    name: "vendor",
-                    priority: 10,
-                    enforce: true,
-                },
-            }
-        };
-        optimization.runtimeChunk = {
-            name: 'manifest'
-        };
+        plugins.push(new ReactLoadablePlugin({
+            filename: path.resolve(output.path, 'react-loadable.json'),
+        }));
+        // optimization.splitChunks = {
+        //     maxAsyncRequests: 1,
+        //     cacheGroups: {
+        //         vendor: {
+        //             name: "vendor",
+        //             priority: 10,
+        //             enforce: true,
+        //         },
+        //     }
+        // };
+        // optimization.runtimeChunk = {
+        //     name: 'manifest'
+        // };
     }
     
     return {
@@ -67,6 +70,7 @@ export default async function getBaseWebpackConfig(
         externals: target === 'server' ? [nodeExternals()] : [],
         output: {
             filename: '[name].js',
+            publicPath: '/dist/',
             ...output
         },
         resolve: {
@@ -97,11 +101,11 @@ export default async function getBaseWebpackConfig(
                     test: /\.less$/,
                     use: [
                         // 'thread-loader',
-                        'style-loader', 'css-loader', 
+                        'isomorphic-style-loader', 'css-loader', 
                         {
                             loader: 'less-loader',
                             options: {
-                                javascriptEnabled: true
+                                // javascriptEnabled: true
                             }
                         }
                     ]

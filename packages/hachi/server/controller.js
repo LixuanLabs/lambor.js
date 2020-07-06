@@ -2,7 +2,7 @@ import * as React from 'react';
 import { join, resolve } from 'path';
 import fs from 'fs';
 import dva from 'dva';
-import Loadable from 'ha/loadable';
+import Loadable from '../../../loadable';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl } from 'url'
 import { renderToString } from 'react-dom/server';
@@ -21,18 +21,20 @@ export default class Controller {
     }) {
         const rootDir = resolve(dir);
         this.haCon = loadConfig(rootDir, conf);
-        const distDir = join(rootDir, this.haCon.distDir);
-        const Document = require(join(distDir, 'server/_document.js')).default;
-        const Ssr = require(join(distDir, 'server/server.js')).default;
+        this.distDir = join(rootDir, this.haCon.distDir);
+        const Document = require(join(this.distDir, 'server/_document.js')).default;
+        this.clientBundles = require(join(this.distDir, 'react-loadable.json'));
+        const Ssr = require(join(this.distDir, 'server/server.js')).default;
         this.ssr = new Ssr({
           rootDir,
-          distDir,
-          Document
+          distDir: this.distDir,
+          Document,
+          clientBundles: this.clientBundles
         });
     }
 
     preload = async () => {
-      await Loadable.preloadAll();
+      await this.ssr.Loadable.preloadAll();
     }
 
     handleRequest = async (req, res, parsedUrl) => {
@@ -49,13 +51,12 @@ export default class Controller {
         }
 
         // 是否为静态文件
-        if (parsedUrl.pathname.startsWith('/static')) {
+        if (parsedUrl.pathname.startsWith('/dist')) {
           res.write(
             fs.readFileSync(
               join(
                 this.distDir,
-                '/static/',
-                parsedUrl.pathname.slice('/static/'.length)
+                parsedUrl.pathname.slice('/dist/'.length)
               ),
               'utf8'
             )
