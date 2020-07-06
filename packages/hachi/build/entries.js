@@ -45,16 +45,15 @@ export function createPagesMapping(
 
 export function createEntrypoints(mappedPages) {
   const dynamicEntry = {};
-  for (const url in mappedPages) {
-    if (BLOCKED_PAGES_REG.test(url)) {
-      dynamicEntry[url] = mappedPages[url];
-    }
-  }
+  // for (const url in mappedPages) {
+  //   if (BLOCKED_PAGES_REG.test(url)) {
+  //     dynamicEntry[url] = mappedPages[url];
+  //   }
+  // }
   
   return {
     client: {
       client: join(__dirname, '../client/index.js'),
-      routes: join(__dirname, '../lib/routes.js'),
       ...dynamicEntry
     },
     server: {

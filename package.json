@@ -1,11 +1,14 @@
 {
-  "name": "hachi-core",
+  "name": "ha",
   "version": "1.0.0",
   "description": "hachi框架服务",
-  "main": "index.js",
+  "main": "./dist/hachi",
   "repository": "git@github.com:l2xBrain/hachi-core.git",
   "author": "l2xBrain <l2xbrai@126.com>",
   "license": "MIT",
+  "bin": {
+    "ha": "./dist/hachi/index.js"
+  },
   "scripts": {
     "build": "taskr hachi"
   },
@@ -16,7 +19,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
     "@babel/plugin-proposal-numeric-separator": "^7.8.3",
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
@@ -47,6 +50,7 @@
     "taskr": "^1.1.0",
     "thread-loader": "^2.1.3",
     "webpack": "^4.43.0",
+    "webpack-node-externals": "^1.7.2",
     "webpack-sources": "^1.4.3"
   }
 }

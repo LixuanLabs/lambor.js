@@ -1,5 +1,4 @@
 import http from 'http';
-import * as Loadable from 'react-loadable';
 import Controller from './controller';
 
 export default async function start(
@@ -11,7 +10,8 @@ export default async function start(
     ...serverOptions,
     customServer: false,
   })
-  await Loadable.preloadAll()
+  await app.preload();
+  // await Loadable.preloadAll()
   
   const srv = http.createServer(app.handleRequest)
   await new Promise((resolve, reject) => {

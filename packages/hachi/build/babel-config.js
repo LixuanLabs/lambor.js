@@ -57,7 +57,7 @@ export const babelServerOpts = {
     plugins: [
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
-      'babel-plugin-dynamic-import-node',
+      'dynamic-import-node',
       ['@babel/plugin-proposal-class-properties', { loose: true }],
     ],
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { join, resolve } from 'path';
 import fs from 'fs';
 import dva from 'dva';
-import * as Loadable from 'react-loadable';
+import Loadable from 'ha/loadable';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl } from 'url'
 import { renderToString } from 'react-dom/server';
@@ -22,11 +22,17 @@ export default class Controller {
         const rootDir = resolve(dir);
         this.haCon = loadConfig(rootDir, conf);
         const distDir = join(rootDir, this.haCon.distDir);
-        const SSR = require(join(distDir, 'server/server.js')).default;
-        this.ssr = new SSR({
-          distDir
+        const Document = require(join(distDir, 'server/_document.js')).default;
+        const Ssr = require(join(distDir, 'server/server.js')).default;
+        this.ssr = new Ssr({
+          rootDir,
+          distDir,
+          Document
         });
-        
+    }
+
+    preload = async () => {
+      await Loadable.preloadAll();
     }
 
     handleRequest = async (req, res, parsedUrl) => {

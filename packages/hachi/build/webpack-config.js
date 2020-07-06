@@ -4,6 +4,7 @@ const {babelClientOpts, babelServerOpts} = require('./babel-config');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 // import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
 // import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
 // import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
@@ -31,6 +32,9 @@ export default async function getBaseWebpackConfig(
                 {from: path.join(__dirname, '../server/pages'), to: output.path}
             ]
         }))
+        plugins.push(new ReactLoadablePlugin({
+            filename: path.resolve(output.path, 'react-loadable.json'),
+        }));
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(true)
         }))
@@ -60,6 +64,7 @@ export default async function getBaseWebpackConfig(
             ...entrypoints
         },
         target: target === 'server' ? 'node' : 'web',
+        externals: target === 'server' ? [nodeExternals()] : [],
         output: {
             filename: '[name].js',
             ...output

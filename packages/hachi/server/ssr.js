@@ -1,16 +1,25 @@
+import * as React from 'react';
 import * as Loadable from 'react-loadable';
 import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import router from '../router';
-import { loadComponents } from './load-components';
 import { generateRoutes } from '../lib/routes';
+import { renderToString } from 'react-dom/server';
+import { sendHTML } from '../lib/utils';
 
-export default class SSR {
+export default class Ssr {
     constructor({
-        distDir
+        rootDir,
+        distDir,
+        Document
     }) {
+        this.rootDir = rootDir;
         this.distDir = distDir;
+        this.Document = Document;
+        this.Loadable = Loadable;
+        this.routesList = generateRoutes();
     }
+    
     async run(
         req,
         res,
@@ -20,13 +29,12 @@ export default class SSR {
         const app = this.app;
         const DApp = app.start();
         try {
-          const { Document, App } = await loadComponents(app, this.distDir);
           let modules = [];
           const html = renderToString(
               <Loadable.Capture report={module => { modules.push(module); }} >
                   <DApp context={{
-                    routesList: generateRoutes(),
-                    Document,
+                    routesList: this.routesList,
+                    Document: this.Document,
                     app
                   }} />
               </Loadable.Capture>

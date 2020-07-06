@@ -33,7 +33,6 @@ const hachiBuild = (argv) => {
   
 
   const dir = resolve(args._[0] || '.')
-  console.log('dir', dir);
   // Check if the provided directory exists
   if (!existsSync(dir)) {
     printAndExit(`> No such directory exists as the project root: ${dir}`)

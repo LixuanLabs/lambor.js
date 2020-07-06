@@ -15,10 +15,11 @@ import formatWebpackMessages from './format-webpack-messages';
 export default async function build(dir) {
     const config = loadConfig(dir);
     const distDir = path.join(dir, config.distDir)
-    const pagesMapDir = findPagesMapDir(dir);
+    // const pagesMapDir = findPagesMapDir(dir);
     
-    const mappedPages = await collectPages(pagesMapDir, dir);
-    const entrypoints = createEntrypoints(mappedPages);
+    // const mappedPages = await collectPages(pagesMapDir, dir);
+    // const entrypoints = createEntrypoints(mappedPages);
+    const entrypoints = createEntrypoints();
     
     
     await promises.mkdir(distDir, { recursive: true })
@@ -56,12 +57,12 @@ export default async function build(dir) {
     //     }
     // }
 
-    const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
-    await promises.writeFile(
-      routesManifestPath,
-      JSON.stringify(mappedPages),
-      'utf8'
-    )
+    // const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
+    // await promises.writeFile(
+    //   routesManifestPath,
+    //   JSON.stringify(mappedPages),
+    //   'utf8'
+    // )
     // const manifestPath = path.join(distDir, SERVER_DIRECTORY, PAGES_MANIFEST)
 
     
