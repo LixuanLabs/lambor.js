@@ -249,7 +249,7 @@ export class Main extends Component {
 
   render() {
     const { children } = this.context._documentProps
-    return <div id="__hachi">{children}</div>;
+    return <div id="__hachi" dangerouslySetInnerHTML={{__html: children}} />;
   }
 }
 
@@ -268,15 +268,17 @@ export class NextScript extends Component {
 
   getScripts() {
     const { files } = this.context._documentProps
-
-    const normalScripts = files.filter((file) => file.endsWith('.js'))
-
+    console.log('files', files);
+    
+    const normalScripts = files.filter((file) => file && file.publicPath.endsWith('.js'))
+    console.log('normalScripts', normalScripts);
+    
     return [...normalScripts].map((file) => {
       return (
         <script
           key={file}
           src={`${encodeURI(
-            file
+            file.publicPath
           )}`}
           nonce={this.props.nonce}
           async
@@ -305,7 +307,7 @@ export class NextScript extends Component {
             __html: NextScript.safariNomoduleFix,
           }}
         />
-        {/* {this.getScripts()} */}
+        {this.getScripts()}
       </>
     )
   }

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import arg from 'arg';
-
+import * as Loadable from 'react-loadable';
 import comBuild from './cli/build';
 import comDev from './cli/dev';
 import comStart from './cli/start';
+
 
 const args = arg(
     {
@@ -37,6 +38,7 @@ const forwardedArgs = foundCommand ? args._.slice(1) : args._;
 const defaultEnv = command === 'dev' ? 'development' : 'production';
 process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
 
-commands[command](forwardedArgs)
+commands[command](forwardedArgs);
 
+export { Loadable };
 

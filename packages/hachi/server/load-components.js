@@ -3,8 +3,7 @@ import { SERVER_DIRECTORY, DIST_DIRECTORY } from '../lib/constants';
 
 export async function loadComponents (app, distDir) {
     const documentPath = join(
-        '__root',
-        DIST_DIRECTORY,
+        distDir,
         SERVER_DIRECTORY,
         '_document.js'
       )
