@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Router, Route, Switch } from 'dva/router';
 
 export default function({history, context}) {
-    const { routesList, Document, pageBuildFiles } = context;
-    console.log('routesList', routesList);
+    const { routesList } = context;
     
     return (
         <Router history={history}>

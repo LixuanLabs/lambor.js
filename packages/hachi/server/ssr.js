@@ -80,7 +80,6 @@ export default class Ssr {
                   }} />
               </Loadable.Capture>
           );
-          console.log('modules', modules);
           
           let bundles = getBundles(this.clientBundles, modules);
           const html = renderToString(this.Document.renderDocument(this.Document,
@@ -91,7 +90,6 @@ export default class Ssr {
               }
           )
           )
-          console.log('bundles', bundles);
           return sendHTML(req, res, html);
         } catch (err) {
           if (err.code === 'DECODE_FAILED') {

@@ -13,7 +13,6 @@ const res = [];
       return res;
     }
     
-    
     for (const key in routes) {
       if (BLOCKED_PAGES_REG.test(key)) continue;
       // const pageCom = join('/', routes[key], '/')
@@ -21,14 +20,16 @@ const res = [];
       res.push({
           path: key,
           exact: true,
-          component: Loadable.Map(routes[key]({registerModel, app}))
-      })  
-      
+          component: Loadable.Map({
+            delay: 200,
+            timeout: 60000,
+            loading: <div>loading</div>,
+            ...routes[key]({registerModel, app})
+          })
+      })   
     }
-    console.log('res', res);
     return res;
 }
-
 if (__IS_SERVER__) {
-  // generateRoutes();
+  generateRoutes();
 }

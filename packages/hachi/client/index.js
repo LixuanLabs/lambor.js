@@ -11,16 +11,17 @@ const app = dva({
     history: createHistory()
 });
 
+const routesList = generateRoutes(app)
+
 
 app.router(router);
-console.log('执行');
 
 
 Loadable.preloadReady().then(() => {
     const DApp = app.start();
     hydrate(
         <DApp context={{
-            routesList: generateRoutes(app)
+            routesList
         }}/>,
         document.getElementById('__hachi')
     )

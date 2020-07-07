@@ -2,7 +2,6 @@ import * as React from 'react';
 import { join, resolve } from 'path';
 import fs from 'fs';
 import dva from 'dva';
-import Loadable from '../../../loadable';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { format as formatUrl, parse as parseUrl } from 'url'
 import { renderToString } from 'react-dom/server';

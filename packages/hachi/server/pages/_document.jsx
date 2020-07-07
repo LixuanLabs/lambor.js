@@ -268,10 +268,8 @@ export class NextScript extends Component {
 
   getScripts() {
     const { files } = this.context._documentProps
-    console.log('files', files);
     
     const normalScripts = files.filter((file) => file && file.publicPath.endsWith('.js'))
-    console.log('normalScripts', normalScripts);
     
     return [...normalScripts].map((file) => {
       return (
