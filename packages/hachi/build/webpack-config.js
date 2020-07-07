@@ -101,12 +101,27 @@ export default async function getBaseWebpackConfig(
                     test: /\.less$/,
                     use: [
                         // 'thread-loader',
-                        'isomorphic-style-loader', 'css-loader', 
+                        'style-loader', 'css-loader', 'postcss-loader',
                         {
                             loader: 'less-loader',
                             options: {
-                                // javascriptEnabled: true
+                                javascriptEnabled: true
                             }
+                        }
+                    ]
+                }, {
+                    test: /\.scss/,
+                    use: [
+                        {
+                            loader: 'style-loader',
+                            options: {
+                                insertAt: {
+                                    before: '#__hachi'
+                                },
+                            }
+                        }, 'css-loader', 'postcss-loader',
+                        {
+                            loader: 'sass-loader'
                         }
                     ]
                 }, {
