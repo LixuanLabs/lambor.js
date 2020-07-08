@@ -11,7 +11,6 @@ export default async function start(
     customServer: false,
   })
   await app.preload();
-  // await Loadable.preloadAll()
   
   const srv = http.createServer(app.handleRequest)
   await new Promise((resolve, reject) => {

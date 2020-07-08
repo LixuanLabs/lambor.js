@@ -98,15 +98,31 @@ export default async function getBaseWebpackConfig(
                         },
                     ]
                 }, {
-                    test: /\.less$/,
-                    use: [
+                    test: /\.less/,
+                    use: target === 'server' ? [
                         // 'thread-loader',
-                        'style-loader', 'css-loader', 'postcss-loader',
+                        {
+                            loader: 'css-loader'
+                        }, 
+                        // 'postcss-loader',
                         {
                             loader: 'less-loader',
-                            options: {
-                                javascriptEnabled: true
-                            }
+                            // options: {
+                                // javascriptEnabled: true
+                            // }
+                        }
+                    ] : [
+                        // 'thread-loader',
+                        'style-loader', 
+                        {
+                            loader: 'css-loader'
+                        }, 
+                        // 'postcss-loader',
+                        {
+                            loader: 'less-loader',
+                            // options: {
+                                // javascriptEnabled: true
+                            // }
                         }
                     ]
                 }, {

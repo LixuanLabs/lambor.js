@@ -2965,7 +2965,7 @@ hoist-non-react-statics@^2.5.0:
   resolved "https://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-2.5.5.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fhoist-non-react-statics%2Fdownload%2Fhoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha1-xZA89AnA39kI84jmGdhrnBF0y0c=
 
-hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
+hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
   version "3.3.2"
   resolved "https://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
   integrity sha1-7OCsr3HWLClpwuxZ/v9CpLGoW0U=
@@ -3322,15 +3322,6 @@ isomorphic-fetch@^2.2.1:
   dependencies:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
-
-isomorphic-style-loader@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.npm.taobao.org/isomorphic-style-loader/download/isomorphic-style-loader-5.1.0.tgz#4845f90bb9828f3dfecc82d0574c9ed01bbaba2d"
-  integrity sha1-SEX5C7mCjz3+zILQV0ye0Bu6ui0=
-  dependencies:
-    hoist-non-react-statics "^3.0.0"
-    loader-utils "^1.2.3"
-    react "^16.3.0"
 
 isstream@~0.1.2:
   version "0.1.2"
@@ -4416,7 +4407,7 @@ react-router@^4.2.0, react-router@^4.3.1:
     prop-types "^15.6.1"
     warning "^4.0.1"
 
-react@^16.13.1, react@^16.3.0:
+react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react/download/react-16.13.1.tgz?cache=0&sync_timestamp=1592588233629&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact%2Fdownload%2Freact-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha1-LoGIIvGpdDEiwGPWQQ2FweOv5I4=
