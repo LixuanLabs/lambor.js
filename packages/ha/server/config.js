@@ -20,7 +20,7 @@ export default function loadConfig(dir, customConfig) {
         if (Object.keys(userConfig).length === 0) {
             console.warn(
               chalk.yellow.bold('Warning: ') +
-                'Detected hachi.config.js, no exported configuration found.'
+                'Detected ha.config.js, no exported configuration found.'
             )
         }
         return assignDefaults({ configOrigin: CONFIG_FILE, ...userConfig })

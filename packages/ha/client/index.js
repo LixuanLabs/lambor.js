@@ -23,6 +23,6 @@ Loadable.preloadReady().then(() => {
         <DApp context={{
             routesList
         }}/>,
-        document.getElementById('__hachi')
+        document.getElementById('__ha')
     )
 })

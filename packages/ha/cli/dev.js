@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import arg from 'arg';
 import { printAndExit } from '../lib/utils';
 
-const hachiDev = (argv) => {
+const haDev = (argv) => {
     const args = arg(
         {
           // Types
@@ -53,4 +53,4 @@ const hachiDev = (argv) => {
     
 }
 
-export default hachiDev
+export default haDev

@@ -4,7 +4,7 @@ import { resolve } from 'path'
 import arg from 'arg'
 import startServer from '../server/start-server'
 
-const hachiStart = (argv) => {
+const haStart = (argv) => {
   const args = arg(
     {
       // Types
@@ -57,4 +57,4 @@ const hachiStart = (argv) => {
     })
 }
 
-export default hachiStart;
+export default haStart;

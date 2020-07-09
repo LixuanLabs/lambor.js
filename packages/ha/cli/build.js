@@ -6,7 +6,7 @@ import { resolve } from 'path'
 import build from '../build'
 import { printAndExit } from '../lib/utils'
 
-const hachiBuild = (argv) => {
+const haBuild = (argv) => {
   const args = arg(
     {
       // Types
@@ -24,7 +24,7 @@ const hachiBuild = (argv) => {
         Compiles the application for production deployment
 
       Usage
-        $ hachi build <dir>
+        $ ha build <dir>
 
     `,
       0
@@ -46,4 +46,4 @@ const hachiBuild = (argv) => {
     })
 }
 
-export default hachiBuild
+export default haBuild

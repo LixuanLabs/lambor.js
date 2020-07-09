@@ -4,11 +4,11 @@ module.exports = {
     * default(task) {
         yield task.start('build')
     },
-    * hachi(task) {
+    * ha(task) {
         yield task
-            .source('packages/hachi/**/*.+(js|jsx|ts|tsx)')
+            .source('packages/ha/**/*.+(js|jsx|ts|tsx)')
             .babel('server')
-            .target('dist/hachi', {mode: 0o666})
+            .target('dist/ha', {mode: 0o666})
         notify('Compiled files')
     },
     * build(task) {
@@ -18,7 +18,7 @@ module.exports = {
 
 function notify(msg) {
     return notifier.notify({
-      title: '▲ Hachi',
+      title: '▲ Ha.js',
       message: msg,
       icon: false,
     })

@@ -249,7 +249,7 @@ export class Main extends Component {
 
   render() {
     const { children } = this.context._documentProps
-    return <div id="__hachi" dangerouslySetInnerHTML={{__html: children}} />;
+    return <div id="__ha" dangerouslySetInnerHTML={{__html: children}} />;
   }
 }
 

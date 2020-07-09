@@ -13,7 +13,7 @@ export function findPagesMapDir(dir) {
     // Check one level up the tree to see if the pages directory might be there
     if (existsSync(path.join(dir, '..', 'pages'))) {
       throw new Error(
-        '> No `pages` directory found. Did you mean to run `hachi` in the parent (`../`) directory?'
+        '> No `pages` directory found. Did you mean to run `ha` in the parent (`../`) directory?'
       )
     }
   
