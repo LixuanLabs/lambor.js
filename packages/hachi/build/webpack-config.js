@@ -5,7 +5,7 @@ const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-// import BuildManifestPlugin from '../webpack/plugins/build-manifest-plugin';
+import BuildEntryPlugin from '../webpack/plugins/build-entry-plugin';
 // import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
 // import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
@@ -32,14 +32,12 @@ export default async function getBaseWebpackConfig(
                 {from: path.join(__dirname, '../server/pages'), to: output.path}
             ]
         }))
-        plugins.push(new ReactLoadablePlugin({
-            filename: path.resolve(output.path, 'react-loadable.json'),
-        }));
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(true)
         }))
     } else {
         output.path = distDir;
+        // output.chunkFilename = '[name].bundle.js';
         plugins.push(new CleanWebpackPlugin())
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(false)
@@ -47,6 +45,7 @@ export default async function getBaseWebpackConfig(
         plugins.push(new ReactLoadablePlugin({
             filename: path.resolve(output.path, 'react-loadable.json'),
         }));
+        plugins.push(new BuildEntryPlugin())
         // optimization.splitChunks = {
         //     maxAsyncRequests: 1,
         //     cacheGroups: {
@@ -57,19 +56,18 @@ export default async function getBaseWebpackConfig(
         //         },
         //     }
         // };
-        // optimization.runtimeChunk = {
-        //     name: 'manifest'
-        // };
+        optimization.runtimeChunk = {
+            name: 'manifest'
+        };
     }
     
+    
     return {
-        entry: {
-            ...entrypoints
-        },
+        entry: entrypoints,
         target: target === 'server' ? 'node' : 'web',
         externals: target === 'server' ? [nodeExternals()] : [],
         output: {
-            filename: '[name].js',
+            filename: target === 'server' ? '[name].js' : '[name].[chunkhash].js',
             publicPath: '/dist/',
             ...output
         },
@@ -101,6 +99,7 @@ export default async function getBaseWebpackConfig(
                     test: /\.less/,
                     use: target === 'server' ? [
                         // 'thread-loader',
+                        // 'style-loader',
                         {
                             loader: 'css-loader'
                         }, 
@@ -123,21 +122,6 @@ export default async function getBaseWebpackConfig(
                             // options: {
                                 // javascriptEnabled: true
                             // }
-                        }
-                    ]
-                }, {
-                    test: /\.scss/,
-                    use: [
-                        {
-                            loader: 'style-loader',
-                            options: {
-                                insertAt: {
-                                    before: '#__hachi'
-                                },
-                            }
-                        }, 'css-loader', 'postcss-loader',
-                        {
-                            loader: 'sass-loader'
                         }
                     ]
                 }, {

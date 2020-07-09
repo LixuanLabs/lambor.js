@@ -14,11 +14,13 @@ export default class Ssr {
         rootDir,
         distDir,
         Document,
+        entryFiles,
         clientBundles
     }) {
         this.rootDir = rootDir;
         this.distDir = distDir;
         this.Document = Document;
+        this.entryFiles = entryFiles;
         this.clientBundles = clientBundles;
         this.Loadable = Loadable;
         this.routesList = generateRoutes();
@@ -82,10 +84,11 @@ export default class Ssr {
           );
           
           let bundles = getBundles(this.clientBundles, modules);
+          
           const html = renderToString(this.Document.renderDocument(this.Document,
               {
                   page: parsedUrl.pathname,
-                  files: bundles,
+                  files: [...bundles, ...this.entryFiles],
                   children: C
               }
           )

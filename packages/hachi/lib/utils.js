@@ -32,7 +32,7 @@ export function registerModel(app, model) {
  }
 }
 
-export function registerRouterModel (modelList) {
+export function registerModels (app, modelList) {
   modelList.forEach(model => {
       registerModel(app, model);
   });

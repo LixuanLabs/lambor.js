@@ -86,7 +86,7 @@ export default class Document extends Component {
           <Head />
           <body>
             <Main />
-            <NextScript />
+            <HaScript />
           </body>
         </Html>
     )
@@ -253,7 +253,7 @@ export class Main extends Component {
   }
 }
 
-export class NextScript extends Component {
+export class HaScript extends Component {
   static contextType = DocumentComponentContext
 
   static propTypes = {
@@ -269,17 +269,16 @@ export class NextScript extends Component {
   getScripts() {
     const { files } = this.context._documentProps
     
-    const normalScripts = files.filter((file) => file && file.publicPath.endsWith('.js'))
+    const normalScripts = files.filter((file) => file && file.publicPath.endsWith('.js')).map(file => file.publicPath);
     
-    return [...normalScripts].map((file) => {
+    return Array.from(new Set(normalScripts)).map((publicPath) => {
       return (
         <script
-          key={file}
+          key={publicPath}
           src={`${encodeURI(
-            file.publicPath
+            publicPath
           )}`}
           nonce={this.props.nonce}
-          async
           crossOrigin={this.props.crossOrigin || process.crossOrigin}
         />
       )
@@ -290,7 +289,7 @@ export class NextScript extends Component {
     if (process.env.NODE_ENV !== 'production') {
       if (this.props.crossOrigin)
         console.warn(
-          'Warning: `NextScript` attribute `crossOrigin` is deprecated. https://err.sh/next.js/doc-crossorigin-deprecated'
+          'Warning: `HaScript` attribute `crossOrigin` is deprecated. https://err.sh/next.js/doc-crossorigin-deprecated'
         )
     }
 
@@ -302,7 +301,7 @@ export class NextScript extends Component {
           crossOrigin={this.props.crossOrigin || process.crossOrigin}
           noModule={true}
           dangerouslySetInnerHTML={{
-            __html: NextScript.safariNomoduleFix,
+            __html: HaScript.safariNomoduleFix,
           }}
         />
         {this.getScripts()}

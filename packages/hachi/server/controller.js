@@ -3,11 +3,9 @@ import { join, resolve } from 'path';
 import fs from 'fs';
 import dva from 'dva';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
-import { format as formatUrl, parse as parseUrl } from 'url'
-import { renderToString } from 'react-dom/server';
+import { parse as parseUrl } from 'url'
 import loadConfig from './config'
-import { CLIENT_PUBLIC_FILES_PATH, SERVER_DIRECTORY, ROUTES_MANIFEST, BUILD_MANIFEST, BLOCKED_PAGES, BLOCKED_PAGES_REG } from '../lib/constants';
-import { registerModel, sendHTML } from '../lib/utils';
+import { ENTRY_FILES } from '../lib/constants';
 
 export default class Controller {
     constructor({
@@ -23,11 +21,13 @@ export default class Controller {
         this.distDir = join(rootDir, this.haCon.distDir);
         const Document = require(join(this.distDir, 'server/_document.js')).default;
         this.clientBundles = require(join(this.distDir, 'react-loadable.json'));
+        const entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
         const Ssr = require(join(this.distDir, 'server/server.js')).default;
         this.ssr = new Ssr({
           rootDir,
           distDir: this.distDir,
           Document,
+          entryFiles,
           clientBundles: this.clientBundles
         });
     }

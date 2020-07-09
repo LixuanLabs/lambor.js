@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as Loadable from 'react-loadable';
 import routes from '__root/routes';
 import { BLOCKED_PAGES_REG } from './constants';
-import { registerModel } from '../lib/utils';
+import { registerModels } from '../lib/utils';
 
 const res = [];
 
@@ -25,7 +25,7 @@ const res = [];
             delay: 200,
             timeout: 60000,
             loading: <div>loading</div>,
-            ...routes[key]({registerModel, app})
+            ...routes[key]({registerModels, app})
           })
       })   
     }

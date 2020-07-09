@@ -53,8 +53,7 @@ export function createEntrypoints(mappedPages) {
   
   return {
     client: {
-      client: join(__dirname, '../client/index.js'),
-      ...dynamicEntry
+      client: join(__dirname, '../client/index.js')
     },
     server: {
       server: join(__dirname, '../server/ssr.js'),
