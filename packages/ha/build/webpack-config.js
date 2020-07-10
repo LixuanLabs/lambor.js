@@ -43,7 +43,7 @@ export default async function getBaseWebpackConfig(
             __IS_SERVER__: JSON.stringify(false)
         }))
         plugins.push(new ReactLoadablePlugin({
-            filename: path.resolve(output.path, 'react-loadable.json'),
+            filename: path.resolve(output.path, REACT_LOADABLE_MANIFEST),
         }));
         plugins.push(new BuildEntryPlugin())
         // optimization.splitChunks = {

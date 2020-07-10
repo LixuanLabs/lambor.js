@@ -12,7 +12,9 @@ import { runCompiler } from './compiler';
 // import { SERVER_DIRECTORY, PAGES_MANIFEST, ROUTES_MANIFEST } from '../lib/constants';
 import formatWebpackMessages from './format-webpack-messages';
 
-export default async function build(dir) {
+export default async function build(dir, {
+  dev = false
+}) {
     const config = loadConfig(dir);
     const distDir = path.join(dir, config.distDir)
     // const pagesMapDir = findPagesMapDir(dir);
@@ -27,7 +29,7 @@ export default async function build(dir) {
       const clientWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client});
       const serverWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server});
       
-      let result = await runCompiler([clientWebpackConfig, serverWebpackConfig]);
+      let result = await runCompiler([clientWebpackConfig, serverWebpackConfig], { dev });
       result = formatWebpackMessages(result);
       if (result.errors.length > 0) {
         throw new Error(result.errors.join('\n\n'))

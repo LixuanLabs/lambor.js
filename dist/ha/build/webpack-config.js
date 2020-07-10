@@ -2,7 +2,7 @@
 // import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
 const{REACT_LOADABLE_MANIFEST}=require('../lib/constants');async function getBaseWebpackConfig(dir,{config,target='server',entrypoints}){const distDir=path.join(dir,config.distDir);const plugins=[];const output={};const optimization={};if(target==='server'){output.libraryTarget='commonjs2';output.path=path.join(distDir,'server');plugins.push(new CleanWebpackPlugin());// plugins.push(new PagesManifestPlugin())
 plugins.push(new CopyPlugin({patterns:[{from:path.join(__dirname,'../server/pages'),to:output.path}]}));plugins.push(new webpack.DefinePlugin({__IS_SERVER__:JSON.stringify(true)}));}else{output.path=distDir;// output.chunkFilename = '[name].bundle.js';
-plugins.push(new CleanWebpackPlugin());plugins.push(new webpack.DefinePlugin({__IS_SERVER__:JSON.stringify(false)}));plugins.push(new ReactLoadablePlugin({filename:path.resolve(output.path,'react-loadable.json')}));plugins.push(new _buildEntryPlugin.default());// optimization.splitChunks = {
+plugins.push(new CleanWebpackPlugin());plugins.push(new webpack.DefinePlugin({__IS_SERVER__:JSON.stringify(false)}));plugins.push(new ReactLoadablePlugin({filename:path.resolve(output.path,REACT_LOADABLE_MANIFEST)}));plugins.push(new _buildEntryPlugin.default());// optimization.splitChunks = {
 //     maxAsyncRequests: 1,
 //     cacheGroups: {
 //         vendor: {

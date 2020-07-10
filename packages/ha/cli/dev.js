@@ -2,6 +2,7 @@
 import { resolve } from 'path';
 import { existsSync } from 'fs';
 import arg from 'arg';
+import startServer from '../server/start-server'
 import { printAndExit } from '../lib/utils';
 
 const haDev = (argv) => {
@@ -49,7 +50,18 @@ const haDev = (argv) => {
       }
     
       const port = args['--port'] || 3000
-      const appUrl = `http://${args['--hostname'] || 'localhost'}:${port}`
+      startServer({ dir, dev: true }, port, args['--hostname'])
+        .then(async (app) => {
+          // tslint:disable-next-line
+          console.log(
+            `started server on http://${args['--hostname'] || 'localhost'}:${port}`
+          )
+        })
+        .catch((err) => {
+          // tslint:disable-next-line
+          console.error(err)
+          process.exit(1)
+        })
     
 }
 

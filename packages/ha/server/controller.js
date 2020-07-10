@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { join, resolve } from 'path';
 import fs from 'fs';
-import dva from 'dva';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { parse as parseUrl } from 'url'
 import loadConfig from './config'
-import { ENTRY_FILES } from '../lib/constants';
+import { ENTRY_FILES, REACT_LOADABLE_MANIFEST } from '../lib/constants';
+import build from '../build';
 
 export default class Controller {
     constructor({
@@ -19,17 +19,24 @@ export default class Controller {
         const rootDir = resolve(dir);
         this.haCon = loadConfig(rootDir, conf);
         this.distDir = join(rootDir, this.haCon.distDir);
-        const Document = require(join(this.distDir, 'server/_document.js')).default;
-        this.clientBundles = require(join(this.distDir, 'react-loadable.json'));
-        const entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
-        const Ssr = require(join(this.distDir, 'server/server.js')).default;
-        this.ssr = new Ssr({
-          rootDir,
-          distDir: this.distDir,
-          Document,
-          entryFiles,
-          clientBundles: this.clientBundles
-        });
+        if (dev) {
+          // dev 环境
+          build(rootDir, { dev }).then()
+        } else {
+          // pro 环境
+          this.clientBundles = require(join(this.distDir, REACT_LOADABLE_MANIFEST));
+          const Document = require(join(this.distDir, 'server/_document.js')).default;
+          const entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
+          const Ssr = require(join(this.distDir, 'server/server.js')).default;
+          this.ssr = new Ssr({
+            rootDir,
+            distDir: this.distDir,
+            Document,
+            entryFiles,
+            clientBundles: this.clientBundles
+          });
+        }
+        
     }
 
     preload = async () => {
