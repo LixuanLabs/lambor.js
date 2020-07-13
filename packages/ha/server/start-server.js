@@ -6,12 +6,12 @@ export default async function start(
   port,
   hostname
 ) {
-  const app = new Controller({
+  const app = new Controller()
+  await app.init({
     ...serverOptions,
     customServer: false,
-  })
+  });
   await app.preload();
-  
   const srv = http.createServer(app.handleRequest)
   await new Promise((resolve, reject) => {
     // This code catches EADDRINUSE error if the port is already in use

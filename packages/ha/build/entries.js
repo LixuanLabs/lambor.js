@@ -43,17 +43,26 @@ export function createPagesMapping(
   return pages
 }
 
-export function createEntrypoints(mappedPages) {
+export function createEntrypoints({dev}) {
   const dynamicEntry = {};
   // for (const url in mappedPages) {
   //   if (BLOCKED_PAGES_REG.test(url)) {
   //     dynamicEntry[url] = mappedPages[url];
   //   }
   // }
+  if (dev) {
+    return {
+      client: [join(__dirname, '../client/index.js')],
+      server: {
+        server: join(__dirname, '../server/ssr.js'),
+        ...dynamicEntry
+      }
+    }
+  }
   
   return {
     client: {
-      client: join(__dirname, '../client/index.js')
+      client: [join(__dirname, '../client/index.js')]
     },
     server: {
       server: join(__dirname, '../server/ssr.js'),

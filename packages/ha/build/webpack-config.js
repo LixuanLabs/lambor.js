@@ -15,7 +15,8 @@ export default async function getBaseWebpackConfig(
     {
         config,
         target = 'server',
-        entrypoints
+        entrypoints,
+        dev = false
     }
 ) {
     const distDir = path.join(dir, config.distDir)
@@ -39,13 +40,19 @@ export default async function getBaseWebpackConfig(
         output.path = distDir;
         // output.chunkFilename = '[name].bundle.js';
         plugins.push(new CleanWebpackPlugin())
+        plugins.push(new BuildEntryPlugin())
+        // if (dev) {
+        //     plugins.push(new webpack.HotModuleReplacementPlugin({
+        //         multiStep: true
+        //     }))
+        // }
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(false)
         }))
         plugins.push(new ReactLoadablePlugin({
             filename: path.resolve(output.path, REACT_LOADABLE_MANIFEST),
         }));
-        plugins.push(new BuildEntryPlugin())
+        
         // optimization.splitChunks = {
         //     maxAsyncRequests: 1,
         //     cacheGroups: {
@@ -56,10 +63,13 @@ export default async function getBaseWebpackConfig(
         //         },
         //     }
         // };
-        optimization.runtimeChunk = {
-            name: 'manifest'
-        };
+        if (!dev) {
+            optimization.runtimeChunk = {
+                name: 'manifest'
+            };
+        }
     }
+    
     
     
     return {
@@ -81,7 +91,8 @@ export default async function getBaseWebpackConfig(
         node: {
             __dirname: true
         },
-        mode: 'development',
+        mode: dev ? 'development' : 'production',
+        watch: dev ? true : false,
         externals: {
         },
         module: {

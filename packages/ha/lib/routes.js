@@ -12,7 +12,6 @@ const res = [];
     if (res.length) {
       return res;
     }
-    console.log('routes', routes);
     
     for (const key in routes) {
       if (BLOCKED_PAGES_REG.test(key)) continue;

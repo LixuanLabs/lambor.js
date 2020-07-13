@@ -100,46 +100,6 @@ export async function loadGetInitialProps (App, ctx) {
   return props
 }
 
-export function getPagePath (page, distDir, server) {
-  const serverBuildPath = path.join(distDir, server);
-  const pagesManifest = require(path.join(serverBuildPath, PAGES_MANIFEST))
-  return  pagesManifest[page];
-}
-
-export async function requirePage(app, page, distDir, server) {
-  console.log('page', page);
-  const serverBuildPath = path.join(distDir, server);
-  if (BLOCKED_PAGES_REG.test(page)) {
-    return require(path.join(serverBuildPath, page))
-  }
-  const pagePath = getPagePath(page, distDir, server)
-  if (Array.isArray(pagePath)) {
-    let comPath = null,
-        modelPath = null,
-        langPath = null;
-    for (const filePath of pagePath) {
-      if (/aModel\.js$/.test(filePath)) {
-        modelPath = path.join(serverBuildPath, filePath);
-      } else if (/aLang\.js$/.test(filePath)) {
-        langPath = path.join(serverBuildPath, filePath)
-      } else if (/aIndex\.js$/.test(filePath)) {
-        comPath = path.join(serverBuildPath, filePath);
-      } else {
-
-      }
-    }
-    console.log('modelPath', modelPath);
-    
-    const langModule = require(langPath)
-    const modelModule = require(modelPath)
-    console.log('modelModule', modelModule);
-    
-    const model = modelModule.default || modelModule;
-    model.state._Lang = langModule.default || langModule;
-    registerModel(app, model.default || model);
-    return require(comPath);
-  }
-}
   
 
 export function sendHTML(

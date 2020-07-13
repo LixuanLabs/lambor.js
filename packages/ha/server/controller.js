@@ -4,39 +4,45 @@ import fs from 'fs';
 import { parse as parseQs, ParsedUrlQuery } from 'querystring'
 import { parse as parseUrl } from 'url'
 import loadConfig from './config'
-import { ENTRY_FILES, REACT_LOADABLE_MANIFEST } from '../lib/constants';
+import { ENTRY_FILES, REACT_LOADABLE_MANIFEST, SERVER_DIRECTORY, DOCUMENTJS, SERVEROUTPUT } from '../lib/constants';
 import build from '../build';
 
 export default class Controller {
-    constructor({
-        dir = '.',
-        staticMarkup = false,
-        quiet = false,
-        conf = null,
-        dev = false,
-        customServer = true,
+    async init({
+      dir = '.',
+      conf = null,
+      dev = false
     }) {
-        const rootDir = resolve(dir);
-        this.haCon = loadConfig(rootDir, conf);
-        this.distDir = join(rootDir, this.haCon.distDir);
-        if (dev) {
-          // dev 环境
-          build(rootDir, { dev }).then()
-        } else {
-          // pro 环境
-          this.clientBundles = require(join(this.distDir, REACT_LOADABLE_MANIFEST));
-          const Document = require(join(this.distDir, 'server/_document.js')).default;
-          const entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
-          const Ssr = require(join(this.distDir, 'server/server.js')).default;
-          this.ssr = new Ssr({
-            rootDir,
-            distDir: this.distDir,
-            Document,
-            entryFiles,
-            clientBundles: this.clientBundles
-          });
-        }
-        
+      const rootDir = resolve(dir);
+      this.dev = dev;
+      this.haCon = loadConfig(rootDir, conf);
+      this.distDir = join(rootDir, this.haCon.distDir);
+      if (dev) {
+        const { 
+          Document,
+          entryFiles,
+          Ssr,
+          clientBundles,
+          mfs,
+        } = await build(rootDir, {dev});
+        this.clientBundles = clientBundles;
+        this.Document = Document;
+        this.entryFiles = entryFiles;
+        this.Ssr = Ssr;
+        this.mfs = mfs;
+      } else {
+        this.clientBundles = require(join(this.distDir, REACT_LOADABLE_MANIFEST));
+        this.Document = require(join(this.distDir, SERVER_DIRECTORY, DOCUMENTJS)).default;
+        this.entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
+        this.Ssr = require(join(this.distDir, SERVER_DIRECTORY, SERVEROUTPUT)).default;
+      }
+      this.ssr = new this.Ssr({
+        rootDir,
+        distDir: this.distDir,
+        Document: this.Document,
+        entryFiles: this.entryFiles,
+        clientBundles: this.clientBundles
+      });
     }
 
     preload = async () => {
@@ -58,15 +64,27 @@ export default class Controller {
 
         // 是否为静态文件
         if (parsedUrl.pathname.startsWith('/dist')) {
-          res.write(
-            fs.readFileSync(
-              join(
-                this.distDir,
-                parsedUrl.pathname.slice('/dist/'.length)
-              ),
-              'utf8'
+          if (this.dev) {
+            res.write(
+              this.mfs.readFileSync(
+                join(
+                  this.distDir,
+                  parsedUrl.pathname.slice('/dist/'.length)
+                ),
+                'utf8'
+              )
             )
-          )
+          } else {
+            res.write(
+              fs.readFileSync(
+                join(
+                  this.distDir,
+                  parsedUrl.pathname.slice('/dist/'.length)
+                ),
+                'utf8'
+              )
+            )
+          }
           return res.end()
         }
 

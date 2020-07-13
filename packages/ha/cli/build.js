@@ -37,7 +37,7 @@ const haBuild = (argv) => {
   if (!existsSync(dir)) {
     printAndExit(`> No such directory exists as the project root: ${dir}`)
   }
-  build(dir)
+  build(dir, { dev: false })
     .then(() => process.exit(0))
     .catch((err) => {
       console.error('')

@@ -21,15 +21,17 @@ export default async function build(dir, {
     
     // const mappedPages = await collectPages(pagesMapDir, dir);
     // const entrypoints = createEntrypoints(mappedPages);
-    const entrypoints = createEntrypoints();
+    const entrypoints = createEntrypoints({dev});
     
     
     await promises.mkdir(distDir, { recursive: true })
     try {
-      const clientWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client});
-      const serverWebpackConfig = await getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server});
-      
+      const [clientWebpackConfig, serverWebpackConfig] = await Promise.all([
+        getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client, dev}),
+        getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server, dev})
+      ])
       let result = await runCompiler([clientWebpackConfig, serverWebpackConfig], { dev });
+      if (dev) return result;
       result = formatWebpackMessages(result);
       if (result.errors.length > 0) {
         throw new Error(result.errors.join('\n\n'))
@@ -37,7 +39,6 @@ export default async function build(dir, {
       if (result.warnings.length > 0) {
         console.log(chalk.yellow(result.warnings.join('\n\n')))
       }
-      
       console.log(chalk.green('Compiled successfully.\n'))
     } catch (error) {
       console.error(chalk.red('Failed to compile.\n'))
