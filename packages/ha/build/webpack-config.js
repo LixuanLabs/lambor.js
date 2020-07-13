@@ -41,11 +41,9 @@ export default async function getBaseWebpackConfig(
         // output.chunkFilename = '[name].bundle.js';
         plugins.push(new CleanWebpackPlugin())
         plugins.push(new BuildEntryPlugin())
-        // if (dev) {
-        //     plugins.push(new webpack.HotModuleReplacementPlugin({
-        //         multiStep: true
-        //     }))
-        // }
+        if (dev) {
+            plugins.push(new webpack.HotModuleReplacementPlugin());
+        }
         plugins.push(new webpack.DefinePlugin({
             __IS_SERVER__: JSON.stringify(false)
         }))
@@ -63,10 +61,10 @@ export default async function getBaseWebpackConfig(
         //         },
         //     }
         // };
+        optimization.runtimeChunk = {
+            name: 'runtime'
+        };
         if (!dev) {
-            optimization.runtimeChunk = {
-                name: 'manifest'
-            };
         }
     }
     
@@ -77,7 +75,7 @@ export default async function getBaseWebpackConfig(
         target: target === 'server' ? 'node' : 'web',
         externals: target === 'server' ? [nodeExternals()] : [],
         output: {
-            filename: target === 'server' ? '[name].js' : '[name].[chunkhash].js',
+            filename: dev ? '[name].js' : target === 'server' ? '[name].js' : '[name].[chunkhash].js',
             publicPath: '/dist/',
             ...output
         },

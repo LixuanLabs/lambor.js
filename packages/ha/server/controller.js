@@ -50,7 +50,6 @@ export default class Controller {
     }
 
     handleRequest = async (req, res, parsedUrl) => {
-        // Parse url if parsedUrl not provided
         if (!parsedUrl || typeof parsedUrl !== 'object') {
           parsedUrl = parseUrl(req.url, true)
         }
