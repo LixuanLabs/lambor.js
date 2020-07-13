@@ -6,8 +6,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 import BuildEntryPlugin from '../webpack/plugins/build-entry-plugin';
-// import PagesManifestPlugin from '../webpack/plugins/pages-manifest-plugin';
-// import RoutesManifestPlugin from '../webpack/plugins/routes-manifest-plugin';
+import HotReloader from './hot-reloader';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
 export default async function getBaseWebpackConfig(

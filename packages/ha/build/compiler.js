@@ -2,6 +2,7 @@ import webpack from 'webpack'
 import path from 'path';
 import MemoryFS from 'memory-fs';
 import requireFromString from 'require-from-string';
+import HotReloader from './hot-reloader';
 import { REACT_LOADABLE_MANIFEST, SERVER_DIRECTORY, DOCUMENTJS, ENTRY_FILES, SERVEROUTPUT } from '../lib/constants';
 
 
@@ -18,6 +19,10 @@ function generateStats(result, stat) {
   return result
 }
 
+send = (action, ...args) {
+  // this.webpackHotMiddleware!.publish({ action, data: args })
+}
+
 export function runCompiler(
   config,
   {
@@ -27,11 +32,11 @@ export function runCompiler(
   const clientConfig = config[0];
   const serverConfig = config[1];
   return new Promise(async (resolve, reject) => {
-    const compiler = webpack(config)
+    const multiCompiler = webpack(config)
     if (dev) {
       const mfs = new MemoryFS();
-      compiler.outputFileSystem = mfs;
-      compiler.watch(
+      multiCompiler.outputFileSystem = mfs;
+      multiCompiler.watch(
         {
           poll: true
         },
@@ -52,23 +57,22 @@ export function runCompiler(
             Ssr,
             mfs
           })
-          // if ('stats' in statsOrMultiStats) {
-          //   const result = statsOrMultiStats.stats.reduce(
-          //     generateStats,
-          //     { errors: [], warnings: [] }
-          //   )
-          //   return resolve(result)
-          // }
-  
-          // const result = generateStats(
-          //   { errors: [], warnings: [] },
-          //   statsOrMultiStats
-          // )
-          // return resolve(result)
         }
       )
+      multiCompiler.compilers[1].hooks.done.tap('HotReloaderForServer', (stats) => {
+        console.log('HotReloaderForServer');
+      })
+      multiCompiler.compilers[1].hooks.done.tap('HotReloaderForClient', (stats) => {
+        const { compilation } = stats
+        const chunkNames = new Set(
+          compilation.chunks
+            .map((c) => c.name)
+            .filter((name) => IS_BUNDLED_PAGE_REGEX.test(name))
+        )
+        console.log('HotReloaderForClient===>', chunkNames);
+      })
     } else {
-      compiler.run(
+      multiCompiler.run(
         (err, statsOrMultiStats) => {
           if (err) {
             return reject(err)
