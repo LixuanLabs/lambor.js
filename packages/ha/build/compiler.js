@@ -19,8 +19,8 @@ function generateStats(result, stat) {
   return result
 }
 
-send = (action, ...args) {
-  // this.webpackHotMiddleware!.publish({ action, data: args })
+const send = (action, ...args) => {
+  this.webpackHotMiddleware.publish({ action, data: args })
 }
 
 export function runCompiler(

@@ -19,6 +19,7 @@ export default class Ssr {
         entryFiles,
         clientBundles
     }) {
+        this.dev = dev;
         this.rootDir = rootDir;
         this.distDir = distDir;
         this.Document = Document;
@@ -76,6 +77,9 @@ export default class Ssr {
         res,
         parsedUrl
       ) {
+        if (this.dev) {
+            this.hotReloader.run(req, res, parsedUrl);
+        }
         this.initDva({url: req.url});
         const app = this.app;
         const DApp = app.start();

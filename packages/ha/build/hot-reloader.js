@@ -1,5 +1,5 @@
 import webpackDevMiddleware from '../compiled/webpack-dev-middleware';
-import webpackHotMiddleware from '../compiled/webpack-hot-middleware';
+import webpackHotMiddleware from '../compiled/webpack-hot-middleware/middleware';
 
 export default class HotReloader {
     constructor() {
