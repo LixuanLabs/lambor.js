@@ -11,8 +11,6 @@ export default class BuildManifestPlugin {
                 };
 
                 for (const [urlKey, entrypoint] of compilation.entrypoints.entries()) {
-                    console.log('urlKey', urlKey, entrypoint.chunks);
-                    console.log('entrypoint.getFiles()', entrypoint.getFiles());
                     for (const file of entrypoint.getFiles()) {
                         assetMap.default.push({
                             publicPath: `/dist/${file}`

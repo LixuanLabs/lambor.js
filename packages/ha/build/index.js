@@ -8,7 +8,7 @@ import loadConfig from '../server/config';
 // } from './utils'
 import { createEntrypoints } from './entries';
 import getBaseWebpackConfig from './webpack-config';
-import { runCompiler } from './compiler';
+import { runCompiler, devRunCompiler } from './compiler';
 // import { SERVER_DIRECTORY, PAGES_MANIFEST, ROUTES_MANIFEST } from '../lib/constants';
 import formatWebpackMessages from './format-webpack-messages';
 
@@ -30,14 +30,17 @@ export default async function build(dir, {
         getBaseWebpackConfig(dir, {config, target: 'client', entrypoints: entrypoints.client, dev}),
         getBaseWebpackConfig(dir, {config, target: 'server', entrypoints: entrypoints.server, dev})
       ])
-      let result = await runCompiler([clientWebpackConfig, serverWebpackConfig], { dev });
-      if (dev) return result;
-      result = formatWebpackMessages(result);
-      if (result.errors.length > 0) {
-        throw new Error(result.errors.join('\n\n'))
-      }
-      if (result.warnings.length > 0) {
-        console.log(chalk.yellow(result.warnings.join('\n\n')))
+      if (dev) {
+        return await devRunCompiler([clientWebpackConfig, serverWebpackConfig]);
+      } else {
+        let result = await runCompiler([clientWebpackConfig, serverWebpackConfig], { dev });
+        result = formatWebpackMessages(result);
+        if (result.errors.length > 0) {
+          throw new Error(result.errors.join('\n\n'))
+        }
+        if (result.warnings.length > 0) {
+          console.log(chalk.yellow(result.warnings.join('\n\n')))
+        }
       }
       console.log(chalk.green('Compiled successfully.\n'))
     } catch (error) {

@@ -8,7 +8,6 @@ import router from '../router';
 import { generateRoutes } from '../lib/routes';
 import { renderToString } from 'react-dom/server';
 import { sendHTML, registerModel } from '../lib/utils';
-import HotReloader from '../build/hot-reloader';
 
 export default class Ssr {
     constructor({
@@ -27,9 +26,6 @@ export default class Ssr {
         this.clientBundles = clientBundles;
         this.Loadable = Loadable;
         this.routesList = generateRoutes();
-        if (dev) {
-            this.hotReloader = new HotReloader();
-        }
     }
 
     matchComponents = async (app, pathname) => {
@@ -77,9 +73,6 @@ export default class Ssr {
         res,
         parsedUrl
       ) {
-        if (this.dev) {
-            this.hotReloader.run(req, res, parsedUrl);
-        }
         this.initDva({url: req.url});
         const app = this.app;
         const DApp = app.start();

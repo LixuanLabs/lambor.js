@@ -24,12 +24,14 @@ export default class Controller {
           Ssr,
           clientBundles,
           mfs,
+          hotReloader
         } = await build(rootDir, {dev});
         this.clientBundles = clientBundles;
         this.Document = Document;
         this.entryFiles = entryFiles;
         this.Ssr = Ssr;
         this.mfs = mfs;
+        this.hotReloader = hotReloader;
       } else {
         this.clientBundles = require(join(this.distDir, REACT_LOADABLE_MANIFEST));
         this.Document = require(join(this.distDir, SERVER_DIRECTORY, DOCUMENTJS)).default;
@@ -53,6 +55,11 @@ export default class Controller {
         if (!parsedUrl || typeof parsedUrl !== 'object') {
           parsedUrl = parseUrl(req.url, true)
         }
+        console.log('parsedUrl.pathname', parsedUrl.pathname);
+        if (this.dev) {
+          await this.hotReloader.run(req, res, parsedUrl);
+        }
+        console.log('执行');
 
         // 检测是否为数据请求
         if (this.haCon.apiReg.test(parsedUrl.pathname)) {

@@ -18,6 +18,9 @@ app.router(router);
 
 
 Loadable.preloadReady().then(() => {
+    if (module.hot) {
+        module.hot.accept();
+    }
     const DApp = app.start();
     hydrate(
         <DApp context={{
