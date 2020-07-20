@@ -9,6 +9,7 @@ module.exports = {
             .source('packages/ha/**/*.+(js|jsx|ts|tsx)')
             .babel('server')
             .target('dist/ha', {mode: 0o666})
+        yield task.source('packages/boilerplates/**/*').target('dist/boilerplates')
         notify('Compiled files')
     },
     * build(task) {

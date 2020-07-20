@@ -3,6 +3,7 @@ import arg from 'arg';
 import comBuild from './cli/build';
 import comDev from './cli/dev';
 import comStart from './cli/start';
+import comInit from './cli/init';
 
 
 const args = arg(
@@ -19,14 +20,14 @@ const args = arg(
     {
         permissive: true,
     }
-
 );
 
 
 const commands = {
     build: comBuild,
     dev: comDev,
-    start: comStart
+    start: comStart,
+    init: comInit
 }
 
 const defaultCommand = 'dev';
