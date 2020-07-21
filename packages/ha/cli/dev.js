@@ -29,9 +29,9 @@ const haDev = (argv) => {
             reporting, etc)
     
           Usage
-            $ next dev <dir> -p <port number>
+            $ ha dev <dir> -p <port number>
     
-          <dir> represents the directory of the Next.js application.
+          <dir> represents the directory of the ha.js application.
           If no directory is provided, the current directory will be used.
     
           Options

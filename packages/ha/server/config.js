@@ -41,7 +41,7 @@ function assignDefaults(userConfig) {
         // public files
         if (userDistDir === 'public') {
           throw new Error(
-            `The 'public' directory is reserved in Next.js and can not be set as the 'distDir'. https://err.sh/zeit/next.js/can-not-output-to-public`
+            `The 'public' directory is reserved in ha.js and can not be set as the 'distDir'. https://err.sh/zeit/ha.js/can-not-output-to-public`
           )
         }
         // make sure distDir isn't an empty string as it can result in the provided

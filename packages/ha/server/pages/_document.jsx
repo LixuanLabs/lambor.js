@@ -32,13 +32,6 @@ function dedupe(bundles) {
   return kept
 }
 
-function getOptionalModernScriptVariant(path) {
-  if (process.env.__NEXT_MODERN_BUILD) {
-    return path.replace(/\.js$/, '.module.js')
-  }
-  return path
-}
-
 /**
  * `Document` component handles the initial `document` markup and renders only on the server side.
  * Commonly used for implementing server side rendering for `css-in-js` libraries.
@@ -69,7 +62,7 @@ export default class Document extends Component {
         value={{
           _documentProps: props,
           // In dev we invalidate the cache by appending a timestamp to the resource URL.
-          // This is a workaround to fix https://github.com/zeit/next.js/issues/5860
+          // This is a workaround to fix https://github.com/zeit/ha.js/issues/5860
           // TODO: remove this workaround when https://bugs.webkit.org/show_bug.cgi?id=187726 is fixed.
           _devOnlyInvalidateCacheQueryString:
             process.env.NODE_ENV !== 'production' ? '?ts=' + Date.now() : '',
@@ -172,14 +165,14 @@ export class Head extends Component {
         const isReactHelmet = child?.props?.['data-react-helmet']
         if (child?.type === 'title' && !isReactHelmet) {
           console.warn(
-            "Warning: <title> should not be used in _document.js's <Head>. https://err.sh/next.js/no-document-title"
+            "Warning: <title> should not be used in _document.js's <Head>. https://err.sh/ha.js/no-document-title"
           )
         }
         return child
       })
       if (this.props.crossOrigin)
         console.warn(
-          'Warning: `Head` attribute `crossOrigin` is deprecated. https://err.sh/next.js/doc-crossorigin-deprecated'
+          'Warning: `Head` attribute `crossOrigin` is deprecated. https://err.sh/ha.js/doc-crossorigin-deprecated'
         )
     }
 
@@ -289,7 +282,7 @@ export class HaScript extends Component {
     if (process.env.NODE_ENV !== 'production') {
       if (this.props.crossOrigin)
         console.warn(
-          'Warning: `HaScript` attribute `crossOrigin` is deprecated. https://err.sh/next.js/doc-crossorigin-deprecated'
+          'Warning: `HaScript` attribute `crossOrigin` is deprecated. https://err.sh/ha.js/doc-crossorigin-deprecated'
         )
     }
 

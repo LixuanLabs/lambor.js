@@ -9,7 +9,6 @@ import loadConfig from '../server/config';
 import { createEntrypoints } from './entries';
 import getBaseWebpackConfig from './webpack-config';
 import { runCompiler, devRunCompiler } from './compiler';
-// import { SERVER_DIRECTORY, PAGES_MANIFEST, ROUTES_MANIFEST } from '../lib/constants';
 import formatWebpackMessages from './format-webpack-messages';
 
 export default async function build(dir, {
@@ -46,16 +45,6 @@ export default async function build(dir, {
     } catch (error) {
       console.error(chalk.red('Failed to compile.\n'))
       console.log(chalk.red(error.message))
-    }
-
-    // const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
-    // await promises.writeFile(
-    //   routesManifestPath,
-    //   JSON.stringify(mappedPages),
-    //   'utf8'
-    // )
-    // const manifestPath = path.join(distDir, SERVER_DIRECTORY, PAGES_MANIFEST)
-
-    
+    }    
     
 }

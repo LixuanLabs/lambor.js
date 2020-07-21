@@ -1,7 +1,5 @@
 import { join } from 'path'
 
-
-export const PAGES_MANIFEST = 'pages-manifest.json'
 export const ENTRY_FILES = 'entry-files.json'
 export const BUILD_MANIFEST = 'build-manifest.json'
 export const ROUTES_MANIFEST = 'routes-manifest.json'

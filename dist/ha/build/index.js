@@ -2,15 +2,7 @@
 //     findPagesMapDir,
 //     collectPages
 // } from './utils'
-// import { SERVER_DIRECTORY, PAGES_MANIFEST, ROUTES_MANIFEST } from '../lib/constants';
 async function build(dir,{dev=false}){const config=(0,_config.default)(dir);const distDir=_path.default.join(dir,config.distDir);// const pagesMapDir = findPagesMapDir(dir);
 // const mappedPages = await collectPages(pagesMapDir, dir);
 // const entrypoints = createEntrypoints(mappedPages);
-const entrypoints=(0,_entries.createEntrypoints)({dev});await _fs.promises.mkdir(distDir,{recursive:true});try{const[clientWebpackConfig,serverWebpackConfig]=await Promise.all([(0,_webpackConfig.default)(dir,{config,target:'client',entrypoints:entrypoints.client,dev}),(0,_webpackConfig.default)(dir,{config,target:'server',entrypoints:entrypoints.server,dev})]);if(dev){return await(0,_compiler.devRunCompiler)([clientWebpackConfig,serverWebpackConfig]);}else{let result=await(0,_compiler.runCompiler)([clientWebpackConfig,serverWebpackConfig],{dev});result=(0,_formatWebpackMessages.default)(result);if(result.errors.length>0){throw new Error(result.errors.join('\n\n'));}if(result.warnings.length>0){console.log(_chalk.default.yellow(result.warnings.join('\n\n')));}}console.log(_chalk.default.green('Compiled successfully.\n'));}catch(error){console.error(_chalk.default.red('Failed to compile.\n'));console.log(_chalk.default.red(error.message));}// const routesManifestPath = path.join(distDir, ROUTES_MANIFEST)
-// await promises.writeFile(
-//   routesManifestPath,
-//   JSON.stringify(mappedPages),
-//   'utf8'
-// )
-// const manifestPath = path.join(distDir, SERVER_DIRECTORY, PAGES_MANIFEST)
-}
+const entrypoints=(0,_entries.createEntrypoints)({dev});await _fs.promises.mkdir(distDir,{recursive:true});try{const[clientWebpackConfig,serverWebpackConfig]=await Promise.all([(0,_webpackConfig.default)(dir,{config,target:'client',entrypoints:entrypoints.client,dev}),(0,_webpackConfig.default)(dir,{config,target:'server',entrypoints:entrypoints.server,dev})]);if(dev){return await(0,_compiler.devRunCompiler)([clientWebpackConfig,serverWebpackConfig]);}else{let result=await(0,_compiler.runCompiler)([clientWebpackConfig,serverWebpackConfig],{dev});result=(0,_formatWebpackMessages.default)(result);if(result.errors.length>0){throw new Error(result.errors.join('\n\n'));}if(result.warnings.length>0){console.log(_chalk.default.yellow(result.warnings.join('\n\n')));}}console.log(_chalk.default.green('Compiled successfully.\n'));}catch(error){console.error(_chalk.default.red('Failed to compile.\n'));console.log(_chalk.default.red(error.message));}}

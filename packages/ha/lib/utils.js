@@ -1,7 +1,3 @@
-import path from 'path';
-
-import { PAGES_MANIFEST, BLOCKED_PAGES_REG } from './constants';
-
 
 export function printAndExit(message, code = 1) {
     if (code === 0) {
@@ -57,7 +53,7 @@ export async function loadGetInitialProps (App, ctx) {
     if (App.prototype?.getInitialProps) {
       const message = `"${getDisplayName(
         App
-      )}.getInitialProps()" is defined as an instance method - visit https://err.sh/zeit/next.js/get-initial-props-as-an-instance-method for more information.`
+      )}.getInitialProps()" is defined as an instance method - visit https://err.sh/zeit/ha.js/get-initial-props-as-an-instance-method for more information.`
       throw new Error(message)
     }
   }
@@ -92,7 +88,7 @@ export async function loadGetInitialProps (App, ctx) {
       console.warn(
         `${getDisplayName(
           App
-        )} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://err.sh/zeit/next.js/empty-object-getInitialProps`
+        )} returned an empty object from \`getInitialProps\`. This de-optimizes and prevents automatic static optimization. https://err.sh/zeit/ha.js/empty-object-getInitialProps`
       )
     }
   }

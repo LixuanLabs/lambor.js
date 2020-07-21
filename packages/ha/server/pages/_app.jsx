@@ -50,13 +50,13 @@ let warnUrl
 if (process.env.NODE_ENV !== 'production') {
   warnContainer = () => {
     console.warn(
-      `Warning: the \`Container\` in \`_app\` has been deprecated and should be removed. https://err.sh/zeit/next.js/app-container-deprecated`
+      `Warning: the \`Container\` in \`_app\` has been deprecated and should be removed. https://err.sh/zeit/ha.js/app-container-deprecated`
     )
   }
 
   warnUrl = () => {
     console.error(
-      `Warning: the 'url' property is deprecated. https://err.sh/zeit/next.js/url-deprecated`
+      `Warning: the 'url' property is deprecated. https://err.sh/zeit/ha.js/url-deprecated`
     )
   }
 }

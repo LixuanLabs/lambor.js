@@ -95,9 +95,9 @@ function formatMessage(message) {
     lines[0] = lines[0].replace(/(.+) \(.+?(?=\?\?).+?\)/, '$1')
 
     lines[1] =
-      "To use Next.js' built-in Sass support, you first need to install `sass`.\n"
+      "To use ha.js' built-in Sass support, you first need to install `sass`.\n"
     lines[1] += 'Run `npm i sass` or `yarn add sass` inside your workspace.\n'
-    lines[1] += '\nLearn more: https://err.sh/next.js/install-sass'
+    lines[1] += '\nLearn more: https://err.sh/ha.js/install-sass'
   }
 
   message = lines.join('\n')

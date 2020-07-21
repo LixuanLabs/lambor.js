@@ -55,11 +55,9 @@ export default class Controller {
         if (!parsedUrl || typeof parsedUrl !== 'object') {
           parsedUrl = parseUrl(req.url, true)
         }
-        console.log('parsedUrl.pathname', parsedUrl.pathname);
         if (this.dev) {
           await this.hotReloader.run(req, res, parsedUrl);
         }
-        console.log('执行');
 
         // 检测是否为数据请求
         if (this.haCon.apiReg.test(parsedUrl.pathname)) {

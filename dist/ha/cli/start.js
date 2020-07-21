@@ -5,12 +5,12 @@
 console.log(`
       Description
         Starts the application in production mode.
-        The application should be compiled with \`next build\` first.
+        The application should be compiled with \`ha build\` first.
 
       Usage
-        $ next start <dir> -p <port>
+        $ ha start <dir> -p <port>
 
-      <dir> represents the directory of the Next.js application.
+      <dir> represents the directory of the ha.js application.
       If no directory is provided, the current directory will be used.
 
       Options
