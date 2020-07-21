@@ -5,11 +5,11 @@ import './style.less';
 
 class Index extends React.Component {
     handleClick = () => {
-        console.log('click')
+        const { index: {test} } = this.props
         this.props.dispatch({
             type: 'index/updateReducer',
             payload: {
-                test: 2
+                test: test + 1
             }
         })
     }
@@ -17,8 +17,9 @@ class Index extends React.Component {
         const { index } = this.props;
         return (
             <div className="container">
-                <div>{index.test} + 7</div>
-                <button onClick={this.handleClick}>点击</button>
+                <h2 className="title">welcome to ha.js</h2>
+                <div>No. {index.test} </div>
+                <button onClick={this.handleClick}>增加</button>
             </div>
         )
     }

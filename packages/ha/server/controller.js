@@ -52,6 +52,7 @@ export default class Controller {
     }
 
     handleRequest = async (req, res, parsedUrl) => {
+      try {
         if (!parsedUrl || typeof parsedUrl !== 'object') {
           parsedUrl = parseUrl(req.url, true)
         }
@@ -102,8 +103,6 @@ export default class Controller {
           parsedUrl.query = parseQs(parsedUrl.query)
         }
 
-    
-        try {
           return await this.ssr.run(req, res, parsedUrl)
         } catch (err) {
           console.error(err)

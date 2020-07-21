@@ -10,7 +10,7 @@
     "ha": "./dist/ha/index.js"
   },
   "scripts": {
-    "build": "taskr ha"
+    "build": "rm -fr dist & taskr ha"
   },
   "taskr": {
     "requires": [
