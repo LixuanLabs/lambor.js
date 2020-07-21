@@ -9,14 +9,14 @@ const ignored = [
 export default class HotReloader {
     constructor(multiCompiler) {
         const webpackDevMiddleware = WebpackDevMiddleware(
-            multiCompiler[0],
+            multiCompiler,
             {
                 watchOptions: { ignored },
             }
         )
 
         const webpackHotMiddleware = WebpackHotMiddleware(
-            multiCompiler[0],
+            multiCompiler.compilers[0],
             {
                 log: console.log,
                 heartbeat: 2500,
@@ -32,7 +32,7 @@ export default class HotReloader {
         //     console.log('HotReloaderForServer');
         //     this.send('reloadPage')
         // })
-        multiCompiler[0].hooks.done.tap('HotReloaderForClient', (stats) => {
+        multiCompiler.compilers[0].hooks.done.tap('HotReloaderForClient', (stats) => {
             this.send('reloadPage')
         })
     }

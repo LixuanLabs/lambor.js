@@ -22,38 +22,42 @@ function generateStats(result, stat) {
 export async function devRunCompiler([clientConfig, serverConfig]) {
   const clientDist = clientConfig.output.path;
   const serverDist = serverConfig.output.path;
-  const serverMFS = new MemoryFS();
-  const clientCompiler = webpack(clientConfig);
-  const serverCompiler = webpack(serverConfig);
-  const hotReloader = new HotReloader([clientCompiler, serverCompiler]);
-  serverCompiler.outputFileSystem = serverMFS;
-  function clientCompile() {
-    return new Promise((resolve, reject) => {
-      clientCompiler.hooks.done.tap('done', () => {
-        const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
-        const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
-        const clientBundles = require(path.resolve(clientDist, REACT_LOADABLE_MANIFEST));
-        resolve({
-          entryFiles,
-          clientBundles
-        });
-      })
-    })
-  }
-  function serverCompile() {
-    return new Promise((resolve, reject) => {
-      serverCompiler.watch({}, (err) => {
-        if (err) return reject(err);
-        const Document = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, DOCUMENTJS), 'utf-8')).default;
-        const Ssr = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, SERVEROUTPUT), 'utf-8')).default;
-        resolve({
-          Document,
-          Ssr
+  // const serverMFS = new MemoryFS();
+  // const clientCompiler = webpack(clientConfig);
+  // const serverCompiler = webpack(serverConfig);
+  // serverCompiler.outputFileSystem = serverMFS;
+  // const hotReloader = new HotReloader([clientCompiler, serverCompiler]);
+  const multiCompiler = webpack([clientConfig, serverConfig]);
+  try {
+    const hotReloader = new HotReloader(multiCompiler);
+    // multiCompiler.compilers[1].outputFileSystem = serverMFS;
+    function clientCompile() {
+      return new Promise((resolve, reject) => {
+        multiCompiler.compilers[0].hooks.done.tap('clientDone', () => {
+          // console.log('hotReloader.webpackDevMiddleware', hotReloader.webpackDevMiddleware.compiler);
+          const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
+          const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
+          const clientBundles = require(path.resolve(clientDist, REACT_LOADABLE_MANIFEST));
+          resolve({
+            entryFiles,
+            clientBundles
+          });
         })
       })
-    })
-  }
-  try {
+    }
+    function serverCompile() {
+      return new Promise((resolve, reject) => {
+        multiCompiler.compilers[1].hooks.done.tap('serverDone', () => {
+          const serverMFS = hotReloader.webpackDevMiddleware.fileSystem;
+          const Document = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, DOCUMENTJS), 'utf-8')).default;
+          const Ssr = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, SERVEROUTPUT), 'utf-8')).default;
+          resolve({
+            Document,
+            Ssr
+          })
+        })
+      })
+    }
     const { entryFiles, clientBundles } = await clientCompile();
     const { Document, Ssr } = await serverCompile();
     return {
