@@ -11,17 +11,13 @@ export default class HotReloader {
         const webpackDevMiddleware = WebpackDevMiddleware(
             multiCompiler[0],
             {
-                // noInfo: true,
-                // logLevel: 'silent',
                 watchOptions: { ignored },
-                // writeToDisk: true,
             }
         )
 
         const webpackHotMiddleware = WebpackHotMiddleware(
             multiCompiler[0],
             {
-                path: '/__webpack-hmr',
                 log: console.log,
                 heartbeat: 2500,
             }
