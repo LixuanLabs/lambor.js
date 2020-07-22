@@ -3,8 +3,6 @@
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
 
----
-
 ## Getting Started
 
 ```bash
@@ -16,7 +14,7 @@ $ yarn global add ha
 ```
 
 ## Commands
----
+
 We have four commands: `init`, `dev`, `build`, `start`
 
 ### ha init
