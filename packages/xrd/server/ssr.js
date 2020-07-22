@@ -105,9 +105,9 @@ export default class Ssr {
         this.initDva({url: req.url});
         const app = this.app;
         const DApp = app.start();
-        console.log('parsedUrl', parsedUrl);
         const components = await this.matchComponents(app, parsedUrl.pathname);
         await this.dispatchActions(app, components, parsedUrl)
+        const PRELOADED_STATE = app._store.getState();
         try {
           let modules = [];
           const C = renderToString(
@@ -126,6 +126,7 @@ export default class Ssr {
               {
                   page: parsedUrl.pathname,
                   files: [...bundles, ...this.entryFiles],
+                  PRELOADED_STATE,
                   children: C
               }
           )

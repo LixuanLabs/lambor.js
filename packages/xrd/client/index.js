@@ -7,8 +7,12 @@ import createHistory from 'history/createBrowserHistory';
 import router from '../router';
 import { generateRoutes } from '../lib/routes';
 
+const preLoadedState = JSON.parse(decodeURIComponent(window.__PRELOADED_STATE__ || {}));
+
+
 const app = dva({
-    history: createHistory()
+    history: createHistory(),
+    initialState: preLoadedState 
 });
 
 const routesList = generateRoutes(app)

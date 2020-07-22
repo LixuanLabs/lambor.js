@@ -258,7 +258,6 @@ export class HaScript extends Component {
   static safariNomoduleFix =
     '!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()},!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();'
 
-
   getScripts() {
     const { files } = this.context._documentProps
     
@@ -279,6 +278,8 @@ export class HaScript extends Component {
   }
 
   render() {
+    const { PRELOADED_STATE } = this.context._documentProps;
+    const preloadedState = JSON.stringify(encodeURIComponent(JSON.stringify(PRELOADED_STATE || {})))
     if (process.env.NODE_ENV !== 'production') {
       if (this.props.crossOrigin)
         console.warn(
@@ -295,6 +296,13 @@ export class HaScript extends Component {
           noModule={true}
           dangerouslySetInnerHTML={{
             __html: HaScript.safariNomoduleFix,
+          }}
+        />
+        <script
+          nonce={this.props.nonce}
+          crossOrigin={this.props.crossOrigin || process.crossOrigin}
+          dangerouslySetInnerHTML={{
+            __html: 'var __PRELOADED_STATE__ =' + preloadedState
           }}
         />
         {this.getScripts()}
