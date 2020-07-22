@@ -4,6 +4,16 @@ import './style.less';
 
 
 class Index extends React.Component {
+    static fetching({dispatch}) {
+        return [
+            dispatch({
+                type: 'index/updateReducer',
+                payload: {
+                    test: 10
+                }
+            })
+        ]
+    }
     handleClick = () => {
         const { index: {test} } = this.props
         this.props.dispatch({
