@@ -1,9 +1,8 @@
 import webpack from 'webpack'
 import path, { resolve } from 'path';
-import MemoryFS from 'memory-fs';
 import requireFromString from 'require-from-string';
 import { REACT_LOADABLE_MANIFEST, SERVER_DIRECTORY, DOCUMENTJS, ENTRY_FILES, SERVEROUTPUT } from '../lib/constants';
-import HotReloader from '../build/hot-reloader';
+import HotReloader from './hot-reloader';
 
 
 function generateStats(result, stat) {
