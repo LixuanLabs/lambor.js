@@ -68,7 +68,6 @@ export default class Ssr {
         // dispatch action
         // 获取所有匹配组件的fetching方法
         const fetchList = [];
-        let bodyParam = await getBodyParam(ctx, true);
         components.map((component) => {  //tslint:disable-line
             if (component.fetching) {
                 fetchList.push(component.fetching({
