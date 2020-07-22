@@ -1,13 +1,13 @@
 {
-  "name": "ha",
+  "name": "xrdc",
   "version": "1.0.0",
-  "description": "ha.js框架服务",
+  "description": "xrdc.js框架服务",
   "main": "./dist/ha",
   "repository": "git@github.com:l2xBrain/ha.js.git",
   "author": "l2xBrain <l2xbrai@126.com>",
   "license": "MIT",
   "bin": {
-    "ha": "./dist/ha/index.js"
+    "xrd": "./dist/ha/index.js"
   },
   "scripts": {
     "build": "rm -fr dist & taskr ha"

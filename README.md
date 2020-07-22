@@ -1,4 +1,4 @@
-# ha.js
+# xrd.js
 
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
@@ -8,16 +8,16 @@ front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadabl
 ```bash
 #Install
 
-$ npm install ha -g
+$ npm install xrd -g
 # or
-$ yarn global add ha
+$ yarn global add xrd
 ```
 
 ## Commands
 
 We have four commands: `init`, `dev`, `build`, `start`
 
-### ha init
+### xrd init
 create app in an empty folder with a demo
 
 #### Generated File Tree
@@ -35,13 +35,13 @@ create app in an empty folder with a demo
 └── package.json           #
 ```
 
-### ha dev
+### xrd dev
 run app in the development mode
 
-### ha build
+### xrd build
 build app in the production mode
 
-### ha start
+### xrd start
 run app in the production mode
 
 ### Route config example
