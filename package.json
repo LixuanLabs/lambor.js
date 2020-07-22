@@ -1,6 +1,6 @@
 {
   "name": "xrdc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "xrdc.js框架服务",
   "main": "./dist/ha",
   "repository": "git@github.com:l2xBrain/ha.js.git",
