@@ -64,6 +64,36 @@ export default class Ssr {
       
     }
 
+    dispatchActions = async (app, components, parsedUrl) => {
+        // dispatch action
+        // 获取所有匹配组件的fetching方法
+        const fetchList = [];
+        let bodyParam = await getBodyParam(ctx, true);
+        components.map((component) => {  //tslint:disable-line
+            if (component.fetching) {
+                fetchList.push(component.fetching({
+                    ...app._store,
+                    ...component.props,
+                    isServerFetching: true, // 是否是服务端获取数据
+                    query: parsedUrl.query,
+                    path: parsedUrl.pathname
+                }));
+            }
+        });
+    
+        // 获取所有fetching方法中需要执行的action并过滤null
+        const actionList = [];
+        fetchList.forEach((actions) => {
+            (actions || []).forEach((action) => {
+                actionList.push(action);
+            });
+        });
+        // 执行所有action
+        await Promise.all(actionList).catch(e => {
+            debug('dispatchActions error:', e.toString());
+        });
+    }
+
     prepare = async () => {
         
     }
@@ -76,7 +106,9 @@ export default class Ssr {
         this.initDva({url: req.url});
         const app = this.app;
         const DApp = app.start();
+        console.log('parsedUrl', parsedUrl);
         const components = await this.matchComponents(app, parsedUrl.pathname);
+        await this.dispatchActions(app, components, parsedUrl)
         try {
           let modules = [];
           const C = renderToString(
