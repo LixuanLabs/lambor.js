@@ -53,18 +53,11 @@ const haInit = (argv) => {
         console.log(`
           Description
             Starts the application in production mode.
-            The application should be compiled with \`ha build\` first.
+            The application should be compiled with \`xrd build\` first.
     
           Usage
-            $ ha start <dir> -p <port>
-    
-          <dir> represents the directory of the ha.js application.
-          If no directory is provided, the current directory will be used.
-    
-          Options
-            --port, -p      A port number on which to start the application
-            --hostname, -H  Hostname on which to start the application
-            --help, -h      Displays this message
+            $ xrd start
+
         `)
         process.exit(0)
       }
@@ -72,18 +65,17 @@ const haInit = (argv) => {
       const projectName = basename(dest);
       function printSuccess() {
         success(`
-            Success! Created ${projectName} at ${dest}.
-            
-            Inside that directory, you can run several commands:
-            * npm start: Starts the development server.
-            * npm run build: Bundles the app into dist for production.
-            * npm test: Run test.
-            
-            We suggest that you begin by typing:
-            cd ${dest}
-            npm start
-            
-            Happy hacking!`);
+      Success! Created ${projectName} at ${dest}.
+      
+      Inside that directory, you can run several commands:
+      * npm run build: Bundles the app into dist for production.
+      * npm start: Starts the development server.
+      
+      We suggest that you begin by typing:
+      cd ${dest}
+      npm run dev
+      
+      Happy hacking!`);
     }
       const cwd = join(__dirname, '../../boilerplates/demo');
       if (!emptyDir(dest)) {

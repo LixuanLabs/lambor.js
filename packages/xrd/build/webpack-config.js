@@ -81,7 +81,7 @@ export default async function getBaseWebpackConfig(
         resolve: {
             alias: {
                 __root: process.cwd(),
-                'ha/document': path.resolve(__dirname, '../server/pages/_document')
+                'xrd/document': path.resolve(__dirname, '../server/pages/_document')
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },

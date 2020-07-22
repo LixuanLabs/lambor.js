@@ -24,20 +24,12 @@ const haDev = (argv) => {
       if (args['--help']) {
         // tslint:disable-next-line
         console.log(`
-          Description
-            Starts the application in development mode (hot-code reloading, error
-            reporting, etc)
-    
-          Usage
-            $ ha dev <dir> -p <port number>
-    
-          <dir> represents the directory of the ha.js application.
-          If no directory is provided, the current directory will be used.
-    
-          Options
-            --port, -p      A port number on which to start the application
-            --hostname, -H  Hostname on which to start the application
-            --help, -h      Displays this message
+        Description
+          Starts the application in development mode (hot-code reloading, error
+          reporting, etc)
+  
+        Usage
+          $ xrd dev
         `)
         process.exit(0)
       }

@@ -102,7 +102,7 @@ function assignDefaults(userConfig) {
 }
 
 export const defaultConfig = {
-    distDir: '.ha',
+    distDir: '.xrd',
     pageExtensions: ['.tsx', '.ts', '.jsx', '.js'],
     target: 'server',
     assetPrefix: '',

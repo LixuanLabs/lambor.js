@@ -24,7 +24,7 @@ const haBuild = (argv) => {
         Compiles the application for production deployment
 
       Usage
-        $ ha build <dir>
+        $ xrd build <dir>
 
     `,
       0

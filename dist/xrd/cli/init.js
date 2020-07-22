@@ -4,28 +4,20 @@
 console.log(`
           Description
             Starts the application in production mode.
-            The application should be compiled with \`ha build\` first.
+            The application should be compiled with \`xrd build\` first.
     
           Usage
-            $ ha start <dir> -p <port>
-    
-          <dir> represents the directory of the ha.js application.
-          If no directory is provided, the current directory will be used.
-    
-          Options
-            --port, -p      A port number on which to start the application
-            --hostname, -H  Hostname on which to start the application
-            --help, -h      Displays this message
+            $ xrd start
+
         `);process.exit(0);}const dest=(0,_path.resolve)(args._[0]||'.');const projectName=(0,_path.basename)(dest);function printSuccess(){success(`
-            Success! Created ${projectName} at ${dest}.
-            
-            Inside that directory, you can run several commands:
-            * npm start: Starts the development server.
-            * npm run build: Bundles the app into dist for production.
-            * npm test: Run test.
-            
-            We suggest that you begin by typing:
-            cd ${dest}
-            npm start
-            
-            Happy hacking!`);}const cwd=(0,_path.join)(__dirname,'../../boilerplates/demo');if(!(0,_emptyDir.sync)(dest)){error('Existing files here, please run init command in an empty folder!');process.exit(1);}_vinylFs.default.src(['**/*','!node_modules/**/*'],{cwd:cwd,dot:true,cwdbase:true}).pipe(template(dest,cwd)).pipe(_vinylFs.default.dest(dest)).on('end',function(){info('rename','gitignore -> .gitignore');(0,_fs.renameSync)((0,_path.join)(dest,'gitignore'),(0,_path.join)(dest,'.gitignore'));printSuccess();}).resume();};var _default=haInit;exports.default=_default;
+      Success! Created ${projectName} at ${dest}.
+      
+      Inside that directory, you can run several commands:
+      * npm run build: Bundles the app into dist for production.
+      * npm start: Starts the development server.
+      
+      We suggest that you begin by typing:
+      cd ${dest}
+      npm run dev
+      
+      Happy hacking!`);}const cwd=(0,_path.join)(__dirname,'../../boilerplates/demo');if(!(0,_emptyDir.sync)(dest)){error('Existing files here, please run init command in an empty folder!');process.exit(1);}_vinylFs.default.src(['**/*','!node_modules/**/*'],{cwd:cwd,dot:true,cwdbase:true}).pipe(template(dest,cwd)).pipe(_vinylFs.default.dest(dest)).on('end',function(){info('rename','gitignore -> .gitignore');(0,_fs.renameSync)((0,_path.join)(dest,'gitignore'),(0,_path.join)(dest,'.gitignore'));printSuccess();}).resume();};var _default=haInit;exports.default=_default;

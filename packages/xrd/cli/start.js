@@ -23,20 +23,15 @@ const haStart = (argv) => {
   if (args['--help']) {
     // tslint:disable-next-line
     console.log(`
-      Description
-        Starts the application in production mode.
-        The application should be compiled with \`ha build\` first.
+    Description
+      Starts the application in production mode.
+      The application should be compiled with \`ha build\` first.
 
-      Usage
-        $ ha start <dir> -p <port>
+    Usage
+      $ ha start
 
-      <dir> represents the directory of the ha.js application.
-      If no directory is provided, the current directory will be used.
-
-      Options
-        --port, -p      A port number on which to start the application
-        --hostname, -H  Hostname on which to start the application
-        --help, -h      Displays this message
+    Options
+      --port, -p      A port number on which to start the application
     `)
     process.exit(0)
   }

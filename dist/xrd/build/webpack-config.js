@@ -10,7 +10,7 @@ plugins.push(new CleanWebpackPlugin());plugins.push(new _buildEntryPlugin.defaul
 //         },
 //     }
 // };
-optimization.runtimeChunk={name:'runtime'};if(!dev){}}return{entry:entrypoints,target:target==='server'?'node':'web',externals:target==='server'?[nodeExternals()]:[],output:{filename:dev?'[name].js':target==='server'?'[name].js':'[name].[chunkhash].js',publicPath:'/dist/',...output},resolve:{alias:{__root:process.cwd(),'ha/document':path.resolve(__dirname,'../server/pages/_document')},extensions:['.ts','.tsx','.js','.jsx','.json']},node:{__dirname:true},mode:dev?'development':'production',watch:dev?true:false,externals:{},module:{rules:[{test:/\.jsx?$/,exclude:[/node_modules/],use:[// 'thread-loader',
+optimization.runtimeChunk={name:'runtime'};if(!dev){}}return{entry:entrypoints,target:target==='server'?'node':'web',externals:target==='server'?[nodeExternals()]:[],output:{filename:dev?'[name].js':target==='server'?'[name].js':'[name].[chunkhash].js',publicPath:'/dist/',...output},resolve:{alias:{__root:process.cwd(),'xrd/document':path.resolve(__dirname,'../server/pages/_document')},extensions:['.ts','.tsx','.js','.jsx','.json']},node:{__dirname:true},mode:dev?'development':'production',watch:dev?true:false,externals:{},module:{rules:[{test:/\.jsx?$/,exclude:[/node_modules/],use:[// 'thread-loader',
 {loader:'babel-loader',options:target==='server'?babelServerOpts:babelClientOpts}]},{test:/\.less/,use:target==='server'?[// 'thread-loader',
 // 'style-loader',
 {loader:'css-loader'},// 'postcss-loader',
