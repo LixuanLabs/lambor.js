@@ -1,6 +1,6 @@
 {
   "name": "xrdc",
-  "version": "1.0.6",
+  "version": "1.0.5",
   "description": "xrd.js框架服务",
   "main": "./dist/xrd",
   "repository": "git@github.com:l2xBrain/xrd.js.git",
