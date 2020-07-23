@@ -8,9 +8,9 @@ front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadabl
 ```bash
 #Install
 
-$ npm install xrd -g
+$ npm install xrdc -g
 # or
-$ yarn global add xrd
+$ yarn global add xrdc
 ```
 
 ## Commands
