@@ -1,4 +1,4 @@
-# xrd.js
+# xrdc.js
 
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
@@ -17,7 +17,7 @@ $ yarn global add xrdc
 
 We have four commands: `init`, `dev`, `build`, `start`
 
-### xrd init
+### xrdc init
 create app in an empty folder with a demo
 
 #### Generated File Tree
@@ -35,13 +35,13 @@ create app in an empty folder with a demo
 └── package.json           #
 ```
 
-### xrd dev
+### xrdc dev
 run app in the development mode
 
-### xrd build
+### xrdc build
 build app in the production mode
 
-### xrd start
+### xrdc start
 run app in the production mode
 
 ### Route config example

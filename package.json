@@ -7,7 +7,7 @@
   "author": "l2xBrain <l2xbrai@126.com>",
   "license": "MIT",
   "bin": {
-    "xrd": "./dist/xrd/index.js"
+    "xrdc": "./dist/xrd/index.js"
   },
   "scripts": {
     "build": "rm -fr dist & taskr xrd"
