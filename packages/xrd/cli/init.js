@@ -4,12 +4,11 @@ import { sync as emptyDir } from 'empty-dir';
 import { renameSync } from 'fs';
 import chalk from 'chalk';
 import through from 'through2';
-import leftPad from 'left-pad';
 import vfs from 'vinyl-fs';
 
 
 function info(type, message) {
-    console.log(`${chalk.green.bold(leftPad(type, 12))}  ${message}`);
+    console.log(`${chalk.green.bold(type)}  ${message}`);
 }
 
 function error(message) {
