@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "build": "xrd build",
-    "dev": "xrd dev",
-    "start": "xrd start"
+    "build": "xrdc build",
+    "dev": "xrdc dev",
+    "start": "xrdc start"
   },
   "dependencies": {
     "@babel/core": "^7.10.4",
