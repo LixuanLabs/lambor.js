@@ -30,7 +30,6 @@ const babelClientOpts = {
     // eslint-disable-next-line no-useless-concat
     '@babel/plugin-syntax-dynamic-impor' + 't',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    'react-loadable/babel'
   ],
   overrides: [
     {
@@ -65,7 +64,6 @@ const babelServerOpts = {
     '@babel/plugin-proposal-nullish-coalescing-operator',
     'babel-plugin-dynamic-import-node',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    'react-loadable/babel'
   ],
   overrides: [
     {
@@ -129,16 +127,16 @@ module.exports = function (task) {
       )
     }
 
-    if (output.map) {
-      const map = `${file.base}.map`
+    // if (output.map) {
+    //   const map = `${file.base}.map`
 
-      // add sourcemap to `files` array
-      this._.files.push({
-        base: map,
-        dir: file.dir,
-        data: Buffer.from(JSON.stringify(output.map)),
-      })
-    }
+    //   // add sourcemap to `files` array
+    //   this._.files.push({
+    //     base: map,
+    //     dir: file.dir,
+    //     data: Buffer.from(JSON.stringify(output.map)),
+    //   })
+    // }
 
     file.data = Buffer.from(setNextVersion(output.code))
   })

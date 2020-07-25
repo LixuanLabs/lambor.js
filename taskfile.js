@@ -4,7 +4,7 @@ module.exports = {
     * default(task) {
         yield task.start('build')
     },
-    * xrd(task) {
+    * xrdc(task) {
         yield task
             .source('packages/xrd/**/*.+(js|jsx|ts|tsx)')
             .babel('server')

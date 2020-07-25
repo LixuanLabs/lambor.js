@@ -1,6 +1,6 @@
 {
   "name": "xrdc",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "xrd.js框架服务",
   "main": "./dist/xrd",
   "repository": "git@github.com:l2xBrain/xrd.js.git",
@@ -10,7 +10,7 @@
     "xrdc": "./dist/xrd/index.js"
   },
   "scripts": {
-    "build": "rm -fr dist & taskr xrd"
+    "build": "rm -fr dist & taskr xrdc"
   },
   "taskr": {
     "requires": [
@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "arg": "^4.1.3",
-    "babel-plugin-dynamic-import-node": "^2.3.3",
     "chalk": "^4.0.0",
     "dva": "^2.4.1",
     "empty-dir": "^2.0.0",
@@ -32,7 +31,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-loadable": "^5.5.0",
-    "react-router": "^5.2.0",
     "react-router-config": "^5.1.1",
     "require-from-string": "^2.0.2",
     "taskr": "^1.1.0",
@@ -53,6 +51,7 @@
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^5.0.9",
     "webpack-node-externals": "^1.7.2",
-    "webpack-sources": "^1.4.3"
+    "webpack-sources": "^1.4.3",
+    "babel-plugin-dynamic-import-node": "^2.3.3"
   }
 }

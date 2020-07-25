@@ -22,8 +22,10 @@ export const babelClientOpts = {
     plugins: [
       // workaround for @taskr/esnext bug replacing `-import` with `-require(`
       // eslint-disable-next-line no-useless-concat
+      'react-loadable/babel',
       '@babel/plugin-syntax-dynamic-import',
       ['@babel/plugin-proposal-class-properties', { loose: true }],
+      
     ],
     overrides: [
       {
@@ -54,6 +56,7 @@ export const babelServerOpts = {
       ],
     ],
     plugins: [
+      'react-loadable/babel',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       'dynamic-import-node',
