@@ -44,6 +44,7 @@ export default async function build(dir, {
       console.log(chalk.green('Compiled successfully.\n'))
     } catch (error) {
       console.error(chalk.red('Failed to compile.\n'))
+      console.log('error', error);
       console.log(chalk.red(error.message))
     }    
     
