@@ -27,12 +27,6 @@ export const babelClientOpts = {
       ['@babel/plugin-proposal-class-properties', { loose: true }],
       
     ],
-    overrides: [
-      {
-        test: /\.tsx?$/,
-        plugins: [require('@babel/plugin-proposal-numeric-separator').default],
-      },
-    ],
   }
   
 export const babelServerOpts = {
