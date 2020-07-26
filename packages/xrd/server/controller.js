@@ -18,20 +18,24 @@ export default class Controller {
       this.haCon = loadConfig(rootDir, conf);
       this.distDir = join(rootDir, this.haCon.distDir);
       if (dev) {
-        const { 
-          Document,
-          entryFiles,
-          Ssr,
-          clientBundles,
-          mfs,
-          hotReloader
-        } = await build(rootDir, {dev});
-        this.clientBundles = clientBundles;
-        this.Document = Document;
-        this.entryFiles = entryFiles;
-        this.Ssr = Ssr;
-        this.mfs = mfs;
-        this.hotReloader = hotReloader;
+        try {
+          const { 
+            Document,
+            entryFiles,
+            Ssr,
+            clientBundles,
+            mfs,
+            hotReloader
+          } = await build(rootDir, {dev});
+            this.clientBundles = clientBundles;
+            this.Document = Document;
+            this.entryFiles = entryFiles;
+            this.Ssr = Ssr;
+            this.mfs = mfs;
+            this.hotReloader = hotReloader; 
+        } catch (error) {
+          console.log('error', error);
+        }
       } else {
         this.clientBundles = require(join(this.distDir, REACT_LOADABLE_MANIFEST));
         this.Document = require(join(this.distDir, SERVER_DIRECTORY, DOCUMENTJS)).default;

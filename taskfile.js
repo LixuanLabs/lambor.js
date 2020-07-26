@@ -17,7 +17,7 @@ module.exports = {
     * build(task) {
         yield task
             .source('packages/xrd/**/*.+(js|jsx|ts|tsx)')
-            .babel('server')
+            .babel()
             .target('dist/xrd', {mode: 0o777})
     }
 }

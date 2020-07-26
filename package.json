@@ -1,6 +1,6 @@
 {
   "name": "xrdc",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "xrd.js框架服务",
   "main": "./dist/xrd",
   "repository": "git@github.com:l2xBrain/xrd.js.git",
@@ -25,9 +25,6 @@
     "find-up": "^4.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^6.0.1",
-    "glob": "^7.1.6",
-    "memory-fs": "^0.5.0",
-    "node-notifier": "^7.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-loadable": "^5.5.0",
@@ -44,13 +41,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.8.3",
-    "@babel/plugin-proposal-numeric-separator": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "babel-plugin-dynamic-import-node": "^2.3.3"
+    "node-notifier": "^7.0.1"
   }
 }

@@ -25,10 +25,10 @@ const haStart = (argv) => {
     console.log(`
     Description
       Starts the application in production mode.
-      The application should be compiled with \`ha build\` first.
+      The application should be compiled with \`xrdc build\` first.
 
     Usage
-      $ ha start
+      $ xrdc start
 
     Options
       --port, -p      A port number on which to start the application

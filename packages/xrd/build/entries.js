@@ -1,8 +1,6 @@
 import chalk from 'chalk'
 import { join } from 'path'
-import { stringify } from 'querystring'
-import { API_ROUTE, DOT_NEXT_ALIAS, PAGES_DIR_ALIAS, BLOCKED_PAGES_REG } from '../lib/constants'
-import { normalizePagePath } from '../lib/normalize-page-path';
+import { PAGES_DIR_ALIAS } from '../lib/constants'
 
 
 export function createPagesMapping(
