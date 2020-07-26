@@ -29,7 +29,7 @@ const haDev = (argv) => {
           reporting, etc)
   
         Usage
-          $ xrd dev
+          $ xrdc dev
         `)
         process.exit(0)
       }

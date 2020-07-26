@@ -8,7 +8,7 @@ console.log(`
           reporting, etc)
   
         Usage
-          $ xrd dev
+          $ xrdc dev
         `);process.exit(0);}const dir=(0,_path.resolve)(args._[0]||'.');// Check if pages dir exists and warn if not
 if(!(0,_fs.existsSync)(dir)){(0,_utils.printAndExit)(`> No such directory exists as the project root: ${dir}`);}const port=args['--port']||3000;(0,_startServer.default)({dir,dev:true},port,args['--hostname']).then(async app=>{// tslint:disable-next-line
 console.log(`started server on http://${args['--hostname']||'localhost'}:${port}`);}).catch(err=>{// tslint:disable-next-line

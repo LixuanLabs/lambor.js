@@ -2,10 +2,6 @@ import path from 'path';
 import chalk from 'chalk';
 import { promises } from 'fs';
 import loadConfig from '../server/config';
-// import {
-//     findPagesMapDir,
-//     collectPages
-// } from './utils'
 import { createEntrypoints } from './entries';
 import getBaseWebpackConfig from './webpack-config';
 import { runCompiler, devRunCompiler } from './compiler';
@@ -16,12 +12,8 @@ export default async function build(dir, {
 }) {
     const config = loadConfig(dir);
     const distDir = path.join(dir, config.distDir)
-    // const pagesMapDir = findPagesMapDir(dir);
-    
-    // const mappedPages = await collectPages(pagesMapDir, dir);
-    // const entrypoints = createEntrypoints(mappedPages);
+
     const entrypoints = createEntrypoints({dev});
-    
     
     await promises.mkdir(distDir, { recursive: true })
     try {
@@ -44,6 +36,7 @@ export default async function build(dir, {
       console.log(chalk.green('Compiled successfully.\n'))
     } catch (error) {
       console.error(chalk.red('Failed to compile.\n'))
+      console.log('error', error);
       console.log(chalk.red(error.message))
     }    
     

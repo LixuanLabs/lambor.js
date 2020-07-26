@@ -1,10 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
-const {babelClientOpts, babelServerOpts} = require('./babel-config');
+const { merge } = require('webpack-merge')
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 import BuildEntryPlugin from '../webpack/plugins/build-entry-plugin';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
@@ -18,64 +17,20 @@ export default async function getBaseWebpackConfig(
     }
 ) {
     const distDir = path.join(dir, config.distDir)
-    const plugins = [];
-    const output = {}
-    const optimization = {};
+    const customeWebpackConfig = config.webpack({dev, target});
     if (target === 'server') {
-        output.libraryTarget = 'commonjs2'
-        output.path = path.join(distDir, 'server');
-        plugins.push(new CleanWebpackPlugin())
-        // plugins.push(new PagesManifestPlugin())
-        plugins.push(new CopyPlugin({
-            patterns: [
-                {from: path.join(__dirname, '../server/pages'), to: output.path}
-            ]
-        }))
-        plugins.push(new webpack.DefinePlugin({
-            __IS_SERVER__: JSON.stringify(true)
-        }))
-    } else {
-        output.path = distDir;
-        // output.chunkFilename = '[name].bundle.js';
-        plugins.push(new CleanWebpackPlugin())
-        plugins.push(new BuildEntryPlugin())
-        if (dev) {
-            plugins.push(new webpack.HotModuleReplacementPlugin());
-        }
-        plugins.push(new webpack.DefinePlugin({
-            __IS_SERVER__: JSON.stringify(false)
-        }))
-        plugins.push(new ReactLoadablePlugin({
-            filename: path.resolve(output.path, REACT_LOADABLE_MANIFEST),
-        }));
-        
-        // optimization.splitChunks = {
-        //     maxAsyncRequests: 1,
-        //     cacheGroups: {
-        //         vendor: {
-        //             name: "vendor",
-        //             priority: 10,
-        //             enforce: true,
-        //         },
-        //     }
-        // };
-        optimization.runtimeChunk = {
-            name: 'runtime'
-        };
-        if (!dev) {
-        }
+        return merge(getCommonConfig(entrypoints, target, dev), getServerConfig(distDir, dev), customeWebpackConfig)
     }
-    
-    
-    
+    return merge(getCommonConfig(entrypoints, target, dev), getClientConfig(distDir, dev), customeWebpackConfig);
+}
+
+function getCommonConfig(entrypoints, target, dev) {
     return {
         entry: entrypoints,
         target: target === 'server' ? 'node' : 'web',
-        externals: target === 'server' ? [nodeExternals()] : [],
         output: {
             filename: dev ? '[name].js' : target === 'server' ? '[name].js' : '[name].[chunkhash].js',
             publicPath: '/dist/',
-            ...output
         },
         resolve: {
             alias: {
@@ -88,66 +43,54 @@ export default async function getBaseWebpackConfig(
             __dirname: true
         },
         mode: dev ? 'development' : 'production',
-        watch: dev ? true : false,
-        externals: {
-        },
-        module: {
-            rules: [{
-                    test: /\.jsx?$/,
-                    exclude: [/node_modules/],
-                    use: [
-                        // 'thread-loader',
-                        {
-                            loader: 'babel-loader',
-                            options: target === 'server' ? babelServerOpts : babelClientOpts
-                        },
-                    ]
-                }, {
-                    test: /\.less/,
-                    use: target === 'server' ? [
-                        // 'thread-loader',
-                        // 'style-loader',
-                        {
-                            loader: 'css-loader'
-                        }, 
-                        // 'postcss-loader',
-                        {
-                            loader: 'less-loader',
-                            // options: {
-                                // javascriptEnabled: true
-                            // }
-                        }
-                    ] : [
-                        // 'thread-loader',
-                        'style-loader', 
-                        {
-                            loader: 'css-loader'
-                        }, 
-                        // 'postcss-loader',
-                        {
-                            loader: 'less-loader',
-                            // options: {
-                                // javascriptEnabled: true
-                            // }
-                        }
-                    ]
-                }, {
-                    test: /\.(png|jpg|gif|ico)$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: 'img/[name].[hash:7].[ext]'
-                    }
-                }, {
-                    test: /\.(woff|eot|ttf|woff2|svg)(\?.*)?$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: 'fonts/[name].[hash:7].[ext]'
-                    }
-                }]
+        
+    }
+}
+
+function getServerConfig(distDir) {
+    const outputPath = path.join(distDir, 'server');
+    return {
+        output: {
+            libraryTarget: 'commonjs2',
+            path: outputPath
         },
         plugins: [
-            ...plugins,
-        ],
-        optimization,
+            new CleanWebpackPlugin(),
+            new CopyPlugin({
+                patterns: [
+                    {from: path.join(__dirname, '../server/pages'), to: outputPath}
+                ]
+            }),
+            new webpack.DefinePlugin({
+                __IS_SERVER__: JSON.stringify(true)
+            })
+        ]
     }
+}
+
+function getClientConfig(distDir, dev) {
+    const config = {
+        output: {
+            path: distDir
+        },
+        plugins: [
+            new CleanWebpackPlugin(),
+            new BuildEntryPlugin(),
+            new webpack.DefinePlugin({
+                __IS_SERVER__: JSON.stringify(false)
+            }),
+            new ReactLoadablePlugin({
+                filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
+            })
+        ],
+        optimization: {
+            runtimeChunk: {
+                name: 'runtime'
+            }
+        }
+    }
+    if (dev) {
+        config.plugins.push(new webpack.HotModuleReplacementPlugin())
+    }
+    return config;
 }

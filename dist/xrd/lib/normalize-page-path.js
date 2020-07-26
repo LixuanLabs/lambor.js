@@ -1,3 +1,0 @@
-"use strict";exports.__esModule=true;exports.normalizePagePath=normalizePagePath;var _path=require("path");function normalizePagePath(page){// Resolve on anything that doesn't start with `/`
-if(!page.startsWith('/')){page=`/${page}`;}if(page==='/'){page='/index';}// Throw when using ../ etc in the pathname
-const resolvedPage=_path.posix.normalize(page);if(page!==resolvedPage){throw new Error(`Requested and resolved page mismatch: ${page} ${resolvedPage}`);}return page;}

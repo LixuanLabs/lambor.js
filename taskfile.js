@@ -4,16 +4,21 @@ module.exports = {
     * default(task) {
         yield task.start('build')
     },
-    * xrd(task) {
-        yield task
-            .source('packages/xrd/**/*.+(js|jsx|ts|tsx)')
-            .babel('server')
-            .target('dist/xrd', {mode: 0o777})
-        yield task.source('packages/boilerplates/**/*').target('dist/boilerplates')
+    * copy(task) {
+        yield task.source('packages/boilerplates/**/*').target('dist/boilerplates', {mode: 0o777})
+    },
+    * xrdc(task) {
+        yield task.parallel([
+            'copy',
+            'build'
+        ])
         notify('Compiled files')
     },
     * build(task) {
-        
+        yield task
+            .source('packages/xrd/**/*.+(js|jsx|ts|tsx)')
+            .babel()
+            .target('dist/xrd', {mode: 0o777})
     }
 }
 
