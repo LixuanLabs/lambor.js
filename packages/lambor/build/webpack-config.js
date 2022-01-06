@@ -35,7 +35,7 @@ function getCommonConfig(entrypoints, target, dev) {
         resolve: {
             alias: {
                 __root: process.cwd(),
-                'xrd/document': path.resolve(__dirname, '../server/pages/_document')
+                'lambor/document': path.resolve(__dirname, '../server/pages/_document')
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import HaDocument from 'xrd/document';
+import HaDocument from 'lambor/document';
 
 export default class Document extends HaDocument {
    

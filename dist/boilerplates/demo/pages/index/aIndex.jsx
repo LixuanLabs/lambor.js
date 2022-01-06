@@ -27,7 +27,7 @@ class Index extends React.Component {
         const { index } = this.props;
         return (
             <div className="container">
-                <h2 className="title">welcome to xrd.js</h2>
+                <h2 className="title">welcome to lambor.js</h2>
                 <div>No. {index.test} </div>
                 <button onClick={this.handleClick}>增加</button>
             </div>

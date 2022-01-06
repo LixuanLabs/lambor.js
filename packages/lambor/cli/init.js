@@ -52,10 +52,10 @@ const haInit = (argv) => {
         console.log(`
           Description
             Starts the application in production mode.
-            The application should be compiled with \`xrd build\` first.
+            The application should be compiled with \`lambor build\` first.
     
           Usage
-            $ xrd start
+            $ lambor start
 
         `)
         process.exit(0)

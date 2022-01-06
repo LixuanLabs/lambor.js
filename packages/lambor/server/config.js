@@ -20,7 +20,7 @@ export default function loadConfig(dir, customConfig) {
         if (Object.keys(userConfig).length === 0) {
             console.warn(
               chalk.yellow.bold('Warning: ') +
-                'Detected xrd.config.js, no exported configuration found.'
+                'Detected lambor.config.js, no exported configuration found.'
             )
         }
         return assignDefaults({ configOrigin: CONFIG_FILE, ...userConfig })
@@ -102,7 +102,7 @@ function assignDefaults(userConfig) {
 }
 
 export const defaultConfig = {
-    distDir: '.xrd',
+    distDir: '.lambor',
     pageExtensions: ['.tsx', '.ts', '.jsx', '.js'],
     target: 'server',
     assetPrefix: '',

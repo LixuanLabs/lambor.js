@@ -4,10 +4,10 @@
 console.log(`
           Description
             Starts the application in production mode.
-            The application should be compiled with \`xrd build\` first.
+            The application should be compiled with \`lambor build\` first.
     
           Usage
-            $ xrd start
+            $ lambor start
 
         `);process.exit(0);}const dest=(0,_path.resolve)(args._[0]||'.');const projectName=(0,_path.basename)(dest);function printSuccess(){success(`
       Success! Created ${projectName} at ${dest}.
