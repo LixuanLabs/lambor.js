@@ -7,7 +7,7 @@ module.exports = {
     * copy(task) {
         yield task.source('packages/boilerplates/**/*').target('dist/boilerplates', {mode: 0o777})
     },
-    * xrdc(task) {
+    * lambor(task) {
         yield task.parallel([
             'copy',
             'build'
@@ -16,15 +16,15 @@ module.exports = {
     },
     * build(task) {
         yield task
-            .source('packages/xrd/**/*.+(js|jsx|ts|tsx)')
+            .source('packages/lambor/**/*.+(js|jsx|ts|tsx)')
             .babel()
-            .target('dist/xrd', {mode: 0o777})
+            .target('dist/lambor', {mode: 0o777})
     }
 }
 
 function notify(msg) {
     return notifier.notify({
-      title: '▲ xrd.js',
+      title: '▲ lambor.js',
       message: msg,
       icon: false,
     })

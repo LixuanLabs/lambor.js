@@ -1,16 +1,16 @@
 {
-  "name": "xrdc",
+  "name": "lambor",
   "version": "1.1.7",
-  "description": "xrd.js框架服务",
-  "main": "./dist/xrd",
-  "repository": "git@github.com:l2xBrain/xrd.js.git",
+  "description": "lambor.js框架服务",
+  "main": "./dist/lambor",
+  "repository": "git@github.com:l2xBrain/lambor.js.git",
   "author": "l2xBrain <l2xbrai@126.com>",
   "license": "MIT",
   "bin": {
-    "xrdc": "./dist/xrd/index.js"
+    "lambor": "./dist/lambor/index.js"
   },
   "scripts": {
-    "build": "rm -fr dist & taskr xrdc"
+    "build": "rm -fr dist & taskr lambor"
   },
   "taskr": {
     "requires": [

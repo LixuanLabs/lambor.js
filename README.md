@@ -1,5 +1,6 @@
-# xrdc.js
+# lambor.js
 
+lambor(兰博)前端开发框架
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
 
@@ -8,16 +9,16 @@ front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadabl
 ```bash
 #Install
 
-$ npm install xrdc -g
+$ npm install lambor -g
 # or
-$ yarn global add xrdc
+$ yarn global add lambor
 ```
 
 ## Commands
 
 We have four commands: `init`, `dev`, `build`, `start`
 
-### xrdc init
+### lambor init
 create app in an empty folder with a demo
 
 #### Generated File Tree
@@ -35,13 +36,13 @@ create app in an empty folder with a demo
 └── package.json           #
 ```
 
-### xrdc dev
+### lambor dev
 run app in the development mode
 
-### xrdc build
+### lambor build
 build app in the production mode
 
-### xrdc start
+### lambor start
 run app in the production mode
 
 ### Route config example
