@@ -1,6 +1,6 @@
 {
   "name": "lambor",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "lambor.js框架服务",
   "main": "./dist/lambor",
   "repository": "git@github.com:l2xBrain/lambor.js.git",
