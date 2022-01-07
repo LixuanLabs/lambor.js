@@ -1,13 +1,32 @@
 exports.babelClientOpts = {
   presets: [
     '@babel/preset-typescript',
-    '@babel/preset-env',
+    ['@babel/preset-env', { loose: true }],
     ['@babel/preset-react', { useBuiltIns: true }],
   ],
   plugins: [
     '@babel/plugin-syntax-dynamic-import',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    
+    [
+      "file-loader",
+      {
+          "name": "img/[name].[hash:7].[ext]",
+          "extensions": ["png", "jpg", "jpeg", "gif", "ico"],
+          "publicPath": "/dist",
+          "outputPath": null
+      },
+      "img-file-loader"
+    ],
+    [
+      "file-loader",
+      {
+        "name": "font/[name].[hash:7].[ext]",
+        "extensions": ["woff", "eot", "ttf", "woff2", "svg"],
+        "publicPath": '/dist',
+        "outputPath": null
+      },
+      "font-file-loader"
+    ]
   ],
 }
 
@@ -29,6 +48,26 @@ exports.babelServerOpts = {
   plugins: [
     'dynamic-import-node',
     ['@babel/plugin-proposal-class-properties', { loose: true }],
+    [
+      "file-loader",
+      {
+          "name": "img/[name].[hash:7].[ext]",
+          "extensions": ["png", "jpg", "jpeg", "gif", "ico"],
+          "publicPath": "/dist",
+          "outputPath": null
+      },
+      "img-file-loader"
+    ],
+    [
+      "file-loader",
+      {
+        "name": "font/[name].[hash:7].[ext]",
+        "extensions": ["woff", "eot", "ttf", "woff2", "svg"],
+        "publicPath": '/dist',
+        "outputPath": null
+      },
+      "font-file-loader"
+    ]
   ],
 
 }

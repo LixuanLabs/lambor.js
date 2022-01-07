@@ -116,8 +116,7 @@ export class Head extends Component {
   getCssLinks() {
     const { files } = this.context._documentProps
     const cssFiles =
-      files && files.length ? files.filter((f) => /\.css$/.test(f)) : []
-
+      files && files.length ? files.filter((f) => /\.css$/.test(f.publicPath)) : []
     const cssLinkElements = []
     cssFiles.forEach((file) => {
       cssLinkElements.push(
@@ -126,7 +125,7 @@ export class Head extends Component {
           nonce={this.props.nonce}
           rel="preload"
           href={`${encodeURI(
-            file
+            file.publicPath
           )}`}
           as="style"
           crossOrigin={this.props.crossOrigin || process.crossOrigin}
@@ -136,7 +135,7 @@ export class Head extends Component {
           nonce={this.props.nonce}
           rel="stylesheet"
           href={`${encodeURI(
-            file
+            file.publicPath
           )}`}
           crossOrigin={this.props.crossOrigin || process.crossOrigin}
         />

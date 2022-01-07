@@ -1,4 +1,5 @@
 const {babelClientOpts, babelServerOpts} = require('./config/babel-config');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
     webpack: (params) => {
@@ -23,9 +24,13 @@ module.exports = {
                         // 'thread-loader',
                         // 'style-loader',
                         {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {}
+                        },
+                        {
                             loader: 'css-loader'
                         }, 
-                        // 'postcss-loader',
+                        'postcss-loader',
                         {
                             loader: 'less-loader',
                             // options: {
@@ -34,11 +39,14 @@ module.exports = {
                         }
                     ] : [
                         // 'thread-loader',
-                        'style-loader', 
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {}
+                        },
                         {
                             loader: 'css-loader'
                         }, 
-                        // 'postcss-loader',
+                        'postcss-loader',
                         {
                             loader: 'less-loader',
                             // options: {
@@ -46,20 +54,11 @@ module.exports = {
                             // }
                         }
                     ]
-                }, {
-                    test: /\.(png|jpg|gif|ico)$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: 'img/[name].[hash:7].[ext]'
-                    }
-                }, {
-                    test: /\.(woff|eot|ttf|woff2|svg)(\?.*)?$/,
-                    loader: 'file-loader',
-                    options: {
-                        name: 'fonts/[name].[hash:7].[ext]'
-                    }
                 }]
-            }
+            },
+            plugins: [
+                new MiniCssExtractPlugin()
+            ]
         }
     }
 }

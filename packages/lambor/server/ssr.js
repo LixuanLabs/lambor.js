@@ -119,7 +119,6 @@ export default class Ssr {
                   }} />
               </Loadable.Capture>
           );
-          
           let bundles = getBundles(this.clientBundles, modules);
           
           const html = renderToString(this.Document.renderDocument(this.Document,

@@ -63,8 +63,13 @@ function getServerConfig(distDir) {
             }),
             new webpack.DefinePlugin({
                 __IS_SERVER__: JSON.stringify(true)
-            })
-        ]
+            }),
+        ],
+        resolve: {
+            alias: {
+                '@pages': path.resolve(distDir, '../pages'),
+            }
+        }
     }
 }
 
@@ -83,6 +88,11 @@ function getClientConfig(distDir, dev) {
                 filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
             })
         ],
+        resolve: {
+            alias: {
+                '@pages': path.resolve(distDir, '../pages'),
+            }
+        },
         optimization: {
             runtimeChunk: {
                 name: 'runtime'

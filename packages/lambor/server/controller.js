@@ -15,8 +15,8 @@ export default class Controller {
     }) {
       const rootDir = resolve(dir);
       this.dev = dev;
-      this.haCon = loadConfig(rootDir, conf);
-      this.distDir = join(rootDir, this.haCon.distDir);
+      this.lamborCon = loadConfig(rootDir, conf);
+      this.distDir = join(rootDir, this.lamborCon.distDir);
       if (dev) {
         try {
           const { 
@@ -65,7 +65,7 @@ export default class Controller {
         }
 
         // 检测是否为数据请求
-        if (this.haCon.apiReg.test(parsedUrl.pathname)) {
+        if (this.lamborCon.apiReg.test(parsedUrl.pathname)) {
             console.log('api接口', parsedUrl.pathname);
             res.end();
             return;
