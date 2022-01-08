@@ -26,7 +26,8 @@ exports.babelClientOpts = {
         "outputPath": null
       },
       "font-file-loader"
-    ]
+    ],
+    'react-loadable/babel'
   ],
 }
 
@@ -67,7 +68,8 @@ exports.babelServerOpts = {
         "outputPath": null
       },
       "font-file-loader"
-    ]
+    ],
+    'react-loadable/babel'
   ],
 
 }

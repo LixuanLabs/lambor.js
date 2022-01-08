@@ -1,1 +1,0 @@
-"use strict";exports.__esModule=true;exports.loadComponents=loadComponents;var _path=require("path");var _constants=require("../lib/constants");async function loadComponents(app,distDir){const documentPath=(0,_path.join)(distDir,_constants.SERVER_DIRECTORY,'_document.js');const DocumentMod=require(documentPath);return{Document:DocumentMod.default};}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Loadable from 'react-loadable';
 import dva from 'dva';
-import { createMemoryHistory } from 'history';
+import createMemoryHistory from 'history/createMemoryHistory';
 import { matchRoutes } from 'react-router-config';
 import { getBundles } from 'react-loadable/webpack';
 import router from '../router';

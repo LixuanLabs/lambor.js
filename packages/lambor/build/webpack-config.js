@@ -35,7 +35,7 @@ function getCommonConfig(entrypoints, target, dev) {
         resolve: {
             alias: {
                 __root: process.cwd(),
-                'lambor/document': path.resolve(__dirname, '../server/pages/_document')
+                'lambor/document': path.resolve(__dirname, '../server/pages/_document'),
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },
@@ -60,6 +60,9 @@ function getServerConfig(distDir) {
                 patterns: [
                     {from: path.join(__dirname, '../server/pages'), to: outputPath}
                 ]
+            }),
+            new ReactLoadablePlugin({
+                filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
             }),
             new webpack.DefinePlugin({
                 __IS_SERVER__: JSON.stringify(true)

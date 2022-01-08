@@ -7,12 +7,13 @@ export default function({history, context}) {
         <Router history={history}>
             <Switch>
                 {
-                    (routesList || []).map(({path, exact, component: C, ...rest}) => {
+                    (routesList || []).map(({path, exact, component}) => {
                         return <Route
                             key={path}
                             path={path}
                             exact={exact}
-                            render={(props) => <C {...props} {...rest} />}
+                            component={component}
+                            // render={(props) => <C {...props} />}
                         />
                     })
                 }

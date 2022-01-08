@@ -1,5 +1,9 @@
+const path = require('path');
 const {babelClientOpts, babelServerOpts} = require('./config/babel-config');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { DIST_DIRECTORY, REACT_LOADABLE_MANIFEST } = require('./config/constants');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
+console.log('ReactLoadablePlugin==>', ReactLoadablePlugin);
 
 module.exports = {
     webpack: (params) => {
@@ -22,7 +26,6 @@ module.exports = {
                     test: /\.less/,
                     use: target === 'server' ? [
                         // 'thread-loader',
-                        // 'style-loader',
                         {
                             loader: MiniCssExtractPlugin.loader,
                             options: {}
@@ -33,9 +36,6 @@ module.exports = {
                         'postcss-loader',
                         {
                             loader: 'less-loader',
-                            // options: {
-                                // javascriptEnabled: true
-                            // }
                         }
                     ] : [
                         // 'thread-loader',
@@ -49,15 +49,15 @@ module.exports = {
                         'postcss-loader',
                         {
                             loader: 'less-loader',
-                            // options: {
-                                // javascriptEnabled: true
-                            // }
                         }
                     ]
                 }]
             },
             plugins: [
-                new MiniCssExtractPlugin()
+                new MiniCssExtractPlugin(),
+                new ReactLoadablePlugin({
+                    filename: path.resolve(__dirname, DIST_DIRECTORY, REACT_LOADABLE_MANIFEST),
+                }),
             ]
         }
     }
