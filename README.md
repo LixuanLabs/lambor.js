@@ -1,6 +1,6 @@
 # lambor.js
 
-lambor(兰博)前端开发框架
+lambor(兰博) SSR前端开发框架
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
 
@@ -48,25 +48,19 @@ run app in the production mode
 ### Route config example
 ---
 ```bash
-import * as React from 'react';
+import React from 'react';
+import Loadable from 'react-loadable';
 
-export default function Home({registerModels, app}) {
-    return {
+export default (({registerModels, app}) => {
+    return Loadable.Map({
+        delay: 200,
+        timeout: 60000,
+        loading: () => null,
         loader: {
-            Index: () => import('../pages/index/aIndex'),
-            Model: () => import('../pages/index/aModel'),
-            Lang: () => import('../pages/index/aLang')
+            Index: () => import('@pages/index/aIndex'),
+            Model: () => import('@pages/index/aModel'),
+            Lang: () => import('@pages/index/aLang')
         },
-        modules: [
-            '../pages/index/aIndex',
-            '../pages/index/aModel',
-            '../pages/index/aLang'
-        ],
-        webpack: () => [
-            require['resolveWeak']('../pages/index/aIndex'),
-            require['resolveWeak']('../pages/index/aModel'),
-            require['resolveWeak']('../pages/index/aLang')
-        ],
         render(loaded, props) {
             const AIndex = loaded['Index'].default || loaded['Index'];
             const AModel = loaded['Model'].default || loaded['Model'];
@@ -75,7 +69,8 @@ export default function Home({registerModels, app}) {
             app && registerModels(app, [AModel]);
             return <AIndex {...props} __lang={ALang} />
         }
-    }
-}
+    });
+});
+
 ```
 

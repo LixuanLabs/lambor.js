@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { promises } from 'fs';
 import loadConfig from '../server/config';
 import { createEntrypoints } from './entries';
-import getBaseWebpackConfig from './webpack-config';
+import getBaseWebpackConfig from './webpack-config-for-business';
 import { runCompiler, devRunCompiler } from './compiler';
 import formatWebpackMessages from './format-webpack-messages';
 

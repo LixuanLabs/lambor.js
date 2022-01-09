@@ -13,7 +13,7 @@ export default async function start(
       customServer: false,
     });
     await app.preload();
-    
+
     const srv = http.createServer(app.handleRequest)
     await new Promise((resolve, reject) => {
       // This code catches EADDRINUSE error if the port is already in use

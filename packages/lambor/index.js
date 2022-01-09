@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 import arg from 'arg';
-import comBuild from './cli/build';
-import comDev from './cli/dev';
-import comStart from './cli/start';
-import comInit from './cli/init';
 import fs from 'fs';
 import path from 'path';
 
@@ -26,13 +22,12 @@ const args = arg(
 
 
 const commands = {
-    build: comBuild,
-    dev: comDev,
-    start: comStart,
-    init: comInit
+    build: true,
+    dev: true,
+    start: true,
+    init: true
 }
 
-console.log('args._[0]', args);
 if (args['--help']) {
     // tslint:disable-next-line
     console.log(`
@@ -87,11 +82,31 @@ if (!foundCommand) {
     `)
     process.exit(0);
 }
-
 const command = args._[0];
 const forwardedArgs = foundCommand ? args._.slice(1) : args._;
 const defaultEnv = command === 'dev' ? 'development' : 'production';
 process.env.NODE_ENV = process.env.NODE_ENV || defaultEnv
 
-commands[command](forwardedArgs);
+if (command === 'build') {
+    const comBuild = require('./cli/build').default;
+    comBuild(forwardedArgs);
+}
+
+if (command === 'dev') {
+    const comDev = require('./cli/dev').default;
+    comDev(forwardedArgs);
+}
+
+if (command === 'start') {
+    const comStart = require('./cli/start').default;
+    comStart(forwardedArgs);
+}
+
+if (command === 'init') {
+    const comInit = require('./cli/init').default;
+    comInit(forwardedArgs)
+}
+
+
+
 

@@ -4,6 +4,8 @@ const { merge } = require('webpack-merge')
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const {babelClientOpts, babelServerOpts} = require('./babel-config-for-business');
+
 import BuildEntryPlugin from '../webpack/plugins/build-entry-plugin';
 const { REACT_LOADABLE_MANIFEST } = require('../lib/constants');
 
@@ -17,14 +19,17 @@ export default async function getBaseWebpackConfig(
     }
 ) {
     const distDir = path.join(dir, config.distDir)
-    const customeWebpackConfig = config.webpack({dev, target});
+    const customWebpackConfig = config.webpack({dev, target});
+    const commonWebpackConfig = getCommonConfig({entrypoints, distDir, target, dev});
     if (target === 'server') {
-        return merge(getCommonConfig(entrypoints, target, dev), getServerConfig(distDir, dev), customeWebpackConfig)
+        const serverWebpackConfig = merge(getServerConfig(distDir, dev), customWebpackConfig, commonWebpackConfig)
+        return serverWebpackConfig;
     }
-    return merge(getCommonConfig(entrypoints, target, dev), getClientConfig(distDir, dev), customeWebpackConfig);
+    const clientWebpackConfig = merge(getClientConfig(distDir, dev), customWebpackConfig, commonWebpackConfig);
+    return clientWebpackConfig;
 }
 
-function getCommonConfig(entrypoints, target, dev) {
+function getCommonConfig({entrypoints, distDir, target, dev}) {
     return {
         entry: entrypoints,
         target: target === 'server' ? 'node' : 'web',
@@ -36,6 +41,7 @@ function getCommonConfig(entrypoints, target, dev) {
             alias: {
                 __root: process.cwd(),
                 'lambor/document': path.resolve(__dirname, '../server/pages/_document'),
+                '@pages': path.resolve(distDir, '../pages'),
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },
@@ -43,7 +49,19 @@ function getCommonConfig(entrypoints, target, dev) {
             __dirname: true
         },
         mode: dev ? 'development' : 'production',
-        
+        module: {
+            rules: [{
+                test: /\.jsx?$/,
+                exclude: [/node_modules/],
+                use: [
+                    // 'thread-loader',
+                    {
+                        loader: 'babel-loader',
+                        options: target === 'server' ? babelServerOpts : babelClientOpts
+                    },
+                ]
+            }]
+        },
     }
 }
 
@@ -61,18 +79,10 @@ function getServerConfig(distDir) {
                     {from: path.join(__dirname, '../server/pages'), to: outputPath}
                 ]
             }),
-            new ReactLoadablePlugin({
-                filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
-            }),
             new webpack.DefinePlugin({
                 __IS_SERVER__: JSON.stringify(true)
             }),
         ],
-        resolve: {
-            alias: {
-                '@pages': path.resolve(distDir, '../pages'),
-            }
-        }
     }
 }
 
@@ -89,18 +99,13 @@ function getClientConfig(distDir, dev) {
             }),
             new ReactLoadablePlugin({
                 filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
-            })
+            }),
         ],
-        resolve: {
-            alias: {
-                '@pages': path.resolve(distDir, '../pages'),
-            }
-        },
         optimization: {
             runtimeChunk: {
                 name: 'runtime'
             }
-        }
+        },
     }
     if (dev) {
         config.plugins.push(new webpack.HotModuleReplacementPlugin())

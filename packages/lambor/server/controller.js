@@ -42,7 +42,6 @@ export default class Controller {
         this.entryFiles = require(join(this.distDir, ENTRY_FILES)).default;
         this.Ssr = require(join(this.distDir, SERVER_DIRECTORY, SERVEROUTPUT)).default;
       }
-      console.log('this.distDir', this.distDir);
       this.ssr = new this.Ssr({
         rootDir,
         distDir: this.distDir,

@@ -27,13 +27,17 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
     function clientCompile() {
       return new Promise((resolve, reject) => {
         multiCompiler.compilers[0].hooks.done.tap('clientDone', () => {
-          const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
-          const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
-          const clientBundles = require(path.resolve(clientDist, REACT_LOADABLE_MANIFEST));
-          resolve({
-            entryFiles,
-            clientBundles
-          });
+          try {
+            const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
+            const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
+            const clientBundles = require(path.resolve(clientDist, REACT_LOADABLE_MANIFEST));
+            resolve({
+              entryFiles,
+              clientBundles
+            });  
+          } catch (error) {
+            console.error("[clientDone]", error)
+          }
         })
       })
     }
