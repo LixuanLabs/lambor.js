@@ -1,6 +1,6 @@
 {
   "name": "lambor",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "lambor.js框架服务",
   "main": "./dist/lambor",
   "repository": "git@github.com:l2xBrain/lambor.js.git",
@@ -30,21 +30,21 @@
     "require-from-string": "^2.0.2",
     "taskr": "^1.1.0",
     "through2": "^4.0.2",
-    "vinyl-fs": "^3.0.3"
+    "webpack": "~4",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-merge": "^5.0.9",
+    "webpack-sources": "^1.4.3",
+    "vinyl-fs": "^3.0.3",
+    "babel-plugin-file-loader": "^2.0.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "babel-plugin-file-loader": "^2.0.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^6.0.1",
-    "node-notifier": "^10.0.0",
-    "webpack": "~4",
-    "webpack-dev-middleware": "^3.7.2",
-    "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^5.0.9",
-    "webpack-sources": "^1.4.3"
+    "node-notifier": "^10.0.0"
   }
 }
