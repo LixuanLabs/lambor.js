@@ -24,7 +24,7 @@ export default async function build(dir, {
       if (dev) {
         return await devRunCompiler([clientWebpackConfig, serverWebpackConfig]);
       } else {
-        let result = await runCompiler([clientWebpackConfig, serverWebpackConfig], { dev });
+        let result = await runCompiler([clientWebpackConfig, serverWebpackConfig]);
         result = formatWebpackMessages(result);
         if (result.errors.length > 0) {
           throw new Error(result.errors.join('\n\n'))

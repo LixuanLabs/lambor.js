@@ -102,13 +102,16 @@ function getClientConfig(distDir, dev) {
             }),
         ],
         optimization: {
-            runtimeChunk: {
-                name: 'runtime'
-            }
+            nodeEnv: dev ? 'development' : 'production',
+            runtimeChunk: true
         },
     }
     if (dev) {
         config.plugins.push(new webpack.HotModuleReplacementPlugin())
+    } else {
+        config.optimization.splitChunks = {
+            chunks: 'all'
+        }
     }
     return config;
 }

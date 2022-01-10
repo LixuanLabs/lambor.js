@@ -71,9 +71,6 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
 
 export function runCompiler(
   config,
-  {
-    dev = false
-  }
 ) {
   const multiCompiler = webpack(config)
   return new Promise(async (resolve, reject) => {

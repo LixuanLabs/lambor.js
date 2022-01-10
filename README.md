@@ -1,9 +1,9 @@
-# lambor.js
+# Introduction
 
 lambor(兰博) SSR前端开发框架
 
 front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
-
+***
 ## Getting Started
 
 ```bash
@@ -18,8 +18,10 @@ $ yarn global add lambor
 
 We have four commands: `init`, `dev`, `build`, `start`
 
-### lambor init
-create app in an empty folder with a demo
+*create app in an empty folder with a demo*
+```bash
+lambor init
+```
 
 #### Generated File Tree
 ```bash
@@ -36,14 +38,25 @@ create app in an empty folder with a demo
 └── package.json           #
 ```
 
-### lambor dev
-run app in the development mode
+*run app in the development environment*
+```bash
+lambor dev
+```
 
-### lambor build
-build app in the production mode
+*build app in the production environment*
+```bash
+lambor build
+```
 
-### lambor start
-run app in the production mode
+*run app in the production environment*
+```bash
+lambor start
+```
+
+*Run on the production server*
+```bash
+pm2 start pm2-start.sh
+```
 
 ### Route config example
 ---
