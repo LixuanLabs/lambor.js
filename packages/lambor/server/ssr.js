@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Loadable from 'react-loadable';
+import Loadable from 'lambor-utils/loadable';
 import dva from 'dva';
 import { createMemoryHistory } from 'history';
 import { matchRoutes } from 'react-router-config';
-import { getBundles } from 'react-loadable/webpack';
+import { getBundles } from 'lambor-utils/webpack';
 import router from '../router';
 import { generateRoutes } from '../lib/routes';
 import { renderToString } from 'react-dom/server';

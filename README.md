@@ -2,7 +2,7 @@
 
 lambor(兰博) SSR前端开发框架
 
-front-end framework based on [dva](https://github.com/dvajs/dva), [react-loadable](https://github.com/jamiebuilds/react-loadable).
+front-end framework based on [dva](https://github.com/dvajs/dva).
 ***
 ## Getting Started
 
@@ -62,7 +62,7 @@ pm2 start pm2-start.sh
 ---
 ```bash
 import React from 'react';
-import Loadable from 'react-loadable';
+import Loadable from 'lambor-utils/loadable';
 
 export default (({registerModels, app}) => {
     return Loadable.Map({

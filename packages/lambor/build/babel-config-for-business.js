@@ -27,7 +27,7 @@ exports.babelClientOpts = {
       },
       "font-file-loader"
     ],
-    'react-loadable/babel'
+    'lambor-utils/babel-loadable-plugin'
   ],
 }
 
@@ -69,7 +69,7 @@ exports.babelServerOpts = {
       },
       "font-file-loader"
     ],
-    'react-loadable/babel'
+    'lambor-utils/babel-loadable-plugin'
   ],
 
 }

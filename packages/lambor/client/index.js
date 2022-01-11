@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Loadable from 'react-loadable';
+import * as Loadable from 'lambor-utils/loadable';
 import dva from 'dva';
 import { hydrate } from 'react-dom';
 import createHistory from 'history/createBrowserHistory';

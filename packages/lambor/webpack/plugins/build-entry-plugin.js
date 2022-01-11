@@ -4,7 +4,7 @@ import { ENTRY_FILES } from '../../lib/constants';
 export default class BuildManifestPlugin {
     apply(compiler) {
         compiler.hooks.emit.tapAsync(
-            'HaEntryFiles',
+            'lamborEntryFiles',
             (compilation, callback) => {
                 const assetMap = {
                     default: []

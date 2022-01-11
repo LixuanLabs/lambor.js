@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { CONFIG_FILE } from '../lib/constants'
+import { CONFIG_FILE, DIST_DIRECTORY } from '../lib/constants'
 import findUp from 'find-up';
 
 export default function loadConfig(dir, customConfig) {
@@ -102,7 +102,7 @@ function assignDefaults(userConfig) {
 }
 
 export const defaultConfig = {
-    distDir: '.lambor',
+    distDir: DIST_DIRECTORY,
     pageExtensions: ['.tsx', '.ts', '.jsx', '.js'],
     target: 'server',
     assetPrefix: '',

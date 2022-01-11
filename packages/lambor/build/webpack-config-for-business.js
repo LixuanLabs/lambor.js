@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge')
-const { ReactLoadablePlugin } = require('react-loadable/webpack');
+const { UtilsLoadablePlugin } = require('lambor-utils/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const {babelClientOpts, babelServerOpts} = require('./babel-config-for-business');
@@ -97,13 +97,15 @@ function getClientConfig(distDir, dev) {
             new webpack.DefinePlugin({
                 __IS_SERVER__: JSON.stringify(false)
             }),
-            new ReactLoadablePlugin({
-                filename: path.resolve(distDir, REACT_LOADABLE_MANIFEST),
+            new UtilsLoadablePlugin({
+                filename: REACT_LOADABLE_MANIFEST,
             }),
         ],
         optimization: {
             nodeEnv: dev ? 'development' : 'production',
-            runtimeChunk: true
+            runtimeChunk: {
+                name: 'runtime'
+            }
         },
     }
     if (dev) {

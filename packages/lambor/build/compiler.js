@@ -30,7 +30,7 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
           try {
             const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
             const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
-            const clientBundles = require(path.resolve(clientDist, REACT_LOADABLE_MANIFEST));
+            const clientBundles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, REACT_LOADABLE_MANIFEST), 'utf-8'));
             resolve({
               entryFiles,
               clientBundles

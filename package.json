@@ -1,6 +1,6 @@
 {
   "name": "lambor",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "lambor.js框架服务",
   "main": "./dist/lambor",
   "repository": "git@github.com:l2xBrain/lambor.js.git",
@@ -28,23 +28,23 @@
     "find-up": "^4.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-loadable": "^5.5.0",
     "react-router-config": "^5.1.1",
     "require-from-string": "^2.0.2",
-    "taskr": "^1.1.0",
     "through2": "^4.0.2",
     "vinyl-fs": "^3.0.3",
     "webpack": "~4",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^5.0.9",
-    "webpack-sources": "^1.4.3"
+    "webpack-sources": "^1.4.3",
+    "lambor-utils": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "taskr": "^1.1.0",
     "node-notifier": "^10.0.0"
   }
 }

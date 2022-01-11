@@ -20,7 +20,7 @@ const babelServerOpts = {
     ],
   ],
   plugins: [
-    ['@babel/plugin-proposal-class-properties', { loose: false }],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
   ],
 }
 

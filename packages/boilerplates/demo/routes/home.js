@@ -1,11 +1,8 @@
 import * as React from 'react';
-import Loadable from 'react-loadable';
+import Loadable from 'lambor-utils/loadable';
 
 export default (({registerModels, app}) => {
     return Loadable.Map({
-        delay: 200,
-        timeout: 60000,
-        loading: () => null,
         loader: {
             Index: () => import('@pages/index/aIndex'),
             Model: () => import('@pages/index/aModel'),
