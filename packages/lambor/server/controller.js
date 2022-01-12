@@ -75,13 +75,7 @@ export default class Controller {
         if (parsedUrl.pathname.startsWith('/dist')) {
           if (this.dev) {
             res.write(
-              this.mfs.readFileSync(
-                join(
-                  this.distDir,
-                  parsedUrl.pathname.slice('/dist/'.length)
-                ),
-                'utf8'
-              )
+              this.mfs.readFileSync(parsedUrl.pathname, 'utf8')
             )
           } else {
             res.write(

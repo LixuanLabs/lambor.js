@@ -11,7 +11,8 @@ export default class HotReloader {
         const webpackDevMiddleware = WebpackDevMiddleware(
             multiCompiler,
             {
-                watchOptions: { ignored },
+                serverSideRender: true,
+                // watchOptions: { ignored },
             }
         )
 
@@ -24,7 +25,7 @@ export default class HotReloader {
         )
         this.webpackDevMiddleware = webpackDevMiddleware
         this.webpackHotMiddleware = webpackHotMiddleware
-        this.middlewares = [
+        this.middlers = [
             webpackDevMiddleware,
             webpackHotMiddleware
         ];
@@ -32,15 +33,16 @@ export default class HotReloader {
         //     console.log('HotReloaderForServer');
         //     this.send('reloadPage')
         // })
-        multiCompiler.compilers[0].hooks.done.tap('HotReloaderForClient', (stats) => {
-            this.send('reloadPage')
-        })
+        // multiCompiler.compilers[0].hooks.done.tap('HotReloaderForClient', (stats) => {
+        //     console.log('执行==');
+        //     this.send('sync')
+        // })
     }
-    send = (action, ...args) => {
-        this.webpackHotMiddleware.publish({ action, data: args })
-    }
-    async run(req, res, parsedUrl) {
-        for (const fn of this.middlewares) {
+    // send = (action, ...args) => {
+    //     this.webpackHotMiddleware.publish({ action, data: args })
+    // }
+    async run(req, res) {
+        for (const fn of this.middlers) {
             await new Promise((resolve, reject) => {
                 fn(req, res, (err) => {
                     if (err) return reject(err)

@@ -1,5 +1,7 @@
 import home from './home';
+import funcUse from './funcUse';
 
 export default {
-    '/': home
+    '/': home,
+    '/funcUse': funcUse,
 }

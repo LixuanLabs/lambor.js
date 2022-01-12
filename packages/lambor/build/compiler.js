@@ -24,11 +24,12 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
   const multiCompiler = webpack([clientConfig, serverConfig]);
   try {
     const hotReloader = new HotReloader(multiCompiler);
+    const mfs = hotReloader.webpackDevMiddleware.context.outputFileSystem;
     function clientCompile() {
       return new Promise((resolve, reject) => {
         multiCompiler.compilers[0].hooks.done.tap('clientDone', () => {
           try {
-            const clientMFS = hotReloader.webpackDevMiddleware.fileSystem;
+            const clientMFS = mfs;
             const entryFiles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, ENTRY_FILES), 'utf-8')).default;
             const clientBundles = JSON.parse(clientMFS.readFileSync(path.resolve(clientDist, REACT_LOADABLE_MANIFEST), 'utf-8'));
             resolve({
@@ -36,6 +37,7 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
               clientBundles
             });  
           } catch (error) {
+            reject(error);
             console.error("[clientDone]", error)
           }
         })
@@ -44,24 +46,28 @@ export async function devRunCompiler([clientConfig, serverConfig]) {
     function serverCompile() {
       return new Promise((resolve, reject) => {
         multiCompiler.compilers[1].hooks.done.tap('serverDone', () => {
-          const serverMFS = hotReloader.webpackDevMiddleware.fileSystem;
-          const Ssr = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, SERVEROUTPUT), 'utf-8')).default;
-          const Document = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, DOCUMENTJS), 'utf-8')).default;
-          resolve({
-            Document,
-            Ssr
-          })
+          try {
+            const serverMFS = mfs;
+            const Ssr = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, SERVEROUTPUT), 'utf-8')).default;
+            const Document = requireFromString(serverMFS.readFileSync(path.resolve(serverDist, DOCUMENTJS), 'utf-8')).default;
+            resolve({
+              Document,
+              Ssr
+            })  
+          } catch (error) {
+            reject(error);
+            console.error("[serverDone]", error)
+          }
         })
       })
     }
-    const { entryFiles, clientBundles } = await clientCompile();
-    const { Document, Ssr } = await serverCompile();
+    const [{ entryFiles, clientBundles }, { Document, Ssr }] = await Promise.all([clientCompile(), serverCompile()]);
     return {
       clientBundles,
       Document,
       entryFiles,
       Ssr,
-      mfs: hotReloader.webpackDevMiddleware.fileSystem,
+      mfs: mfs,
       hotReloader
     }  
   } catch (error) {

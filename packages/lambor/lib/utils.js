@@ -110,3 +110,8 @@ export function sendHTML(
   res.setHeader('Content-Length', Buffer.byteLength(html))
   res.end(req.method === 'HEAD' ? null : html)
 }
+
+export function isAsyncFunction(fn) {
+  let fnStr =fn.toString();
+  return Object.prototype.toString.call(fn) === '[object AsyncFunction]' || fnStr.includes("return _regenerator.default.async(function")
+}

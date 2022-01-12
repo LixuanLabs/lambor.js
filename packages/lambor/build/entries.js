@@ -50,7 +50,7 @@ export function createEntrypoints({dev}) {
   // }
   if (dev) {
     return {
-      client: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000', join(__dirname, '../client/index.js')],
+      client: ['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true', join(__dirname, '../client/index.js')],
       server: {
         server: [join(__dirname, '../server/ssr.js')],
         ...dynamicEntry

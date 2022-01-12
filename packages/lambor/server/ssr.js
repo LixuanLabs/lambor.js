@@ -68,7 +68,7 @@ export default class Ssr {
         // dispatch action
         // 获取所有匹配组件的fetching方法
         const fetchList = [];
-        components.map((component) => {  //tslint:disable-line
+        for (const component of components) {
             if (component.fetching) {
                 fetchList.push(component.fetching({
                     ...app._store,
@@ -78,7 +78,7 @@ export default class Ssr {
                     path: parsedUrl.pathname
                 }));
             }
-        });
+        }
     
         // 获取所有fetching方法中需要执行的action并过滤null
         const actionList = [];

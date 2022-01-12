@@ -103,9 +103,10 @@ function getClientConfig(distDir, dev) {
         ],
         optimization: {
             nodeEnv: dev ? 'development' : 'production',
-            runtimeChunk: {
-                name: 'runtime'
-            }
+            // runtimeChunk: {
+            //     name: 'runtime'
+            // }
+            runtimeChunk: true
         },
     }
     if (dev) {

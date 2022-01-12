@@ -2,7 +2,7 @@
 
 lambor(兰博) SSR前端开发框架
 
-front-end framework based on [dva](https://github.com/dvajs/dva).
+front-end server-side render framework based on [dva](https://github.com/dvajs/dva).
 ***
 ## Getting Started
 
