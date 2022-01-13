@@ -39,9 +39,10 @@ function getCommonConfig({entrypoints, distDir, target, dev}) {
         },
         resolve: {
             alias: {
-                __root: process.cwd(),
+                '@': process.cwd(),
+                '@pages': path.resolve(process.cwd(), './pages'),
                 'lambor/document': path.resolve(__dirname, '../server/pages/_document'),
-                '@pages': path.resolve(distDir, '../pages'),
+                
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
         },
@@ -56,11 +57,18 @@ function getCommonConfig({entrypoints, distDir, target, dev}) {
                 use: [
                     // 'thread-loader',
                     {
-                        loader: 'babel-loader',
+                        loader: require.resolve('babel-loader'),
                         options: target === 'server' ? babelServerOpts : babelClientOpts
                     },
                 ]
-            }]
+            }, {
+                test: /\.(png|jpe?g|gif|woff|eot|ttf|woff2|svg)$/i,
+                use: [
+                  {
+                    loader: require.resolve('file-loader'),
+                  },
+                ],
+              },]
         },
     }
 }

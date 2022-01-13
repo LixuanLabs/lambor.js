@@ -3,4 +3,5 @@
 //     dynamicEntry[url] = mappedPages[url];
 //   }
 // }
-if(dev){return{client:['webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true',(0,_path.join)(__dirname,'../client/index.js')],server:{server:[(0,_path.join)(__dirname,'../server/ssr.js')],...dynamicEntry}};}return{client:{client:[(0,_path.join)(__dirname,'../client/index.js')]},server:{server:(0,_path.join)(__dirname,'../server/ssr.js'),...dynamicEntry}};}
+if(dev){// ?path=/__webpack_hmr&timeout=20000&reload=true'
+return{client:[require.resolve('webpack-hot-middleware/client').concat('?path=/__webpack_hmr&timeout=20000&reload=true'),(0,_path.join)(__dirname,'../client/index.js')],server:{server:[(0,_path.join)(__dirname,'../server/ssr.js')],...dynamicEntry}};}return{client:{client:[(0,_path.join)(__dirname,'../client/index.js')]},server:{server:(0,_path.join)(__dirname,'../server/ssr.js'),...dynamicEntry}};}
