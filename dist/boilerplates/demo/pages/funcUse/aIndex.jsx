@@ -22,37 +22,46 @@ function Index({index: { test }, dispatch}) {
                 we will set click count is 10 in the server side current
                 <div className="count">Click Count: {test}</div> 
             </div>
-            <button className="add-button" onClick={handleClick}>增加</button>
+            <button className="add-button" onClick={handleClick}>add count</button>
             <div className="code">
                 <pre>
                     {`
-                        function Index({index: { test }, dispatch}) {
-                            const handleClick = () => {
-                                dispatch({
-                                    type: 'index/updateReducer',
-                                    payload: {
-                                        test: test + 1
-                                    }
-                                })
-                            }
-                            return (
-                                <div className="container">
-                                    <h2 className="title">welcome to lambor.js</h2>
-                                    <div>No. {test} </div>
-                                    <button onClick={handleClick}>增加</button>
+                    import React from 'react';
+                    import { connect } from 'dva';
+                    import logo from '@/assets/logo.png';
+                    import './style.less';
+                    function Index({index: { test }, dispatch}) {
+                        const handleClick = () => {
+                            dispatch({
+                                type: 'index/updateReducer',
+                                payload: {
+                                    test: test + 1
+                                }
+                            })
+                        }
+                        return (
+                            <div className="container">
+                                <img className="logo" src={logo} />
+                                <h2 className="title">welcome to lambor.js</h2>
+                    
+                                <div className="tip">
+                                    we will set click count is 10 in the server side current
+                                    <div className="count">Click Count: {test}</div> 
                                 </div>
-                            )
-                        }
-                        Index.fetching = ({dispatch}) => {
-                            return [
-                                dispatch({
-                                    type: 'index/updateReducer',
-                                    payload: {
-                                        test: 10
-                                    }
-                                })
-                            ]
-                        }
+                                <button className="add-button" onClick={handleClick}>add count</button>
+                            </div>
+                        )
+                    }
+                    Index.fetching = ({dispatch}) => {
+                        return [
+                            dispatch({
+                                type: 'index/updateReducer',
+                                payload: {
+                                    test: 10
+                                }
+                            })
+                        ]
+                    }
                     `}
                 </pre>
             </div>
