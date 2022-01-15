@@ -1,7 +1,7 @@
-import * as React from 'react';
+import loadable from 'lambor-utils/loadable';
 import { join, resolve } from 'path';
 import fs from 'fs';
-import { parse as parseQs, ParsedUrlQuery } from 'querystring'
+import { parse as parseQs } from 'querystring'
 import { parse as parseUrl } from 'url'
 import loadConfig from './config'
 import { ENTRY_FILES, REACT_LOADABLE_MANIFEST, SERVER_DIRECTORY, DOCUMENTJS, SERVEROUTPUT } from '../lib/constants';
@@ -10,12 +10,11 @@ import build from '../build';
 export default class Controller {
     async init({
       dir = '.',
-      conf = null,
       dev = false
     }) {
-      const rootDir = resolve(dir);
       this.dev = dev;
-      this.lamborCon = loadConfig(rootDir, conf);
+      const rootDir = resolve(dir);
+      this.lamborCon = loadConfig(rootDir);
       this.distDir = join(rootDir, this.lamborCon.distDir);
       if (dev) {
         try {
@@ -52,7 +51,7 @@ export default class Controller {
     }
 
     preload = async () => {
-      await this.ssr.Loadable.preloadAll();
+      await loadable.preloadAll();
     }
 
     handleRequest = async (req, res, parsedUrl) => {

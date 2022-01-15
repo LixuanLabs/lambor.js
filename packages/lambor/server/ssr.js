@@ -24,7 +24,6 @@ export default class Ssr {
         this.Document = Document;
         this.entryFiles = entryFiles;
         this.clientBundles = clientBundles;
-        this.Loadable = Loadable;
         this.routesList = generateRoutes();
     }
 

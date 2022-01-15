@@ -1,23 +1,22 @@
 import * as React from 'react';
-import { Router, Route, Switch } from 'dva/router';
+import { Router, Route, Routes } from 'react-router-dom';
 
 export default function({history, context}) {
     const { routesList } = context;
     return (
-        <Router history={history}>
-            <Switch>
+        <Router location={history.location}>
+            <Routes>
                 {
-                    (routesList || []).map(({path, exact, component}) => {
+                    (routesList || []).map(({path, component: C}) => {
                         return <Route
                             key={path}
                             path={path}
-                            exact={exact}
-                            component={component}
-                            // render={(props) => <C {...props} />}
-                        />
+                            element={<C />}
+                        >
+                        </Route>
                     })
                 }
-            </Switch>
+            </Routes>
         </Router>
     )
 }

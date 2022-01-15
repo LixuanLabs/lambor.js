@@ -43,7 +43,6 @@ module.exports = function (task) {
     }
     const output = transform(file.data, options)
     const ext = extname(file.base)
-
     // Replace `.ts|.tsx|.jsx` with `.js` in files with an extension
     if (ext) {
       const extRegex = new RegExp(ext.replace('.', '\\.') + '$', 'i')

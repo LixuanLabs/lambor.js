@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as Loadable from 'lambor-utils/loadable';
+import Loadable from 'lambor-utils/loadable';
 import dva from 'dva';
 import { hydrate } from 'react-dom';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 
 import router from '../router';
 import { generateRoutes } from '../lib/routes';
@@ -11,7 +11,7 @@ const preLoadedState = JSON.parse(decodeURIComponent(window.__PRELOADED_STATE__ 
 
 
 const app = dva({
-    history: createHistory(),
+    history: createBrowserHistory(),
     initialState: preLoadedState 
 });
 

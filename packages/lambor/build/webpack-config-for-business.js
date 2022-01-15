@@ -4,6 +4,7 @@ const { merge } = require('webpack-merge')
 const { UtilsLoadablePlugin } = require('lambor-utils/webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const {babelClientOpts, babelServerOpts} = require('./babel-config-for-business');
 
 import BuildEntryPlugin from '../webpack/plugins/build-entry-plugin';
@@ -19,7 +20,7 @@ export default async function getBaseWebpackConfig(
     }
 ) {
     const distDir = path.join(dir, config.distDir)
-    const customWebpackConfig = config.webpack({dev, target});
+    const customWebpackConfig = config.webpack ? config.webpack({dev, target}) : {};
     const commonWebpackConfig = getCommonConfig({entrypoints, distDir, target, dev});
     if (target === 'server') {
         const serverWebpackConfig = merge(getServerConfig(distDir, dev), customWebpackConfig, commonWebpackConfig)
@@ -68,7 +69,7 @@ function getCommonConfig({entrypoints, distDir, target, dev}) {
                     loader: require.resolve('file-loader'),
                   },
                 ],
-              },]
+              }]
         },
     }
 }
@@ -79,6 +80,24 @@ function getServerConfig(distDir) {
         output: {
             libraryTarget: 'commonjs2',
             path: outputPath
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.less/,
+                    use: [
+                        {
+                            loader: require.resolve('css-loader')
+                        }, 
+                        {
+                            loader: require.resolve('postcss-loader'),
+                        },
+                        {
+                            loader: require.resolve('less-loader'),
+                        }
+                    ]
+                }
+            ]
         },
         plugins: [
             new CleanWebpackPlugin(),
@@ -99,6 +118,28 @@ function getClientConfig(distDir, dev) {
         output: {
             path: distDir
         },
+        module: {
+            rules: [
+                {
+                    test: /\.less/,
+                    use: [
+                        // 'thread-loader',
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                        },
+                        {
+                            loader: require.resolve('css-loader'),
+                        }, 
+                        {
+                            loader: require.resolve('postcss-loader'),
+                        },
+                        {
+                            loader: require.resolve('less-loader'),
+                        }
+                    ]
+                }
+            ]
+        },
         plugins: [
             new CleanWebpackPlugin(),
             new BuildEntryPlugin(),
@@ -108,6 +149,7 @@ function getClientConfig(distDir, dev) {
             new UtilsLoadablePlugin({
                 filename: REACT_LOADABLE_MANIFEST,
             }),
+            new MiniCssExtractPlugin(),
         ],
         optimization: {
             nodeEnv: dev ? 'development' : 'production',

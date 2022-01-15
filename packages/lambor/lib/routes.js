@@ -14,11 +14,9 @@ const res = [];
     for (const key in routes) {
       if (BLOCKED_PAGES_REG.test(key)) continue;
       // const pageCom = join('/', routes[key], '/')
-      
       res.push({
           path: key,
-          exact: true,
-          component: routes[key]({registerModels, app}),
+          component: routes[key]({registerModels, app})
       })   
     }
     return res;

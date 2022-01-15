@@ -8,10 +8,7 @@ export default async function start(
 ) {
   try {
     const app = new Controller()
-    await app.init({
-      ...serverOptions,
-      customServer: false,
-    });
+    await app.init(serverOptions);
     await app.preload();
 
     const srv = http.createServer(app.handleRequest)

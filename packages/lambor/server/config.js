@@ -2,28 +2,22 @@ import chalk from 'chalk';
 import { CONFIG_FILE, DIST_DIRECTORY } from '../lib/constants'
 import findUp from 'find-up';
 
-export default function loadConfig(dir, customConfig) {
-    if (customConfig) {
-        return assignDefaults({ configOrigin: 'server', ...customConfig })
-    }
+export default function loadConfig(dir) {
     const configFile = findUp.sync(CONFIG_FILE, {
         cwd: dir,
     })
     // If config file was found
     if (configFile) {
-      const userConfigModule = require(configFile);
+      const userConfigModule = require(configFile);  
+      const userConfig = userConfigModule.default || userConfigModule
         
-        const userConfig = normalizeConfig(
-            userConfigModule.default || userConfigModule
-        )
-        
-        if (Object.keys(userConfig).length === 0) {
-            console.warn(
-              chalk.yellow.bold('Warning: ') +
-                'Detected lambor.config.js, no exported configuration found.'
-            )
-        }
-        return assignDefaults({ configOrigin: CONFIG_FILE, ...userConfig })
+      if (Object.keys(userConfig).length === 0) {
+          console.warn(
+            chalk.yellow.bold('Warning: ') +
+              'Detected lambor.config.js, no exported configuration found.'
+          )
+      }
+      return assignDefaults({ configOrigin: CONFIG_FILE, ...userConfig })
     }
     return defaultConfig
 }
@@ -104,14 +98,7 @@ function assignDefaults(userConfig) {
 export const defaultConfig = {
     distDir: DIST_DIRECTORY,
     pageExtensions: ['.tsx', '.ts', '.jsx', '.js'],
-    target: 'server',
     assetPrefix: '',
     apiReg: /^\/api(?:\/|$)/
 }
 
-export function normalizeConfig(config) {
-    if (typeof config === 'function') {
-      config = config({ defaultConfig })
-    }
-    return config
-}
