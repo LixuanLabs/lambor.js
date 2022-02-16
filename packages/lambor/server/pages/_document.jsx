@@ -218,18 +218,7 @@ export class Head extends Component {
         )}
         {children}
         {head}
-        <meta
-          name="next-head-count"
-          content={React.Children.count(head || []).toString()}
-        />
-          {this.getCssLinks()}
-          {this.context._documentProps.isDevelopment && (
-            // this element is used to mount development styles so the
-            // ordering matches production
-            // (by default, style-loader injects at the bottom of <head />)
-            <noscript id="__next_css__DO_NOT_USE__" />
-          )}
-          {styles || null}
+        {this.getCssLinks()}
         {React.createElement(React.Fragment, {}, ...(headTags || []))}
       </head>
     )
